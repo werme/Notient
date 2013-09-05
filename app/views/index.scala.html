@@ -1,7 +1,26 @@
-@(message: String)
+@(notes: List[Note], noteForm: Form[Note])
 
-@main("Welcome to Play 2.1") {
-    
-    @play20.welcome(message, style = "Java")
-    
+@import helper._
+
+@main("Note list") {
+
+    <h1>Notes</h1>
+
+    <table>
+        @for(note <- notes) {
+            <tr>
+                <td class="note">@note.text<td>
+                <td><a href='@routes.Application.deleteNote(note.id)'>Delete Note</a></td>
+            </tr>
+        }
+    </table>
+
+    @form(routes.Application.newNote()) {
+
+        @inputText(noteForm("text"))
+
+        <input type="submit" value="Create note">
+
+    }
+
 }
