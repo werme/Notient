@@ -16,6 +16,10 @@ public class Note extends Model {
   @Required
   public String text;
 
+  public Note(String text) {
+    this.text = text;
+  }
+
   public static Finder<Long,Note> find = new Finder(Long.class, Note.class);
 
   public static List<Note> all() {
