@@ -9,6 +9,7 @@ import org.junit.*;
 
 import play.mvc.*;
 import play.test.*;
+import play.test.WithApplication;
 import play.data.Form;
 import play.data.DynamicForm;
 import play.data.validation.ValidationError;
@@ -16,25 +17,27 @@ import play.data.validation.Constraints.RequiredValidator;
 import play.i18n.Lang;
 import play.libs.F;
 import play.libs.F.*;
+import play.libs.Yaml;
+
+import com.avaje.ebean.*;
+
 
 import models.*;
 
 import views.html.*;
 
 import static play.test.Helpers.*;
+
 import static org.fest.assertions.Assertions.*;
+import static org.junit.Assert.*;
 
-
-/**
-* Unit tests
-*/
 public class ApplicationTest {
 
     private FakeApplication app;
 
     @Before
     public void startApp() throws IOException {
-        app = fakeApplication(Helpers.inMemoryDatabase());
+        app = fakeApplication(inMemoryDatabase());
         start(app);
     }
 
@@ -44,9 +47,14 @@ public class ApplicationTest {
     }
 
     @Test
-    public void dummyTest() {
-        int a = 1 + 1;
-        assertThat(a).isEqualTo(2);
+    public void testInitialData() {
+
+        // Should be 4 notes in DB
+        assertEquals(4, Note.find.findRowCount());
+
+        // Should have note with text "The first note"
+        Note myNote = Note.find.where().eq("text", "The first note").findUnique();
+        assertNotNull(myNote);
     }
 
     @Test
