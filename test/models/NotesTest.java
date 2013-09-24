@@ -1,3 +1,5 @@
+package models;
+
 import com.avaje.ebean.*;
 
 import java.util.*;
