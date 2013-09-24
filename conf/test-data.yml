@@ -5,7 +5,7 @@
 
 # Users
 
-# - !!models.User
-#    email: student@notes.com
-#    username: student
-#    password: mysecretpassword
+- !!models.User
+    email: student@notes.com
+    username: student
+    password: mysecretpassword
