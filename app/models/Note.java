@@ -1,11 +1,11 @@
 package models;
 
+import play.data.validation.Constraints.Required;
+import play.db.ebean.Model;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.*;
-
-import play.db.ebean.*;
-import play.data.validation.Constraints.*;
-
-import javax.persistence.*;
 
 @Entity
 public class Note extends Model {

@@ -1,18 +1,15 @@
-import org.junit.*;
+import com.avaje.ebean.Ebean;
+import com.google.common.collect.ImmutableMap;
+import org.junit.Before;
+import org.junit.Test;
+import play.libs.Yaml;
+import play.mvc.Result;
+import play.test.WithApplication;
 
 import java.util.List;
 
-import com.google.common.collect.ImmutableMap;
-import com.avaje.ebean.*;
-
-import play.libs.Yaml;
-import play.test.WithApplication;
-import play.mvc.*;
-
 import static org.junit.Assert.*;
 import static play.test.Helpers.*;
-
-import models.*;
 
 public class AuthenticationTest extends WithApplication {
 

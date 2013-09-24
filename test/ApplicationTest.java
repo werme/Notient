@@ -1,21 +1,17 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import models.Note;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import play.data.Form;
+import play.mvc.Content;
+import play.test.FakeApplication;
+
 import java.io.IOException;
 
-import org.junit.*;
-
-import play.mvc.*;
-import play.test.*;
-import play.data.Form;
-
-import models.*;
-
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static play.test.Helpers.*;
-
-import static org.fest.assertions.Assertions.*;
-import static org.junit.Assert.*;
 
 public class ApplicationTest {
 

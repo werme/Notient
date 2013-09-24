@@ -1,12 +1,15 @@
-import org.junit.*;
-import static org.junit.Assert.*;
-import static org.fest.assertions.Assertions.*;
-import java.util.*;
-import play.mvc.*;
-import play.test.WithApplication;
-import static play.test.Helpers.*;
-import models.*;
 import com.google.common.collect.ImmutableMap;
+import models.Note;
+import org.junit.Before;
+import org.junit.Test;
+import play.mvc.Result;
+import play.test.WithApplication;
+
+import java.util.*;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static play.test.Helpers.*;
 
 public class NotesFunctionalTest extends WithApplication {
 

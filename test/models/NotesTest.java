@@ -1,19 +1,17 @@
 package models;
 
-import com.avaje.ebean.*;
+import com.avaje.ebean.Ebean;
+import org.junit.Before;
+import org.junit.Test;
+import play.libs.Yaml;
+import play.test.WithApplication;
 
 import java.util.*;
 
-import org.junit.*;
-
-import play.test.WithApplication;
-import play.libs.*;
-
-import models.*;
-
-import static org.junit.Assert.*;
-
-import static play.test.Helpers.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static play.test.Helpers.fakeApplication;
+import static play.test.Helpers.inMemoryDatabase;
 
 public class NotesTest extends WithApplication {
 
