@@ -14,6 +14,6 @@
 
 
 - !!models.User
-    email: student1@notes.com
-    username: student1
-    password: password1
+    email: student@notes.com
+    username: student
+    password: password

@@ -32,11 +32,11 @@ public class UsersTest extends WithApplication {
     assertEquals("Pingu", pingu.username);
 
     // Invalid users
-    new User("pingu1@notes.com", "P", "mysecretpasword").save();
-    User pingu1 = User.find.where().eq("email", "pingu1@notes.com").findUnique();
+    new User("invalidPingu@notes.com", "P", "mysecretpasword").save();
+    pingu = User.find.where().eq("email", "invalidPingu@notes.com").findUnique();
+
     // Should not create user with too short username
-    // Currently not working, problems with annotations.
-    //assertNull(pingu1);
+    assertNull(pingu);
 
     // TODO: More invalid user cases
   }
@@ -50,7 +50,7 @@ public class UsersTest extends WithApplication {
   public void deleteUser() {
     User student = User.find.where().eq("email", "student@notes.com").findUnique();
     User.deleteUser("student@notes.com");
-    
+
     User myDeletedUser = User.find.where().eq("email", "student@notes.com").findUnique();
     assertNull(myDeletedUser);
   }

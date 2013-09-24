@@ -6,6 +6,6 @@
 # Users
 
 - !!models.User
-    email: student@notes.com
+    email: test@notes.com
     username: student
-    password: password
+    password: mysecretpassword

@@ -26,7 +26,7 @@ public class AuthenticationTest extends WithApplication {
   @Test
   public void authenticateUser() {
     // Should return user on correct input
-    assertNotNull(User.authenticate("student@notes.com", "mysecretpassword"));
+    assertNotNull(User.authenticate("test@notes.com", "mysecretpassword"));
     // Should return null on authentication fail
     assertNull(User.authenticate("address@notin.db", "randompassword"));
   }
@@ -36,13 +36,13 @@ public class AuthenticationTest extends WithApplication {
     Result result = callAction(
             controllers.routes.ref.Application.authenticate(), // Move from application controller?
             fakeRequest().withFormUrlEncodedBody(ImmutableMap.of(
-                    "email", "student@notes.com"
+                    "email", "test@notes.com", "password", "mysecretpassword"
             )));
 
     // Should redirect on successful login
     assertEquals(SEE_OTHER, status(result));
     // Should save user email in session
-    assertEquals("student@notes.com", session(result).get("email"));
+    assertEquals("test@notes.com", session(result).get("email"));
   }
 
   @Test
