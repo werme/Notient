@@ -1,13 +1,18 @@
 import org.junit.*;
-import static org.junit.Assert.*;
-import static org.fest.assertions.Assertions.*;
-import java.util.*;
-import play.mvc.*;
-import play.test.WithApplication;
-import static play.test.Helpers.*;
-import models.*;
+
+import java.util.List;
+
 import com.google.common.collect.ImmutableMap;
 import com.avaje.ebean.*;
+
+import play.libs.Yaml;
+import play.test.WithApplication;
+import play.mvc.*;
+
+import static org.junit.Assert.*;
+import static play.test.Helpers.*;
+
+import models.*;
 
 public class AuthenticationTest extends WithApplication {
 
@@ -28,10 +33,10 @@ public class AuthenticationTest extends WithApplication {
   @Test
   public void authenticateSuccess() {
     Result result = callAction(
-      controllers.routes.ref.Application.authenticate(), // Move from application controller?
-      fakeRequest().withFormUrlEncodedBody(ImmutableMap.of(
-          "email", "student@notes.com"
-    );
+            controllers.routes.ref.Application.authenticate(), // Move from application controller?
+            fakeRequest().withFormUrlEncodedBody(ImmutableMap.of(
+                    "email", "student@notes.com"
+            )));
 
     // Should redirect on successful login
     assertEquals(SEE_OTHER, status(result));
@@ -42,10 +47,10 @@ public class AuthenticationTest extends WithApplication {
   @Test
   public void authenticateFail() {
     Result result = callAction(
-      controllers.routes.ref.Application.authenticate(), // Move from application controller?
-      fakeRequest().withFormUrlEncodedBody(ImmutableMap.of(
-          "email", "address@notin.db"
-    );
+            controllers.routes.ref.Application.authenticate(), // Move from application controller?
+            fakeRequest().withFormUrlEncodedBody(ImmutableMap.of(
+                    "email", "address@notin.db"
+            )));
 
     // Should return bad request on authentication fail
     assertEquals(BAD_REQUEST, status(result));
