@@ -1,11 +1,18 @@
-import org.junit.*;
-import static org.junit.Assert.*;
-import static org.fest.assertions.Assertions.*;
-import java.util.*;
-import play.mvc.*;
+import com.google.common.collect.ImmutableMap;
+
+import models.Note;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import play.mvc.Result;
 import play.test.WithApplication;
+
+import java.util.*;
+
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.*;
 import static play.test.Helpers.*;
-import models.*;
 
 public class NotesFunctionalTest extends WithApplication {
 
@@ -21,12 +28,9 @@ public class NotesFunctionalTest extends WithApplication {
     // Should return bad request if no data is given
     assertThat(status(result)).isEqualTo(BAD_REQUEST);
 
-    Map<String,String> data = new HashMap<String,String>();
-    data.put("text", "My note");
-
     result = callAction(
         controllers.routes.ref.Application.newNote(),
-        fakeRequest().withFormUrlEncodedBody(data)
+        fakeRequest().withFormUrlEncodedBody(ImmutableMap.of("text", "My note"))
     );
 
     // Should return redirect status if successful

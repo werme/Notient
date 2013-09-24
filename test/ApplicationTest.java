@@ -1,35 +1,17 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import models.Note;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import play.data.Form;
+import play.mvc.Content;
+import play.test.FakeApplication;
+
 import java.io.IOException;
 
-import org.codehaus.jackson.JsonNode;
-import org.junit.*;
-
-import play.mvc.*;
-import play.test.*;
-import play.test.WithApplication;
-import play.data.Form;
-import play.data.DynamicForm;
-import play.data.validation.ValidationError;
-import play.data.validation.Constraints.RequiredValidator;
-import play.i18n.Lang;
-import play.libs.F;
-import play.libs.F.*;
-import play.libs.Yaml;
-
-import com.avaje.ebean.*;
-
-
-import models.*;
-
-import views.html.*;
-
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static play.test.Helpers.*;
-
-import static org.fest.assertions.Assertions.*;
-import static org.junit.Assert.*;
 
 public class ApplicationTest {
 

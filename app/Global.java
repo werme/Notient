@@ -1,11 +1,11 @@
-import play.*;
-import play.libs.*;
+import com.avaje.ebean.Ebean;
+import models.Note;
+import play.Application;
+import play.GlobalSettings;
+import play.Logger;
+import play.libs.Yaml;
 
 import java.util.*;
-
-import com.avaje.ebean.*;
-
-import models.*;
 
 public class Global extends GlobalSettings {
 
