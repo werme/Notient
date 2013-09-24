@@ -1,2 +1,9 @@
+# Notes
+
 - !!models.Note
     text: Test note
+
+# Users
+
+# - !!models.User
+#    email: student@notes.com
