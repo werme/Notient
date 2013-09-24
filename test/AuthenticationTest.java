@@ -18,6 +18,14 @@ public class AuthenticationTest extends WithApplication {
   }
 
   @Test
+  public void authenticateUser() {
+    // Should return user on correct input
+    assertNotNull(User.authenticate("student@notes.com", "mysecretpassword"));
+    // Should return null on authentication fail
+    assertNull(User.authenticate("address@notin.db", "randompassword"));
+  }
+
+  @Test
   public void authenticateSuccess() {
     Result result = callAction(
       controllers.routes.ref.Application.authenticate(), // Move from application controller?
