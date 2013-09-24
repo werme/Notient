@@ -44,4 +44,5 @@ public class NotesTest extends WithApplication {
     Note myDeletedNote = Note.find.where().eq("text", "Test note").findUnique();
     assertNull(myDeletedNote);
   }
+
 }

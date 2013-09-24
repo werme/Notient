@@ -11,3 +11,8 @@
 
 - !!models.Note
     text: Lorem ipsum Sit sunt et nostrud quis cupidatat consequat proident eu amet ut.
+
+- !!models.User
+    email: user@test.com
+    name: user
+    password: password
