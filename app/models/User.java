@@ -1,6 +1,6 @@
 package models;
 
-import play.data.validation.*;
+import play.data.validation.Constraints.*;
 import javax.persistence.*;
 import play.db.ebean.*;
 
@@ -10,8 +10,8 @@ public class User extends Model {
 	@Id
 	public String email;
 
-	@Constraints.MinLength(5)
-	@Constraints.MaxLength(20)
+	@MinLength(5)
+	@MaxLength(20)
 	public String username;
 	public String password;
 
