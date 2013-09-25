@@ -43,4 +43,16 @@ public class NotesFunctionalTest extends WithApplication {
     assertNotNull(newNote);
     assertEquals("My note", newNote.text);
   }
-}
+
+
+  @Test
+  public void createInvalidNote() {
+    Result result = callAction(
+        controllers.routes.ref.Application.newNote(),
+        fakeRequest().withFormUrlEncodedBody(ImmutableMap.of("text", ""))
+    );
+
+    // Should return redirect status if successful
+    assertThat(status(result)).isEqualTo(BAD_REQUEST);
+  }
+  }
