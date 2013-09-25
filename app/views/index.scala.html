@@ -13,6 +13,7 @@
         <section class="notes-wrapper">
             @for(note <- notes) {
                 <div class="note">
+                    <h2>@note.title</h2>
                     <p>@note.text</p>
                     <a href='@routes.Application.deleteNote(note.id)' class="delete-button">Delete Note</a>
                 </div>
@@ -23,10 +24,10 @@
         <div class="container">
         @form(routes.Application.newNote()) {
 
+            @inputText(noteForm("title"))
             @inputText(noteForm("text"))
 
             <input type="submit" value="Create Note">
-
         }
         </div>
     </footer>
