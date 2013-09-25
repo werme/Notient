@@ -2,21 +2,33 @@
 @pink: #E81F83;
 
 * { box-sizing: border-box; }
-
 body {
   font: 14px/1.5 'jaf-facitweb';
   color: #333;
   background: #f5f5f5;
 }
 
-h1 {
-  font-family: 'jubilat';
-  color: white;
-  font-size: 3.4em;
-  font-weight: 600;
-  background: @pink;
-  padding: 0.2rem 1rem;
-  //text-shadow: rgba(0,0,0,0.2) 0 0 5px;
+header {
+  h1 {
+    font-family: 'jubilat';
+    color: white;
+    font-size: 3.4em;
+    font-weight: 600;
+    background: @pink;
+    padding: 0.2rem 1rem;
+    text-shadow: rgba(0,0,0,0.2) 0 0 5px;
+  }
+  nav {
+    background: white;
+    margin-top: 1rem;
+    li { display: inline-block; }
+    a {
+      display: block;
+      padding: 1rem;
+      border: 0;
+      &:hover { color: white; background: @pink; }
+    }
+  }
 }
 
 a {
@@ -24,10 +36,13 @@ a {
   text-decoration: none;
   border-bottom: 2px dotted @pink;
   transition: 0.3s all;
+  &:hover { border-color: white; }
 }
 
 .container {
+  margin: 0 auto;
   width: 100%;
+  max-width: 50em;
 }
 
 .notes-wrapper {
@@ -80,7 +95,7 @@ form {
 
   label { line-height: 2em }
 
-  input[type=text], input[type=submit] {
+  input[type=text], input[type=password], input[type=submit] {
     border: 3px solid #eee;
     margin-bottom: 1em;
     font-size: 1em;
@@ -99,11 +114,29 @@ form {
   }
 }
 
-@media (min-width: 50em) {
-  .container {
-    margin: 0 auto;
-    width: 50em;
+.login {
+  margin: 0 auto;
+  padding: 1.4rem 1rem 1rem;
+  width: 100%;
+  max-width: 20rem;
+  background: white;
+
+  input, dd {
+    width: 100%;
   }
+  input[type=submit] { margin: 0; }
+}
+
+h1.login-header {
+  margin: 4rem auto -0.94rem;
+  width: 100%;
+  max-width: 20rem;
+  padding: 0 1rem;
+
+  font: 3rem 'jubilat';
+}
+
+@media (min-width: 50em) {
   .note {
     float: left;
     width: 32%;

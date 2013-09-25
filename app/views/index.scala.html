@@ -6,7 +6,12 @@
     <header class="main-header">
         <div class="container">
             <h1>Pink is the best color.</h1>
-            <a href="@routes.Application.logout()">Logout</a>
+            <nav>
+                <ul>
+                    <li><a href="@routes.Application.login()">Login</a></li>
+                    <li><a href="@routes.Application.logout()">Logout</a></li>
+                </ul>
+            </nav>
         </div>
 
     </header>
@@ -24,7 +29,7 @@
     </div>
     <footer>
         <div class="container">
-        @form(routes.Application.newNote()) {
+        @form(routes.Application.newNote) {
 
             @inputText(noteForm("title"))
             @inputText(noteForm("text"))
