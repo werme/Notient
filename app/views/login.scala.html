@@ -12,6 +12,11 @@
 		@if(form.hasGlobalErrors) {
 		<p class="error">@form.globalError.message</p>
 		}
+		@if(flash.contains("success")) {
+   		<p class="success">
+        @flash.get("success")
+   		</p>
+}
 	</header>
 
 	@helper.form(routes.Application.authenticate) {

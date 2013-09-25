@@ -5,20 +5,19 @@ import play.data.*;
 import models.*;
 import views.html.*;
 
-
 public class Application extends Controller {
 
 	static Form<Note> noteForm = Form.form(Note.class);
-	//@Security.Authenticated(Secured.class)
+	
 	public static Result index() {
 		return ok(views.html.index.render(Note.all(), noteForm));
 	}
 
-	//@Security.Authenticated(Secured.class)
 	public static Result notes() {
 		return ok(views.html.index.render(Note.all(), noteForm));
 	}
 
+	@Security.Authenticated(Secured.class)
 	public static Result newNote() {
 		Form<Note> filledForm = noteForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
@@ -29,6 +28,7 @@ public class Application extends Controller {
 		}
 	}
 
+	@Security.Authenticated(Secured.class)
 	public static Result deleteNote(Long id) {
 		Note.delete(id);
 		return redirect(routes.Application.notes());
@@ -51,6 +51,7 @@ public class Application extends Controller {
 		}
 
 	}
+	
 	public static Result authenticate() {
 		Form<Login> loginForm = Form.form(Login.class).bindFromRequest();
 		if (loginForm.hasErrors()) {
@@ -62,5 +63,13 @@ public class Application extends Controller {
 				routes.Application.notes()
 				);
 		}
+	}
+	
+	public static Result logout() {
+	    session().clear();
+	    flash("success", "You've been logged out");
+	    return redirect(
+	        routes.Application.login()
+	    );
 	}
 }

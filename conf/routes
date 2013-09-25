@@ -5,6 +5,7 @@
 # Home page
 GET     /                       controllers.Application.notes()
 GET     /login                  controllers.Application.login()
+GET     /logout                     controllers.Application.logout()
 
 
 # Note CRUD
