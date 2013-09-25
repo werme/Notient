@@ -1,0 +1,65 @@
+@import "reset.less";
+@pink: #E81F83;
+
+* { box-sizing: border-box; }
+
+body {
+  font: 14px/1.5 'jaf-facitweb';
+  color: #333;
+}
+
+h1 {
+  font-family: 'jubilat';
+  color: white;
+  font-size: 3em;
+  background: @pink;
+  padding: 0.4rem 1rem;
+}
+
+a {
+  color: @pink;
+  text-decoration: none;
+  border-bottom: 2px dotted @pink;
+  transition: 0.3s all;
+}
+
+.container {
+  margin: 0 auto;
+  width: 860px;
+}
+
+.notes-wrapper {
+  padding-top: 2%;
+  overflow: hidden;
+}
+
+.note {
+  display: block;
+  float: left;
+  position: relative;
+  padding: 1em;
+  margin: 0 2% 2% 0;
+  width: 32%;
+  height: 200px;
+  background: @pink;
+  color: white;
+  transition: 0.2s all;
+
+  &:nth-child(3n) {
+    margin-right: 0;
+  }
+
+  &:hover {
+    background: @pink;
+    color: white;
+
+    a { color: white; border-color: white; }
+  }
+
+  .delete-button {
+    display: inline-block;
+    position: absolute;
+    bottom: 1em;
+    right: 1em;
+  }
+}

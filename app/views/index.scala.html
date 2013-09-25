@@ -3,24 +3,20 @@
 @import helper._
 
 @main("Note list") {
+    <div class="container">
+        <h1>Pink notes!</h1>
 
-    <h1>Notes</h1>
+        <section class="notes-wrapper">
+            @for(note <- notes) {
+                <div class="note">@note.text <a href='@routes.Application.deleteNote(note.id)' class="delete-button">Delete Note</a></div>
+            }
+        </section>
+        @form(routes.Application.newNote()) {
 
-    <table>
-        @for(note <- notes) {
-            <tr>
-                <td class="note">@note.text<td>
-                <td><a href='@routes.Application.deleteNote(note.id)'>Delete Note</a></td>
-            </tr>
+            @inputText(noteForm("text"))
+
+            <input type="submit" value="Create note">
+
         }
-    </table>
-
-    @form(routes.Application.newNote()) {
-
-        @inputText(noteForm("text"))
-
-        <input type="submit" value="Create note">
-
-    }
-
+    </div>
 }
