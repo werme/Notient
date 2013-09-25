@@ -25,9 +25,9 @@ public class NotesTest extends WithApplication {
   @Test
   public void createAndRetrieveNote() {
     new Note("My note").save();
-    Note myNote = Note.find.where().eq("text", "My note").findUnique();
+    Note myNote = Note.find.where().eq("title", "My note").findUnique();
     assertNotNull(myNote);
-    assertEquals("My note", myNote.text);
+    assertEquals("My note", myNote.title);
   }
 
   @Test
@@ -37,11 +37,10 @@ public class NotesTest extends WithApplication {
 
   @Test
   public void deleteNote() {
-    Note myNote = Note.find.where().eq("text", "Test note").findUnique();
+    Note myNote = Note.find.where().eq("title", "Test note title").findUnique();
     Note.delete(myNote.id);
 
-    Note myDeletedNote = Note.find.where().eq("text", "Test note").findUnique();
+    Note myDeletedNote = Note.find.where().eq("title", "Test note title").findUnique();
     assertNull(myDeletedNote);
   }
-
 }

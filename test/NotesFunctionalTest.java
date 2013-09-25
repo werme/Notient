@@ -30,29 +30,49 @@ public class NotesFunctionalTest extends WithApplication {
 
     result = callAction(
         controllers.routes.ref.Application.newNote(),
-        fakeRequest().withFormUrlEncodedBody(ImmutableMap.of("text", "My note"))
+        fakeRequest().withFormUrlEncodedBody(ImmutableMap.of("title", "My note title", "text", "My note content"))
     );
 
     // Should return redirect status if successful
     assertThat(status(result)).isEqualTo(SEE_OTHER);
     assertThat(redirectLocation(result)).isEqualTo("/");
 
-    Note newNote = Note.find.where().eq("text", "My note").findUnique();
+    Note newNote = Note.find.where().eq("title", "My note title").findUnique();
 
     // Should be saved to DB
     assertNotNull(newNote);
-    assertEquals("My note", newNote.text);
+    assertEquals("My note title", newNote.title);
+    assertEquals("My note content", newNote.text);
   }
-
 
   @Test
   public void createInvalidNote() {
+    String title = "";
     Result result = callAction(
         controllers.routes.ref.Application.newNote(),
-        fakeRequest().withFormUrlEncodedBody(ImmutableMap.of("text", ""))
+        fakeRequest().withFormUrlEncodedBody(ImmutableMap.of("title", title))
     );
+    assertThat(status(result)).isEqualTo(BAD_REQUEST);
 
-    // Should return bas request since text is required
+    title = " ";
+    result = callAction(
+        controllers.routes.ref.Application.newNote(),
+        fakeRequest().withFormUrlEncodedBody(ImmutableMap.of("title", title))
+    );
+    assertThat(status(result)).isEqualTo(BAD_REQUEST);
+
+    title = "N";
+    result = callAction(
+        controllers.routes.ref.Application.newNote(),
+        fakeRequest().withFormUrlEncodedBody(ImmutableMap.of("title", title))
+    );
+    assertThat(status(result)).isEqualTo(BAD_REQUEST);
+
+    title = "Lorem ipsum Veniam sunt nulla enim esse incididunt eiusmod qui aliqua dolor nisi";
+    result = callAction(
+        controllers.routes.ref.Application.newNote(),
+        fakeRequest().withFormUrlEncodedBody(ImmutableMap.of("title", title))
+    );
     assertThat(status(result)).isEqualTo(BAD_REQUEST);
   }
 }

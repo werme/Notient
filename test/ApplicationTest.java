@@ -35,7 +35,7 @@ public class ApplicationTest {
         assertEquals(4, Note.find.findRowCount());
 
         // Should have note with text "The first note"
-        Note myNote = Note.find.where().eq("text", "The first note").findUnique();
+        Note myNote = Note.find.where().eq("title", "Note title 1").findUnique();
         assertNotNull(myNote);
     }
 
