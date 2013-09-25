@@ -46,6 +46,6 @@ public class ApplicationTest {
         Content html = views.html.index.render(Note.all(), noteForm);
 
         assertThat(contentType(html)).isEqualTo("text/html");
-        assertThat(contentAsString(html)).contains("Notes");
+        assertThat(contentAsString(html)).contains("Pink notes!");
     }
 }
