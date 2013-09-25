@@ -38,6 +38,7 @@ public class UsersTest extends WithApplication {
     // Should not create user with too short username
     assertNull(pingu);
 
+
     // TODO: More invalid user cases
   }
 

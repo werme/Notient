@@ -5,14 +5,16 @@ import play.data.*;
 import models.*;
 import views.html.*;
 
+
 public class Application extends Controller {
 
 	static Form<Note> noteForm = Form.form(Note.class);
-
+	//@Security.Authenticated(Secured.class)
 	public static Result index() {
 		return ok(views.html.index.render(Note.all(), noteForm));
 	}
 
+	//@Security.Authenticated(Secured.class)
 	public static Result notes() {
 		return ok(views.html.index.render(Note.all(), noteForm));
 	}
@@ -42,23 +44,23 @@ public class Application extends Controller {
 		public String password;
 
 		public String validate() {
-		    if (User.authenticate(email, password) == null) {
-		      return "Invalid user or password";
-		    }
-		    return null;
+			if (User.authenticate(email, password) == null) {
+				return "Invalid user or password";
+			}
+			return null;
 		}
 
 	}
 	public static Result authenticate() {
-	    Form<Login> loginForm = Form.form(Login.class).bindFromRequest();
-	    if (loginForm.hasErrors()) {
-	        return badRequest(login.render(loginForm));
-	    } else {
-	        session().clear();
-	        session("email", loginForm.get().email);
-	        return redirect(
-	            routes.Application.notes()
-	        );
-	    }
+		Form<Login> loginForm = Form.form(Login.class).bindFromRequest();
+		if (loginForm.hasErrors()) {
+			return badRequest(login.render(loginForm));
+		} else {
+			session().clear();
+			session("email", loginForm.get().email);
+			return redirect(
+				routes.Application.notes()
+				);
+		}
 	}
 }
