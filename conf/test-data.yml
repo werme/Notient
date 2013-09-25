@@ -1,7 +1,8 @@
 # Notes
 
 - !!models.Note
-    text: Test note
+    title: Test note title
+    text: Test note content
 
 # Users
 

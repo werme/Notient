@@ -3,6 +3,7 @@ package models;
 import java.util.*;
 import play.db.ebean.*;
 import play.data.validation.Constraints.*;
+import play.data.format.Formats.*;
 import javax.persistence.*;
 
 @Entity
@@ -12,9 +13,19 @@ public class Note extends Model {
 	public Long id;
 
 	@Required
+	@NonEmpty
+	@MinLength(2)
+	@MaxLength(30)
+	public String title;
+
 	public String text;
 
-	public Note(String text) {
+	public Note(String title) {
+		this.title = title;
+	}
+
+	public Note(String title, String text) {
+		this.title = title;
 		this.text = text;
 	}
 
