@@ -6,14 +6,17 @@
 body {
   font: 14px/1.5 'jaf-facitweb';
   color: #333;
+  background: #f5f5f5;
 }
 
 h1 {
   font-family: 'jubilat';
   color: white;
-  font-size: 3em;
+  font-size: 3.4em;
+  font-weight: 600;
   background: @pink;
-  padding: 0.4rem 1rem;
+  padding: 0.2rem 1rem;
+  //text-shadow: rgba(0,0,0,0.2) 0 0 5px;
 }
 
 a {
@@ -29,8 +32,15 @@ a {
 }
 
 .notes-wrapper {
-  padding-top: 2%;
   overflow: hidden;
+  padding-top: 2%;
+}
+
+footer {
+  .container {
+    background: white;
+    padding: 1rem;
+  }
 }
 
 .note {
@@ -41,8 +51,8 @@ a {
   margin: 0 2% 2% 0;
   width: 32%;
   height: 200px;
-  background: @pink;
-  color: white;
+  background: white;
+  color: #333;
   transition: 0.2s all;
 
   &:nth-child(3n) {
@@ -53,6 +63,7 @@ a {
     background: @pink;
     color: white;
 
+    p { text-shadow: rgba(0,0,0,0.2) 0 0 5px; }
     a { color: white; border-color: white; }
   }
 
@@ -61,5 +72,35 @@ a {
     position: absolute;
     bottom: 1em;
     right: 1em;
+    &:hover { border-color: @pink; }
+  }
+}
+
+form {
+  .info { color: @pink; display: none; }
+
+  dd, dl {
+    display: inline-block;
+  }
+
+  input[type=text], input[type=submit] {
+    border: 3px solid #eee;
+    font-size: 1em;
+    padding: 0.4em;
+  }
+
+  label { display: none; }
+
+  input[type=submit] {
+    border: 3px solid @pink;
+    display: inline-block;
+    color: white;
+    background: transparent;
+    transition: 0.1s background;
+    background: @pink;
+    margin: 0 0.6em;
+    padding: 0.4em 0.6em;
+
+    &:hover { background: darken(@pink, 10%); border-color: darken(@pink, 10%); }
   }
 }
