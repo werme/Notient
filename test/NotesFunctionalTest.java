@@ -52,7 +52,7 @@ public class NotesFunctionalTest extends WithApplication {
         fakeRequest().withFormUrlEncodedBody(ImmutableMap.of("text", ""))
     );
 
-    // Should return redirect status if successful
+    // Should return bas request since text is required
     assertThat(status(result)).isEqualTo(BAD_REQUEST);
   }
-  }
+}
