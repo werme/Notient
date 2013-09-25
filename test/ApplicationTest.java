@@ -35,7 +35,7 @@ public class ApplicationTest {
         assertEquals(4, Note.find.findRowCount());
 
         // Should have note with text "The first note"
-        Note myNote = Note.find.where().eq("text", "The first note").findUnique();
+        Note myNote = Note.find.where().eq("title", "Note title 1").findUnique();
         assertNotNull(myNote);
     }
 
@@ -46,6 +46,6 @@ public class ApplicationTest {
         Content html = views.html.index.render(Note.all(), noteForm);
 
         assertThat(contentType(html)).isEqualTo("text/html");
-        assertThat(contentAsString(html)).contains("Notes");
+        assertThat(contentAsString(html)).contains("The first note");
     }
 }
