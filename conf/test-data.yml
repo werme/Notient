@@ -10,3 +10,7 @@
     email: test@notes.com
     username: teststudent
     password: mysecretpassword
+
+# Tags
+- !!models.Tag
+    title: Test tag titlegs
