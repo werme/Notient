@@ -20,6 +20,9 @@ public class Note extends Model {
 
 	public String text;
 
+	@ManyToMany
+	public List<Tag> tags = new ArrayList<Tag>();
+
 	public Note(String title) {
 		this.title = title;
 	}
