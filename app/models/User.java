@@ -4,6 +4,9 @@ import play.data.validation.Constraints.*;
 import javax.persistence.*;
 import play.db.ebean.*;
 
+@Table(
+	    uniqueConstraints=
+	        @UniqueConstraint(columnNames={"username"}))
 @Entity
 public class User extends Model {
 
