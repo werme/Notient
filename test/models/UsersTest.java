@@ -44,7 +44,7 @@ public class UsersTest extends WithApplication {
 		pingu = User.find.where().eq("email", "invalidPingu@notes.com")
 				.findUnique();
 		
-		/*
+		
 		// Should not create user with too short username
 		Result result = callAction(
 				controllers.routes.ref.Application.newUser(),
@@ -56,7 +56,7 @@ public class UsersTest extends WithApplication {
 		assertThat(status(result)).isEqualTo(BAD_REQUEST);
 		// Username should be unique
 		
-		Result result = callAction(
+		result = callAction(
 				controllers.routes.ref.Application.newUser(),
 				fakeRequest().withFormUrlEncodedBody(
 						ImmutableMap.of("email", "pinguUser@notes.com",
@@ -65,7 +65,7 @@ public class UsersTest extends WithApplication {
 						"test@notes.com"));
 		assertThat(status(result)).isEqualTo(SEE_OTHER);
 						
-		Result result = callAction(
+		result = callAction(
 				controllers.routes.ref.Application.newUser(),
 				fakeRequest().withFormUrlEncodedBody(
 						ImmutableMap.of("email", "otherPinguUser@notes.com",
@@ -73,7 +73,7 @@ public class UsersTest extends WithApplication {
 								"mysecret password")).withSession("email",
 						"test@notes.com"));
 		assertThat(status(result)).isEqualTo(BAD_REQUEST);
-		*/
+		
 		// TODO: More invalid user cases
 	}
 

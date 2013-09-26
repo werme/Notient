@@ -1,7 +1,9 @@
 package models;
 
 import play.data.validation.Constraints.*;
+
 import javax.persistence.*;
+
 import play.db.ebean.*;
 
 @Table(
@@ -34,6 +36,9 @@ public class User extends Model {
 
 	public static User findByEmail(String email) {
 		return find.where().eq("email", email).findUnique();
+	}
+	public static void createUser(User user) {
+		user.save();
 	}
 
 	public static void deleteUser(String email) {

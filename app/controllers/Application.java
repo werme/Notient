@@ -51,7 +51,7 @@ public class Application extends Controller {
 		}
 
 	}
-
+	
 	public static Result authenticate() {
 		Form<Login> loginForm = Form.form(Login.class).bindFromRequest();
 		if (loginForm.hasErrors()) {
@@ -64,6 +64,23 @@ public class Application extends Controller {
 				);
 		}
 	}
+	
+	public static Result register() {
+		return ok(register.render(Form.form(Register.class)));
+	}
+	
+	public static class Register {
+
+		public String email;
+		public String username;
+		public String password;
+
+		public String validate() {
+			//Validate the email, username and password here.
+			return null;
+		}
+
+	}
 
 	public static Result logout() {
 	    session().clear();
@@ -71,5 +88,18 @@ public class Application extends Controller {
 	    return redirect(
 	        routes.Application.login()
 	    );
+	}
+	public static Result newUser() {
+		Form<User> registerForm = Form.form(User.class).bindFromRequest();
+		if (registerForm.hasErrors()) {
+			return badRequest(register.render(Form.form(Register.class)));
+		} else {
+			User.createUser(registerForm.get());
+			session().clear();
+			session("email", registerForm.get().email);
+			return redirect(
+				routes.Application.notes()
+				);
+		}
 	}
 }

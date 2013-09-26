@@ -1,34 +1,32 @@
-@(loginForm: Form[Application.Login])
+@(form: Form[Application.Login])
 
-@import helper._
-
-@main("Login") {
-
-	<h1 class="login-header">Sign in</h1>
-	<section class="login">
+<html>
+<head>
+<title>Login test</title>
+<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+<link rel="stylesheet" type="text/css" media="screen"
+	href="@routes.Assets.at("stylesheets/login.css")">
+</head>
+<body>
 	<header>
-		@if(loginForm.hasGlobalErrors) {
-			<p class="error">loginForm.globalError.message</p>
-		}
-		@if(flash.contains("success")) {
-	 		<p class="success">
-	      @flash.get("success")
-	 		</p>
+		@if(form.hasGlobalErrors) {
+		<p class="error">@form.globalError.message</p>
 		}
 	</header>
 
-		@helper.form(routes.Application.authenticate) {
-			@inputText(
-	        loginForm("email"),
-	        '_label -> "Email",
-	        'placeholder -> "user@example.com"
-	    )
-			@inputPassword(
-	        loginForm("password"),
-	        '_label -> "Password",
-	        'placeholder -> "password"
-	    )
-			<input type="submit" value="Login">
-		}
-	</section>
-}
+	@helper.form(routes.Application.authenticate) {
+	<h1>Sign in</h1>
+
+	<p>
+		<input type="email" name="email" placeholder="Email" value="@form("email").value">
+	</p>
+	<p>
+		<input type="password" name="password" placeholder="Password">
+	</p>
+	<p>
+		<button type="submit">Login</button>
+	</p>
+	}
+
+</body>
+</html>
