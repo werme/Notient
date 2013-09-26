@@ -8,5 +8,5 @@
 
 - !!models.User
     email: test@notes.com
-    username: student
+    username: teststudent
     password: mysecretpassword
