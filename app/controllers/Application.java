@@ -8,7 +8,7 @@ import views.html.*;
 public class Application extends Controller {
 
 	static Form<Note> noteForm = Form.form(Note.class);
-	
+
 	public static Result index() {
 		return ok(views.html.index.render(Note.all(), noteForm));
 	}
@@ -51,7 +51,7 @@ public class Application extends Controller {
 		}
 
 	}
-	
+
 	public static Result authenticate() {
 		Form<Login> loginForm = Form.form(Login.class).bindFromRequest();
 		if (loginForm.hasErrors()) {
@@ -64,7 +64,7 @@ public class Application extends Controller {
 				);
 		}
 	}
-	
+
 	public static Result logout() {
 	    session().clear();
 	    flash("success", "You've been logged out");
