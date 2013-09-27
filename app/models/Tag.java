@@ -5,6 +5,7 @@ import play.db.ebean.*;
 import play.data.validation.Constraints.*;
 import play.data.format.Formats.*;
 import javax.persistence.*;
+import java.util.regex.PatternSyntaxException;
 
 @Entity
 public class Tag extends Model {
@@ -28,11 +29,34 @@ public class Tag extends Model {
     return find.all();
   }
 
-  public static void create(Tag tag) {
+  public static Tag create(Tag tag) {
     tag.save();
+    return tag;
+  }
+
+  public static List<Tag> createOrFindAllFromString(String list) {
+    List<Tag> tags = new ArrayList<Tag>();
+    String[] tagArray = new String[]{list};
+
+    try {
+        tagArray = list.split("\\s+");
+    } catch (PatternSyntaxException ex) {
+        // TODO
+    }
+
+    for(String title : tagArray) {
+      Tag tag = findByTitle(title) == null ? create(new Tag(title)) : findByTitle(title);
+      tags.add(findByTitle(title));
+    }
+
+    return tags;
   }
 
   public static void delete(Long id) {
     find.ref(id).delete();
+  }
+
+  public static Tag findByTitle(String title) {
+    return find.where().eq("title", title).findUnique();
   }
 }
