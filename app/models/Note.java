@@ -39,16 +39,18 @@ public class Note extends Model {
 		return find.all();
 	}
 
-	public static void create(Note note) {
+	public static Note create(Note note) {
 		note.save();
+		return note;
 	}
 
-	public static void create(Note note, String tags) {
+	public static Note create(Note note, String tags) {
 		note.save();
 		if(tags != null) {
 			note.tags = Tag.createOrFindAllFromString(tags);
 			note.saveManyToManyAssociations("tags");
 		}
+		return note;
 	}
 
 	public static void delete(Long id) {
