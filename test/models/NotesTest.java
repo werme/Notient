@@ -33,10 +33,7 @@ public class NotesTest extends WithApplication {
   @Test
   public void addTagToNote() {
     Note myNote = Note.find.where().eq("title", "Test note title").findUnique();
-    myNote.tags.add(Tag.find.where().eq("title", "Test tag title").findUnique());
-    myNote.saveManyToManyAssociations("tags");
-
-    myNote = Note.find.where().eq("title", "Test note title").findUnique();
+    Note.addTag(myNote.id, Tag.findByTitle("Test tag title"));
 
     assertEquals("Test tag title", myNote.tags.get(0).title);
   }
