@@ -2,6 +2,7 @@ package controllers;
 
 import play.mvc.*;
 import play.data.*;
+import play.Logger;
 import models.*;
 import views.html.*;
 
@@ -23,7 +24,7 @@ public class Application extends Controller {
 		if (filledForm.hasErrors()) {
 			return badRequest(views.html.index.render(Note.all(), filledForm));
 		} else {
-			Note.create(filledForm.get());
+			Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"));
 			return redirect(routes.Application.notes());
 		}
 	}
@@ -51,7 +52,7 @@ public class Application extends Controller {
 		}
 
 	}
-	
+
 	public static Result authenticate() {
 		Form<Login> loginForm = Form.form(Login.class).bindFromRequest();
 		if (loginForm.hasErrors()) {
@@ -64,11 +65,11 @@ public class Application extends Controller {
 				);
 		}
 	}
-	
+
 	public static Result register() {
 		return ok(register.render(Form.form(Register.class)));
 	}
-	
+
 	public static class Register {
 
 		public String email;

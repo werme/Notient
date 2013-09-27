@@ -22,6 +22,7 @@
                 <div class="note">
                     <h2>@note.title</h2>
                     <p>@note.text</p>
+                    @for(tag <- note.tags) { @tag.title }
                     <a href='@routes.Application.deleteNote(note.id)' class="delete-button">Delete Note</a>
                 </div>
             }
@@ -33,6 +34,10 @@
 
             @inputText(noteForm("title"))
             @inputText(noteForm("text"))
+            <dl>
+                <dt><label>tags</label></dt>
+                <dd><input type="text" name="tagList" /></dd>
+            </dl>
 
             <input type="submit" value="Create Note">
         }
