@@ -7,6 +7,7 @@ import play.data.format.Formats.*;
 import javax.persistence.*;
 import java.util.regex.PatternSyntaxException;
 
+@Table(uniqueConstraints=@UniqueConstraint(columnNames={"title"}))
 @Entity
 public class Tag extends Model {
 
