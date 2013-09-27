@@ -58,6 +58,28 @@ public class NotesFunctionalTest extends WithApplication {
 	}
 
 	@Test
+	public void createNoteWithTags() {
+		Result result = callAction(
+				controllers.routes.ref.Application.newNote(),
+				fakeRequest().withFormUrlEncodedBody(
+						ImmutableMap.of("title", "My note title", "text",
+								"My note content", "tagList", "tag1 tag2")).withSession("email",
+						"test@notes.com"));
+
+		// Should return redirect status if successful
+		assertThat(status(result)).isEqualTo(SEE_OTHER);
+		assertThat(redirectLocation(result)).isEqualTo("/");
+
+		Note newNote = Note.find.where().eq("title", "My note title")
+				.findUnique();
+
+		// Tags should have been created and saveed to DB
+		assertEquals(2, newNote.tags.size());
+		assertEquals("tag1", newNote.tags.get(0).title);
+		assertEquals("tag2", newNote.tags.get(1).title);
+	}
+
+	@Test
 	public void createInvalidNote() {
 		String title = "";
 		Result result = callAction(
