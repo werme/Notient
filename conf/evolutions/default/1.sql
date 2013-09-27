@@ -24,17 +24,20 @@ create table user (
   constraint pk_user primary key (email))
 ;
 
+
 create table note_tag (
   note_id                        bigint not null,
   tag_id                         bigint not null,
   constraint pk_note_tag primary key (note_id, tag_id))
 ;
-
 create sequence note_seq;
 
 create sequence tag_seq;
 
 create sequence user_seq;
+
+
+
 
 alter table note_tag add constraint fk_note_tag_note_01 foreign key (note_id) references note (id) on delete restrict on update restrict;
 
