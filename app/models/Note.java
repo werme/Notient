@@ -53,6 +53,12 @@ public class Note extends Model {
 		return note;
 	}
 
+	public static void addTag(Long id, Tag tag) {
+		Note note = find.ref(id);
+		note.tags.add(tag);
+		note.saveManyToManyAssociations("tags");
+	}
+
 	public static void delete(Long id) {
 		find.ref(id).delete();
 	}
