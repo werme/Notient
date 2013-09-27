@@ -4,6 +4,7 @@ import java.util.*;
 import play.db.ebean.*;
 import play.data.validation.Constraints.*;
 import play.data.format.Formats.*;
+import play.Logger;
 import javax.persistence.*;
 
 @Entity
@@ -40,6 +41,14 @@ public class Note extends Model {
 
 	public static void create(Note note) {
 		note.save();
+	}
+
+	public static void create(Note note, String tags) {
+		note.save();
+		if(tags != null) {
+			note.tags = Tag.createOrFindAllFromString(tags);
+			note.saveManyToManyAssociations("tags");
+		}
 	}
 
 	public static void delete(Long id) {
