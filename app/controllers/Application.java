@@ -8,31 +8,8 @@ import views.html.*;
 
 public class Application extends Controller {
 
-	static Form<Note> noteForm = Form.form(Note.class);
-
 	public static Result index() {
-		return ok(views.html.index.render(Note.all(), noteForm));
-	}
-
-	public static Result notes() {
-		return ok(views.html.index.render(Note.all(), noteForm));
-	}
-
-	@Security.Authenticated(Secured.class)
-	public static Result newNote() {
-		Form<Note> filledForm = noteForm.bindFromRequest();
-		if (filledForm.hasErrors()) {
-			return badRequest(views.html.index.render(Note.all(), filledForm));
-		} else {
-			Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"));
-			return redirect(routes.Application.notes());
-		}
-	}
-
-	@Security.Authenticated(Secured.class)
-	public static Result deleteNote(Long id) {
-		Note.delete(id);
-		return redirect(routes.Application.notes());
+		return redirect(routes.Notes.list());
 	}
 
 	public static Result login() {
@@ -50,7 +27,6 @@ public class Application extends Controller {
 			}
 			return null;
 		}
-
 	}
 
 	public static Result authenticate() {
@@ -61,7 +37,7 @@ public class Application extends Controller {
 			session().clear();
 			session("email", loginForm.get().email);
 			return redirect(
-				routes.Application.notes()
+				routes.Application.index()
 				);
 		}
 	}
@@ -99,7 +75,7 @@ public class Application extends Controller {
 			session().clear();
 			session("email", registerForm.get().email);
 			return redirect(
-				routes.Application.notes()
+				routes.Application.index()
 				);
 		}
 	}

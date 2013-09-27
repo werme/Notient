@@ -30,7 +30,7 @@ public class NotesFunctionalTest extends WithApplication {
 
 		// Should return bad request if no data is given
 		result = callAction(
-				controllers.routes.ref.Application.newNote(),
+				controllers.routes.ref.Notes.newNote(),
 				fakeRequest().withFormUrlEncodedBody(
 						ImmutableMap.of("title", "", "text",
 								"")).withSession("email",
@@ -38,7 +38,7 @@ public class NotesFunctionalTest extends WithApplication {
 		assertThat(status(result)).isEqualTo(BAD_REQUEST);
 
 		result = callAction(
-				controllers.routes.ref.Application.newNote(),
+				controllers.routes.ref.Notes.newNote(),
 				fakeRequest().withFormUrlEncodedBody(
 						ImmutableMap.of("title", "My note title", "text",
 								"My note content")).withSession("email",
@@ -46,7 +46,7 @@ public class NotesFunctionalTest extends WithApplication {
 
 		// Should return redirect status if successful
 		assertThat(status(result)).isEqualTo(SEE_OTHER);
-		assertThat(redirectLocation(result)).isEqualTo("/");
+		assertThat(redirectLocation(result)).isEqualTo("/notes");
 
 		Note newNote = Note.find.where().eq("title", "My note title")
 				.findUnique();
@@ -60,7 +60,7 @@ public class NotesFunctionalTest extends WithApplication {
 	@Test
 	public void createNoteWithTags() {
 		Result result = callAction(
-				controllers.routes.ref.Application.newNote(),
+				controllers.routes.ref.Notes.newNote(),
 				fakeRequest().withFormUrlEncodedBody(
 						ImmutableMap.of("title", "My note title", "text",
 								"My note content", "tagList", "tag1 tag2")).withSession("email",
@@ -68,7 +68,7 @@ public class NotesFunctionalTest extends WithApplication {
 
 		// Should return redirect status if successful
 		assertThat(status(result)).isEqualTo(SEE_OTHER);
-		assertThat(redirectLocation(result)).isEqualTo("/");
+		assertThat(redirectLocation(result)).isEqualTo("/notes");
 
 		Note newNote = Note.find.where().eq("title", "My note title")
 				.findUnique();
@@ -83,7 +83,7 @@ public class NotesFunctionalTest extends WithApplication {
 	public void createInvalidNote() {
 		String title = "";
 		Result result = callAction(
-				controllers.routes.ref.Application.newNote(),
+				controllers.routes.ref.Notes.newNote(),
 				fakeRequest()
 						.withFormUrlEncodedBody(ImmutableMap.of("title", title))
 						.withSession("email", "test@notes.com")
@@ -92,7 +92,7 @@ public class NotesFunctionalTest extends WithApplication {
 
 		title = " ";
 		result = callAction(
-				controllers.routes.ref.Application.newNote(),
+				controllers.routes.ref.Notes.newNote(),
 				fakeRequest().withFormUrlEncodedBody(
 						ImmutableMap.of("title", title)).withSession("email",
 						"test@notes.com"));
@@ -100,7 +100,7 @@ public class NotesFunctionalTest extends WithApplication {
 
 		title = "N";
 		result = callAction(
-				controllers.routes.ref.Application.newNote(),
+				controllers.routes.ref.Notes.newNote(),
 				fakeRequest().withFormUrlEncodedBody(
 						ImmutableMap.of("title", title)).withSession("email",
 						"test@notes.com"));
@@ -108,7 +108,7 @@ public class NotesFunctionalTest extends WithApplication {
 
 		title = "Lorem ipsum Veniam sunt nulla enim esse incididunt eiusmod qui aliqua dolor nisi";
 		result = callAction(
-				controllers.routes.ref.Application.newNote(),
+				controllers.routes.ref.Notes.newNote(),
 				fakeRequest().withFormUrlEncodedBody(
 						ImmutableMap.of("title", title)).withSession("email",
 						"test@notes.com"));
