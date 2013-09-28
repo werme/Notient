@@ -51,4 +51,15 @@ public class NotesTest extends WithApplication {
     Note myDeletedNote = Note.find.where().eq("title", "Test note title").findUnique();
     assertNull(myDeletedNote);
   }
+  @Test
+  public void notesBy() {
+      new User("test1@notes.com", "Student", "password").save();
+
+      Note.create(new Note("My first note", User.findByEmail("test1@notes.com")));
+      Note.create(new Note("My second note", User.findByEmail("test1@notes.com")));
+
+      List<Note> results = Note.notesBy("test1@notes.com");
+      assertEquals(2, results.size());
+      assertEquals("My first note", results.get(0).title);
+  }
 }
