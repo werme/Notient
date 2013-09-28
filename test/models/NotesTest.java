@@ -24,7 +24,7 @@ public class NotesTest extends WithApplication {
 
   @Test
   public void createAndRetrieveNote() {
-    Note.create(new Note("My note"));
+    Note.create(new Note("My note", User.findByEmail("test@notes.com")));
     Note myNote = Note.find.where().eq("title", "My note").findUnique();
     assertNotNull(myNote);
     assertEquals("My note", myNote.title);
