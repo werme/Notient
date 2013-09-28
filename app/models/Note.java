@@ -24,6 +24,9 @@ public class Note extends Model {
 	@ManyToMany
 	public List<Tag> tags = new ArrayList<Tag>();
 
+	@OneToMany(mappedBy="note", cascade=CascadeType.ALL)
+	public List<Comment> comments = new ArrayList<Comment>();
+
 	public Note(String title) {
 		this.title = title;
 	}
@@ -62,4 +65,11 @@ public class Note extends Model {
 	public static void delete(Long id) {
 		find.ref(id).delete();
 	}
+
+	public Note addComment(String author, String content) {
+        Comment comment = new Comment(this, author, content);
+        this.comments.add(comment);
+        this.save();
+        return this;
+    }
 }
