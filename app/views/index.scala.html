@@ -10,6 +10,7 @@
                 <ul>
                     <li><a href="@routes.Application.login()">Login</a></li>
                     <li><a href="@routes.Application.logout()">Logout</a></li>
+                    <li><a href="@routes.Application.register()">Register</a></li>
                 </ul>
             </nav>
         </div>
@@ -20,17 +21,17 @@
         <section class="notes-wrapper">
             @for(note <- notes) {
                 <div class="note">
-                    <h2>@note.title</h2>
+                    <a href='@routes.Notes.show(note.id)'><h2>@note.title</h2></a>
                     <p>@note.text</p>
                     @for(tag <- note.tags) { @tag.title }
-                    <a href='@routes.Application.deleteNote(note.id)' class="delete-button">Delete Note</a>
+                    <a href='@routes.Notes.delete(note.id)' class="delete-button">Delete Note</a>
                 </div>
             }
         </section>
     </div>
     <footer>
         <div class="container">
-        @form(routes.Application.newNote) {
+        @form(routes.Notes.newNote) {
 
             @inputText(noteForm("title"))
             @inputText(noteForm("text"))

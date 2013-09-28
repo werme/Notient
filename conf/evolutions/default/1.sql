@@ -13,6 +13,7 @@ create table note (
 create table tag (
   id                        bigint not null,
   title                     varchar(255),
+  constraint uq_tag_1 unique (title),
   constraint pk_tag primary key (id))
 ;
 

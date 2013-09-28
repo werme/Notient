@@ -1,5 +1,6 @@
 @import "reset.less";
 @pink: #E81F83;
+@green: #29c67e;
 
 * { box-sizing: border-box; }
 body {
@@ -50,12 +51,25 @@ a {
   padding-top: 1rem;
 }
 
+.note-wrapper {
+  padding: 1rem;
+  margin-top: 1rem;
+  background: white;
+}
+
 footer {
   .container {
     background: white;
     padding: 1rem;
   }
 }
+
+p {
+  margin-bottom: 1rem;
+}
+
+.success { color: @green; }
+.error { color: @pink; }
 
 .note {
   display: block;
@@ -114,7 +128,7 @@ form {
   }
 }
 
-.login {
+.center-form {
   margin: 0 auto;
   padding: 1.4rem 1rem 1rem;
   width: 100%;
@@ -127,7 +141,7 @@ form {
   input[type=submit] { margin: 0; }
 }
 
-h1.login-header {
+h1.center-form-header {
   margin: 4rem auto -0.94rem;
   width: 100%;
   max-width: 20rem;
