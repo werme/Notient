@@ -1,38 +1,35 @@
-@(form: Form[Application.Register])
+@(registerForm: Form[Application.Register])
 
-<html>
-<head>
-<title>Register test</title>
-<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
-<link rel="stylesheet" type="text/css" media="screen"
-	href="@routes.Assets.at("stylesheets/register.css")">
-</head>
-<body>
+@import helper._
+
+@main("Register") {
+
+<h1 class="register-header">Register</h1>
+	<section class="register">
 	<header>
-		@if(form.hasGlobalErrors) {
-		<p class="error">@form.globalError.message</p>
+		@if(registerForm.hasGlobalErrors) {
+		<p class="error">@registerForm.globalError.message</p>
 		}
 	</header>
-
-	@helper.form(routes.Application.newUser) {
-	<div =newUser>
-		<h1>Register</h1>
-
-		<p>
-			<input type="email" name="email" placeholder="Email" value="@form("email").value">
-		</p>
-		<p>
-			<input type="username" name="username" placeholder="Username"
-				value="@form("username").value">
-		</p>
-		<p>
-			<input type="password" name="password" placeholder="Password">
-		</p>
-		<p>
-			<button type="submit">Create user</button>
-		</p>
-	</div>
-	}
-
-</body>
-</html>
+		@helper.form(routes.Application.newUser) {
+			@inputText(
+	        registerForm("email"),
+	        '_label -> "Email",
+	        'placeholder -> "user@example.com"
+	    )
+	    	@inputText(
+	        registerForm("username"),
+	        '_label -> "Username",
+	        'placeholder -> "username"
+	    )
+	        
+			@inputPassword(
+	        registerForm("password"),
+	        '_label -> "Password",
+	        'placeholder -> "password"
+	    )
+			<input type="submit" value="Register">
+		}
+		</section>
+		
+}
