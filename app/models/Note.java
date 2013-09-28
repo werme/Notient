@@ -19,7 +19,7 @@ public class Note extends Model {
 	@MaxLength(30)
 	public String title;
 	public String text;
-	public User author;
+	public String author;
 
 	@ManyToMany
 	public List<Tag> tags = new ArrayList<Tag>();
@@ -29,17 +29,23 @@ public class Note extends Model {
 
 	public Note(String title, User author) {
 		this.title = title;
-		this.author = author;
+		this.author = author.email;
 	}
 
 	public Note(String title, String text, User author) {
 		this.title = title;
 		this.text = text;
-		this.author = author;
+		this.author = author.email;
 	}
 
 	public static Finder<Long, Note> find = new Finder(Long.class, Note.class);
 
+    public static List<Note> notesBy(String user) {
+        return find.where()
+            .eq("author", user)
+            .findList();
+    }
+    
 	public static List<Note> all() {
 		return find.all();
 	}
