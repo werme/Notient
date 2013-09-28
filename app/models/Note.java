@@ -18,8 +18,8 @@ public class Note extends Model {
 	@MinLength(2)
 	@MaxLength(30)
 	public String title;
-
 	public String text;
+	public User author;
 
 	@ManyToMany
 	public List<Tag> tags = new ArrayList<Tag>();
@@ -27,13 +27,15 @@ public class Note extends Model {
 	@OneToMany(mappedBy="note", cascade=CascadeType.ALL)
 	public List<Comment> comments = new ArrayList<Comment>();
 
-	public Note(String title) {
+	public Note(String title, User author) {
 		this.title = title;
+		this.author = author;
 	}
 
-	public Note(String title, String text) {
+	public Note(String title, String text, User author) {
 		this.title = title;
 		this.text = text;
+		this.author = author;
 	}
 
 	public static Finder<Long, Note> find = new Finder(Long.class, Note.class);
