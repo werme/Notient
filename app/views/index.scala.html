@@ -5,7 +5,7 @@
 @main("Note list") {
     <header class="main-header">
         <div class="container">
-            <h1>Pink is the best color.</h1>
+            <h1>notient</h1>
             <nav>
                 <ul>
                     <li><a href="@routes.Application.login()">Login</a></li>
@@ -14,17 +14,21 @@
                 </ul>
             </nav>
         </div>
-
+        <div class="clearfix">
     </header>
 
     <div class="container main">
         <section class="notes-wrapper">
             @for(note <- notes) {
-                <div class="note">
-                    <a href='@routes.Notes.show(note.id)'><h2>@note.title</h2></a>
-                    <p>@note.text</p>
-                    @for(tag <- note.tags) { @tag.title }
-                    <a href='@routes.Notes.delete(note.id)' class="delete-button">Delete Note</a>
+                <div class="small-note">
+                    <header>
+                        <a href='@routes.Notes.show(note.id)'><h2>@note.title</h2></a>
+                        <a href='@routes.Notes.delete(note.id)' class="delete-button"><i class="remove icon"></i></a>
+                    </header>
+                    <section class="note-content">
+                        <p>@note.text</p>
+                        @for(tag <- note.tags) { <span class="ui red label">@tag.title</span> }
+                    </section>
                 </div>
             }
         </section>
@@ -40,7 +44,7 @@
                 <dd><input type="text" name="tagList" /></dd>
             </dl>
 
-            <input type="submit" value="Create Note">
+            <input class="ui blue submit button" type="submit" value="Create Note">
         }
         </div>
     </footer>
