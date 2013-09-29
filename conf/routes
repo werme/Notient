@@ -6,7 +6,8 @@ GET     /                       controllers.Application.index()
 GET     /notes                  controllers.Notes.list()
 POST    /notes                  controllers.Notes.newNote()
 GET     /note/:id               controllers.Notes.show(id: Long)
-POST    /note/:id               controllers.Notes.delete(id: Long)
+
+POST    /note/:index            controllers.Notes.delete(id: Long)
 POST    /note/:id/comments      controllers.Comments.newNoteComment(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
