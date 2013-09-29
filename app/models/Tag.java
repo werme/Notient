@@ -47,7 +47,8 @@ public class Tag extends Model {
 
     for(String title : tagArray) {
       Tag tag = findByTitle(title) == null ? create(new Tag(title)) : findByTitle(title);
-      tags.add(findByTitle(title));
+      if(!tags.contains(findByTitle(title)))
+        tags.add(findByTitle(title));
     }
 
     return tags;
