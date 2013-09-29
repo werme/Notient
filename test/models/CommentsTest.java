@@ -23,7 +23,25 @@ public class CommentsTest extends WithApplication {
 	}
 
 	@Test
-	public void createNote() {
+	public void useTheCommentsRelation() {
+		Note.create(new Note("My note"));
+		Note note = Note.find.where().eq("title", "My note").findUnique();
+
+		note.addComment("Jeff", "Nice post");
+		note.addComment("Tom", "Awesome");
+
+		// assertEquals(2, Comment.count());
+
+		assertEquals(2, note.comments.size());
+		assertEquals("Jeff", note.comments.get(0).author);
+
+		note.delete();
+
+		// assertEquals(0, Comment.count());
+	}
+
+	@Test
+	public void createComment() {
 		Note.create(new Note("My note"));
     	Note note = Note.find.where().eq("title", "My note").findUnique();
 
@@ -46,5 +64,4 @@ public class CommentsTest extends WithApplication {
 		assertEquals("Awesome", secondComment.content);
 		assertNotNull(secondComment.postedAt);
 	}
-
 }
