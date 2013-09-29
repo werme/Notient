@@ -21,7 +21,7 @@ public class Notes extends Controller {
 	}
 
 	public static Result show(Long id) {
-		return ok(views.html.show.render(Note.find.ref(id), noteForm, commentForm));
+		return ok(views.html.show.render(Note.find.ref(id), commentForm));
 	}
 
 	@SecureSocial.SecuredAction
