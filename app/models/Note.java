@@ -45,7 +45,7 @@ public class Note extends Model {
             .eq("author", user)
             .findList();
     }
-    
+
 	public static List<Note> all() {
 		return find.all();
 	}
