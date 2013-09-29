@@ -1,35 +1,30 @@
-@(loginForm: Form[Application.Register])
+@(registerForm: Form[Application.Register])
 
 @import helper._
 
 @main("Register") {
 
-	<h1 class="center-form-header">Register</h1>
+	<h1 class="center-form-header">Sign in</h1>
 	<section class="center-form">
 	<header>
-		@if(loginForm.hasGlobalErrors) {
-			<p class="error">loginForm.globalError.message</p>
-		}
-		@if(flash.contains("success")) {
-	 		<p class="success">
-	      @flash.get("success")
-	 		</p>
+		@if(registerForm.hasGlobalErrors) {
+		<p class="error">@registerForm.globalError.message</p>
 		}
 	</header>
-
 		@helper.form(routes.Application.newUser) {
 			@inputText(
-	        loginForm("email"),
+	        registerForm("email"),
 	        '_label -> "Email",
 	        'placeholder -> "user@example.com"
 	    )
-  		@inputText(
-          loginForm("username"),
-          '_label -> "Username",
-          'placeholder -> "Pony"
-      )
+	    	@inputText(
+	        registerForm("username"),
+	        '_label -> "Username",
+	        'placeholder -> "username"
+	    )
+	        
 			@inputPassword(
-	        loginForm("password"),
+	        registerForm("password"),
 	        '_label -> "Password",
 	        'placeholder -> "password"
 	    )
