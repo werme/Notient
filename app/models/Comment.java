@@ -15,7 +15,11 @@ public class Comment extends Model {
   public Long id;
 
   //@Required
+<<<<<<< HEAD
   public String author;
+=======
+  public User author;
+>>>>>>> Implement working comments
 
   //@Required
   public Date postedAt;
