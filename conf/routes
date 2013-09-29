@@ -3,10 +3,10 @@
 GET     /                       controllers.Application.index()
 
 # Login
-GET     /login                  controllers.Application.login()
+GET     /login1                 controllers.Application.login()
 GET     /register               controllers.Application.register()
-GET     /logout                 controllers.Application.logout()
-POST    /login                  controllers.Application.authenticate()
+GET     /logout1                controllers.Application.logout()
+POST    /login1                 controllers.Application.authenticate()
 POST    /register               controllers.Application.newUser()
 
 # Notes
@@ -18,3 +18,24 @@ GET     /note/:id/delete        controllers.Notes.delete(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file           controllers.Assets.at(path="/public", file)
+
+# Login page
+GET     /login                      securesocial.controllers.LoginPage.login
+GET     /logout                     securesocial.controllers.LoginPage.logout
+
+# User Registration and password handling 
+GET     /signup                     securesocial.controllers.Registration.startSignUp
+POST    /signup                     securesocial.controllers.Registration.handleStartSignUp
+GET     /signup/:token              securesocial.controllers.Registration.signUp(token)
+POST    /signup/:token              securesocial.controllers.Registration.handleSignUp(token)
+GET     /reset                      securesocial.controllers.Registration.startResetPassword
+POST    /reset                      securesocial.controllers.Registration.handleStartResetPassword
+GET     /reset/:token               securesocial.controllers.Registration.resetPassword(token)
+POST    /reset/:token               securesocial.controllers.Registration.handleResetPassword(token)
+GET     /password                   securesocial.controllers.PasswordChange.page
+POST    /password                   securesocial.controllers.PasswordChange.handlePasswordChange
+
+# Providers entry points
+GET     /authenticate/:provider     securesocial.controllers.ProviderController.authenticate(provider)
+POST    /authenticate/:provider     securesocial.controllers.ProviderController.authenticateByPost(provider)
+GET     /not-authorized             securesocial.controllers.ProviderController.notAuthorized
