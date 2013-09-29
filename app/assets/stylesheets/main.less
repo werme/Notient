@@ -129,8 +129,10 @@ p {
 
   .label { padding: 0.4rem 0.6rem !important; }
 
-  a h2 { color: #333; }
-
+  a h2 {
+    color: #333;
+    &:hover { color: @blue; }
+  }
 
   .delete-button {
     display: inline-block;
