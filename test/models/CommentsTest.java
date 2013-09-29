@@ -24,7 +24,7 @@ public class CommentsTest extends WithApplication {
 
 	@Test
 	public void useTheCommentsRelation() {
-		Note.create(new Note("My note"));
+		Note.create(new Note("My note", User.findByEmail("test@notes.com")));
 		Note note = Note.find.where().eq("title", "My note").findUnique();
 
 		note.addComment("Jeff", "Nice post");
