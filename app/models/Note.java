@@ -80,18 +80,17 @@ public class Note extends Model {
 
 		Tag.clean();
 	}
-
 	public Note addComment(String author, String content) {
-    Comment comment = new Comment(this, author, content);
-    this.comments.add(comment);
-    this.save();
-    return this;
-  }
+	    Comment comment = new Comment(this, author, content);
+	    this.comments.add(comment);
+	    this.save();
+	    return this;
+	}
 
-  public String extract(int length) {
-  	if(content != null) {
-    	return content.length() > length ? content.substring(0, length-1) + " ..." : content;
-  	}
-  	return null;
-  }
+	public String extract(int length) {
+		if(content != null) {
+		  return content.length() > length ? content.substring(0, length-1) + " ..." : content;
+		}
+		return null;
+	}
 }

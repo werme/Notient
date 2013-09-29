@@ -10,6 +10,7 @@ import securesocial.core.java.SecureSocial;
 public class Notes extends Controller {
 
 	static Form<Note> noteForm = Form.form(Note.class);
+	static Form<Comment> commentForm = Form.form(Comment.class);
 
 	public static Result index() {
 		return ok(views.html.index.render(Note.all(), noteForm));
@@ -20,7 +21,7 @@ public class Notes extends Controller {
 	}
 
 	public static Result show(Long id) {
-		return ok(views.html.notes.show.render(Note.find.ref(id)));
+		return ok(views.html.show.render(Note.find.ref(id), noteForm, commentForm));
 	}
 
 	@SecureSocial.SecuredAction

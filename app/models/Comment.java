@@ -13,10 +13,10 @@ public class Comment extends Model {
   @Id
   public Long id;
 
-  @Required
-  public String author;
+  //@Required
+  public User author;
 
-  @Required
+  //@Required
   public Date postedAt;
 
   @Required
@@ -24,20 +24,37 @@ public class Comment extends Model {
   @MaxLength(140)
   public String content;
 
+  //@Required
   @ManyToOne
-  @Required
   public Note note;
 
-  public Comment(Note note, String author, String content) {
-      this.note = note;
-      this.author = author;
-      this.content = content;
-      this.postedAt = new Date();
+  public Comment(String author, String content) { // User key?
+    this.author = User.find.ref(author);
+    this.content = content;
+    this.postedAt = new Date();
+  }
+
+  public Comment(Long noteId, String authorEmail, String content) { // User key?
+    this.note = Note.find.ref(noteId);
+    this.author = User.find.ref(authorEmail);
+    this.content = content;
+    this.postedAt = new Date();
   }
 
   public static Finder<Long, Comment> find = new Finder(Long.class, Comment.class);
 
+  public static Comment create(Long noteId, Comment comment) {
+    comment.note = Note.find.ref(noteId);
+    comment.save();
+    return comment;
+  }
+
+  public static Comment create(Comment comment) {
+    comment.save();
+    return comment;
+  }
+
   public String toString() {
-      return content.length() > 50 ? content.substring(0, 50) + "..." : content;
+    return content.length() > 50 ? content.substring(0, 50) + "..." : content;
   }
 }
