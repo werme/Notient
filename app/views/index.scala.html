@@ -14,21 +14,31 @@
                 </ul>
             </nav>
         </div>
-        <div class="clearfix">
     </header>
 
     <div class="container main">
         <section class="notes-wrapper">
             @for(note <- notes) {
-                <div class="small-note">
-                    <header>
-                        <a href='@routes.Notes.show(note.id)'><h2>@note.title</h2></a>
-                        <a href='@routes.Notes.delete(note.id)' class="delete-button"><i class="remove icon"></i></a>
-                    </header>
-                    <section class="note-content">
-                        <p>@note.text</p>
-                        @for(tag <- note.tags) { <span class="ui red label">@tag.title</span> }
-                    </section>
+                <div class="small-note-wrapper">
+                    <div class="small-note">
+                        <div class="face front">
+                            <header>
+                                <a href='@routes.Notes.show(note.id)'><h2>@note.title</h2></a>
+                                <a href='@routes.Notes.delete(note.id)' class="delete-button"><i class="remove icon"></i></a>
+                            </header>
+                            <section class="note-content">
+                                <p>@note.text</p>
+                            </section>
+                        </div>
+                        <div class="face back">
+                            <header>
+                                <h2>Tags</h2>
+                            </header>
+                            <section>
+                                @for(tag <- note.tags) { <span class="ui red label">@tag.title</span> }
+                            </section>
+                        </div>
+                    </div>
                 </div>
             }
         </section>
