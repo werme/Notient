@@ -32,21 +32,26 @@
             @for(note <- notes) {
                 <div class="small-note-wrapper">
                     <div class="small-note">
-                        <div class="face front">
+                        <div class="side-base front">
                             <header>
                                 <a href='@routes.Notes.show(note.id)'><h2>@note.title</h2></a>
-                                <a href='@routes.Notes.delete(note.id)' class="delete-button"><i class="remove icon"></i></a>
+
                             </header>
                             <section class="note-content">
                                 <p>@note.text</p>
                             </section>
                         </div>
-                        <div class="face back">
+                        <div class="side-base info back">
                             <header>
-                                <h2>Tags</h2>
+                                <a href='@routes.Notes.delete(note.id)' class="delete-button"><i class="remove icon"></i></a>
+                                <date>Posted 1th Oct 2013</date>
+                                <ul>
+                                    <li>@note.title</li>
+                                    <li>By <a href="#">Ollmardandav</a></li>
+                                </ul>
                             </header>
                             <section>
-                                @for(tag <- note.tags) { <span class="ui red label">@tag.title</span> }
+                                @for(tag <- note.tags) { <span class="ui red small label">@tag.title</span> }
                             </section>
                         </div>
                     </div>
@@ -65,7 +70,7 @@
                 <dd><input type="text" name="tagList" /></dd>
             </dl>
 
-            <input class="ui blue submit button" type="submit" value="Create Note">
+            <input class="flat-button" type="submit" value="Create Note">
         }
         </div>
     </footer>
