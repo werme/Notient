@@ -59,11 +59,8 @@ public class UserService extends BaseUserService {
             Logger.debug(String.format("finding by Id = %s", identityId.userId()));
 
         }
-        LocalUser localUser = null;
-        localUser = LocalUser.find.byId(identityId.userId());
 
-        //WHYYY DOES NOT THIS WORK?!?!?
-        //LocalUser localUser = LocalUser.findById(identityId.userId());
+        LocalUser localUser = LocalUser.find.byId(identityId.userId());
         Logger.debug(String.format("localUser = " + localUser));
         if(localUser == null) return null;
         SocialUser socialUser = new SocialUser(new IdentityId(localUser.id, localUser.provider),    
