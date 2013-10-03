@@ -21,7 +21,7 @@ public class Note extends Model {
 	public String text;
 	public String author;
 
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.REMOVE)
 	public List<Tag> tags = new ArrayList<Tag>();
 
 	@OneToMany(mappedBy="note", cascade=CascadeType.ALL)
@@ -40,11 +40,11 @@ public class Note extends Model {
 
 	public static Finder<Long, Note> find = new Finder(Long.class, Note.class);
 
-    public static List<Note> notesBy(String user) {
-        return find.where()
-            .eq("author", user)
-            .findList();
-    }
+  public static List<Note> notesBy(String user) {
+    return find.where()
+        .eq("author", user)
+        .findList();
+  }
 
 	public static List<Note> all() {
 		return find.all();
@@ -55,12 +55,13 @@ public class Note extends Model {
 		return note;
 	}
 
-	public static Note create(Note note, String tags) {
+	public static Note create(Note note, String tagsList) {
 		note.save();
-		if(tags != null) {
-			note.tags = Tag.createOrFindAllFromString(tags);
+		if(tagsList != null && !tagsList.equals("") && !tagsList.equals(" ")) {
+			note.tags.addAll(Tag.createOrFindAllFromString(tagsList));
 			note.saveManyToManyAssociations("tags");
 		}
+		Logger.info("size: " + note.tags.size());
 		return note;
 	}
 
@@ -71,7 +72,10 @@ public class Note extends Model {
 	}
 
 	public static void delete(Long id) {
-		find.ref(id).delete();
+		Note note = find.ref(id);
+		note.delete();
+
+		Tag.clean();
 	}
 
 	public Note addComment(String author, String content) {

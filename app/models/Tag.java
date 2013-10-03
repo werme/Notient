@@ -1,7 +1,9 @@
 package models;
 
 import java.util.*;
+import play.Logger;
 import play.db.ebean.*;
+import play.db.ebean.Model.Finder;
 import play.data.validation.Constraints.*;
 import play.data.format.Formats.*;
 import javax.persistence.*;
@@ -19,6 +21,9 @@ public class Tag extends Model {
   @MinLength(3)
   @MaxLength(40)
   public String title;
+
+  @ManyToMany(mappedBy="tags", cascade = CascadeType.REMOVE)
+  public List<Note> notes = new ArrayList<Note>();
 
   public Tag(String title) {
     this.title = title;
@@ -40,9 +45,10 @@ public class Tag extends Model {
     String[] tagArray = new String[]{list};
 
     try {
-        tagArray = list.split("\\s+");
+      tagArray = list.split("\\s+");
     } catch (PatternSyntaxException ex) {
-        // TODO
+      Logger.error("Error creating tags");
+      return null;
     }
 
     for(String title : tagArray) {
@@ -52,6 +58,14 @@ public class Tag extends Model {
     }
 
     return tags;
+  }
+
+  public static void clean() {
+    for(Tag tag : find.all()) {
+      if(tag.notes.isEmpty()) {
+        tag.delete();
+      }
+    }
   }
 
   public static void delete(Long id) {
