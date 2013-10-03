@@ -59,7 +59,12 @@ public class UserService extends BaseUserService {
             Logger.debug(String.format("finding by Id = %s", identityId.userId()));
 
         }
-        LocalUser localUser = LocalUser.findByEmail(identityId.userId());
+        LocalUser localUser = null;
+        localUser = LocalUser.find.byId(identityId.userId());
+
+        //WHYYY DOES NOT THIS WORK?!?!?
+        //LocalUser localUser = LocalUser.findById(identityId.userId());
+        Logger.debug(String.format("localUser = " + localUser));
         if(localUser == null) return null;
         SocialUser socialUser = new SocialUser(new IdentityId(localUser.id, localUser.provider),    
             localUser.firstName, 
@@ -129,26 +134,29 @@ public class UserService extends BaseUserService {
             Logger.debug(String.format("user = %s", user));
         }
         LocalUser localUser = null;
-        //localUser = LocalUser.find.byId(user.id().id());
         localUser = LocalUser.find.byId(user.identityId().userId());
         Logger.debug("id = " + user.identityId().userId());
         Logger.debug("provider = " + user.identityId().providerId());
         Logger.debug("firstName = " + user.firstName());
-        Logger.debug("lastName = " + user.firstName());
+        Logger.debug("lastName = " + user.lastName());
         Logger.debug(user.fullName() + "");
         Logger.debug("email = " + user.email());
-        Logger.debug("password = " + user.passwordInfo());
 
         if (localUser == null) {
             Logger.debug("adding new...");
             localUser = new LocalUser();
-            //here was localUser.id = user.id().id();
             localUser.id = user.identityId().userId();
             localUser.provider = user.identityId().providerId();
             localUser.firstName = user.firstName();
             localUser.lastName = user.lastName();
-            //localUser.email = user.email().get();
-            //localUser.password = user.passwordInfo().get().password();
+            
+            //Temporary solution for twitter which does not have email in OAuth answer
+            if(!(user.email() + "").equals("None")){
+                localUser.email = user.email().get();
+            }
+            if(!(user.passwordInfo() + "").equals("None")){
+                localUser.password = user.passwordInfo().get().password();
+            }
             localUser.save();
         } else {
             Logger.debug("existing one...");
@@ -156,8 +164,13 @@ public class UserService extends BaseUserService {
             localUser.provider = user.identityId().providerId();
             localUser.firstName = user.firstName();
             localUser.lastName = user.lastName();
-            //localUser.email = user.email().get();
-            //localUser.password = user.passwordInfo().get().password();
+            //Temporary solution for twitter which does not have email in OAuth answer
+            if(!(user.email() + "").equals("None")){
+                localUser.email = user.email().get();
+            }
+            if(!(user.passwordInfo() + "").equals("None")){
+                localUser.password = user.passwordInfo().get().password();
+            }
             localUser.update();
         }
         return user;
@@ -173,7 +186,7 @@ public class UserService extends BaseUserService {
             localToken.createdAt = df.parse(token.creationTime.toString("yyyy-MM-dd HH:mm:ss"));
             localToken.expireAt = df.parse(token.expirationTime.toString("yyyy-MM-dd HH:mm:ss"));
         } catch (ParseException e) {
-            Logger.error("SqlUserService.doSave(): ", e);
+            Logger.error("UserService.doSave(): ", e);
         }
         localToken.isSignUp = token.isSignUp;
         localToken.save();

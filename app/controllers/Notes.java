@@ -5,6 +5,7 @@ import play.data.*;
 import play.Logger;
 import models.*;
 import views.html.*;
+import securesocial.core.java.SecureSocial;
 
 public class Notes extends Controller {
 
@@ -22,7 +23,7 @@ public class Notes extends Controller {
 		return ok(views.html.show.render(Note.find.ref(id)));
 	}
 
-	@Security.Authenticated(Secured.class)
+	@SecureSocial.SecuredAction
 	public static Result newNote() {
 		Form<Note> filledForm = noteForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
@@ -33,7 +34,7 @@ public class Notes extends Controller {
 		}
 	}
 
-	@Security.Authenticated(Secured.class)
+	@SecureSocial.SecuredAction
 	public static Result delete(Long id) {
 		Note.delete(id);
 		return redirect(routes.Notes.list());
