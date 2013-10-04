@@ -24,7 +24,9 @@ public class Notes extends Controller {
 
 	@Security.Authenticated(Secured.class)
 	public static Result newNote() {
+
 		Form<Note> filledForm = noteForm.bindFromRequest();
+
 		if (filledForm.hasErrors()) {
 			return badRequest(views.html.index.render(Note.all(), filledForm));
 		} else {

@@ -2,7 +2,7 @@
 
 - !!models.Note
     title: Test note title
-    text: Test note content
+    content: Test note content
 
 # Users
 

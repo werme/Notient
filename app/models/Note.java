@@ -19,8 +19,8 @@ public class Note extends Model {
 	@MaxLength(30)
 	public String title;
 
-	@Lob
-	public String text;
+  @Column(columnDefinition = "TEXT")
+	public String content;
 
 	public String author;
 
@@ -35,9 +35,9 @@ public class Note extends Model {
 		this.author = author.email;
 	}
 
-	public Note(String title, String text, User author) {
+	public Note(String title, String content, User author) {
 		this.title = title;
-		this.text = text;
+		this.content = content;
 		this.author = author.email;
 	}
 
@@ -64,7 +64,6 @@ public class Note extends Model {
 			note.tags.addAll(Tag.createOrFindAllFromString(tagsList));
 			note.saveManyToManyAssociations("tags");
 		}
-		Logger.info("size: " + note.tags.size());
 		return note;
 	}
 
@@ -89,8 +88,8 @@ public class Note extends Model {
   }
 
   public String extract(int length) {
-  	if(text != null) {
-  		return text.length() > length ? text.substring(0, length-1) + " ..." : text;
+  	if(content != null) {
+  		return content.length() > length ? content.substring(0, length-1) + " ..." : content;
   	}
   	return null;
   }

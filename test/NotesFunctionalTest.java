@@ -32,7 +32,7 @@ public class NotesFunctionalTest extends WithApplication {
 		result = callAction(
 				controllers.routes.ref.Notes.newNote(),
 				fakeRequest().withFormUrlEncodedBody(
-						ImmutableMap.of("title", "", "text",
+						ImmutableMap.of("title", "", "content",
 								"")).withSession("email",
 						"test@notes.com"));
 		assertThat(status(result)).isEqualTo(BAD_REQUEST);
@@ -40,7 +40,7 @@ public class NotesFunctionalTest extends WithApplication {
 		result = callAction(
 				controllers.routes.ref.Notes.newNote(),
 				fakeRequest().withFormUrlEncodedBody(
-						ImmutableMap.of("title", "My note title", "text",
+						ImmutableMap.of("title", "My note title", "content",
 								"My note content")).withSession("email",
 						"test@notes.com"));
 
@@ -54,7 +54,7 @@ public class NotesFunctionalTest extends WithApplication {
 		// Should be saved to DB
 		assertNotNull(newNote);
 		assertEquals("My note title", newNote.title);
-		assertEquals("My note content", newNote.text);
+		assertEquals("My note content", newNote.content);
 	}
 
 	@Test
@@ -62,7 +62,7 @@ public class NotesFunctionalTest extends WithApplication {
 		Result result = callAction(
 				controllers.routes.ref.Notes.newNote(),
 				fakeRequest().withFormUrlEncodedBody(
-						ImmutableMap.of("title", "My note title", "text",
+						ImmutableMap.of("title", "My note title", "content",
 								"My note content", "tagList", "tag1 tag2")).withSession("email",
 						"test@notes.com"));
 
