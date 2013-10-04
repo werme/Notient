@@ -19,7 +19,7 @@ public class Notes extends Controller {
 	}
 
 	public static Result show(Long id) {
-		return ok(views.html.show.render(Note.find.ref(id)));
+		return ok(views.html.notes.show.render(Note.find.ref(id)));
 	}
 
 	@Security.Authenticated(Secured.class)
