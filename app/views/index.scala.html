@@ -36,6 +36,7 @@
 
     <div class="container main">
         <br/>
+        Tags for debug:
         @for(tag <- Tag.find.all()) { <span class="ui red small label">@tag.title @tag.notes.size</span> }
         <section class="notes-wrapper">
             @for(note <- notes) {
