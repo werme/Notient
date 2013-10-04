@@ -1,0 +1,18 @@
+@(noteForm: Form[Note])
+
+@import helper._
+
+@implicitFieldConstructor = @{ FieldConstructor(plainFieldConstructor.render) }
+
+@form(routes.Notes.newNote) {
+    @inputText(
+        noteForm("title"),
+        '_showConstraints -> false
+    )
+    @textarea(noteForm("text"))
+
+    <label>tags</label>
+    <input type="text" name="tagList" />
+
+    <input class="flat-button" type="submit" value="Create Note">
+}
