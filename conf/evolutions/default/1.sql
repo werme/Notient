@@ -15,7 +15,7 @@ create table comment (
 create table note (
   id                        bigint not null,
   title                     varchar(255),
-  text                      varchar(255),
+  text                      clob,
   author                    varchar(255),
   constraint pk_note primary key (id))
 ;
