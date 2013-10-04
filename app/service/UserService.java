@@ -10,7 +10,7 @@ import java.util.List;
 import org.joda.time.DateTime;
 
 import models.LocalToken;
-import models.LocalUser;
+import models.User;
 import play.Application;
 import play.Logger;
 import scala.Option;
@@ -60,7 +60,7 @@ public class UserService extends BaseUserService {
 
         }
 
-        LocalUser localUser = LocalUser.find.byId(identityId.userId());
+        User localUser = User.find.byId(identityId.userId());
         Logger.debug(String.format("localUser = " + localUser));
         if(localUser == null) return null;
         SocialUser socialUser = new SocialUser(new IdentityId(localUser.id, localUser.provider),    
@@ -83,12 +83,12 @@ public class UserService extends BaseUserService {
 
     @Override
     public Identity doFindByEmailAndProvider(String email, String providerId) {
-        List<LocalUser> list = LocalUser.find.where().eq("email", email).eq("provider", providerId).findList();
+        List<User> list = User.find.where().eq("email", email).eq("provider", providerId).findList();
         if(list.size() != 1){
             Logger.debug("found a null in findByEmailAndProvider...");
             return null;
         }
-        LocalUser localUser = list.get(0);
+        User localUser = list.get(0);
         SocialUser socialUser = 
                 new SocialUser(new IdentityId(localUser.email, localUser.provider),
                         localUser.firstName, 
@@ -130,8 +130,8 @@ public class UserService extends BaseUserService {
             Logger.debug("save...!_!");
             Logger.debug(String.format("user = %s", user));
         }
-        LocalUser localUser = null;
-        localUser = LocalUser.find.byId(user.identityId().userId());
+        User localUser = null;
+        localUser = User.find.byId(user.identityId().userId());
         Logger.debug("id = " + user.identityId().userId());
         Logger.debug("provider = " + user.identityId().providerId());
         Logger.debug("firstName = " + user.firstName());
@@ -142,7 +142,7 @@ public class UserService extends BaseUserService {
 
         if (localUser == null) {
             Logger.debug("adding new...");
-            localUser = new LocalUser();
+            localUser = new User();
             localUser.id = user.identityId().userId();
             localUser.provider = user.identityId().providerId();
             localUser.firstName = user.firstName();

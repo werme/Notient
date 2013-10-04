@@ -2,13 +2,6 @@
 # Home
 GET     /                       controllers.Application.index()
 
-# Login
-GET     /login1                 controllers.Application.login()
-GET     /register               controllers.Application.register()
-GET     /logout1                controllers.Application.logout()
-POST    /login1                 controllers.Application.authenticate()
-POST    /register               controllers.Application.newUser()
-
 # Notes
 GET     /notes                  controllers.Notes.list()
 POST    /notes                  controllers.Notes.newNote()
