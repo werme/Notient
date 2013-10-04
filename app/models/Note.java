@@ -29,23 +29,23 @@ public class Note extends Model {
 
 	public Note(String title, User author) {
 		this.title = title;
-		this.author = author.email;
+		this.author = author.id;
 	}
 
 	public Note(String title, String text, User author) {
 		this.title = title;
 		this.text = text;
-		this.author = author.email;
+		this.author = author.id;
 	}
 
 	public static Finder<Long, Note> find = new Finder(Long.class, Note.class);
 
-    public static List<Note> notesBy(String user) {
+    public static List<Note> notesBy(String id) {
         return find.where()
-            .eq("author", user)
+            .eq("author", id)
             .findList();
     }
-
+    
 	public static List<Note> all() {
 		return find.all();
 	}
