@@ -18,7 +18,10 @@ public class Note extends Model {
 	@MinLength(2)
 	@MaxLength(30)
 	public String title;
+
+	@Lob
 	public String text;
+
 	public String author;
 
 	@ManyToMany(cascade = CascadeType.REMOVE)
