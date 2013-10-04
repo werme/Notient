@@ -37,7 +37,10 @@ public class User extends Model {
 
 	public static Finder<String, User> find = new Finder<String, User>(
 			String.class, User.class);
-
+	
+	public static User findById(String id) {
+		return find.where().eq("id", id).findUnique();
+	}
 	@Override
     public String toString() {
         return this.id + " - " + this.firstName;
