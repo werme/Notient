@@ -82,9 +82,16 @@ public class Note extends Model {
 	}
 
 	public Note addComment(String author, String content) {
-        Comment comment = new Comment(this, author, content);
-        this.comments.add(comment);
-        this.save();
-        return this;
-    }
+    Comment comment = new Comment(this, author, content);
+    this.comments.add(comment);
+    this.save();
+    return this;
+  }
+
+  public String extract(int length) {
+  	if(text != null) {
+  		return text.length() > length ? text.substring(0, length-1) + " ..." : text;
+  	}
+  	return null;
+  }
 }
