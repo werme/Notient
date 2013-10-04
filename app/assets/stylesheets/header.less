@@ -1,0 +1,45 @@
+@import "config";
+
+.main-header {
+  background:@blue;// @dark-brown;
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%,#0084C1), color-stop(100%,#0ad));
+  position: relative;
+  z-index: 3;
+
+  h1 {
+    font-family: 'effra';
+    font-style: italic;
+    font-weight: bold;
+    font-size: 1.6rem;
+    color: white;
+    padding: 0.4rem 1rem;
+    margin: 0;
+    border: 0;
+
+    float: left;
+
+    // text-shadow: rgba(0,0,0,0.2) 0 0 5px;
+  }
+  .main-bar {
+    display: block;
+    float: right;
+    font-family: 'Raleway';
+    letter-spacing: 0.1em;
+    font-weight: 600;
+
+    li { display: block; float: left; }
+    a {
+      display: block;
+      padding: 1rem;
+      border: 0;
+      background: transparent;
+      color: lighten(@blue, 60%);
+      &:hover i { opacity: 1; }
+
+      &.menu-link {
+        font-size: 1.4rem;
+        padding: 0.7rem 0.7rem 0 0.7rem;
+      }
+    }
+  }
+}
