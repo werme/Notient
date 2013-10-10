@@ -159,6 +159,7 @@ public class UserService extends BaseUserService {
             localUser.provider = user.identityId().providerId();
             localUser.firstName = user.firstName();
             localUser.lastName = user.lastName();
+            localUser.avatarUrl = user.avatarUrl();
             
             //Temporary solution for twitter which does not have email in OAuth answer
             if(!(user.email().toString()).equals("None")){
@@ -176,6 +177,7 @@ public class UserService extends BaseUserService {
             localUser.provider = user.identityId().providerId();
             localUser.firstName = user.firstName();
             localUser.lastName = user.lastName();
+            localUser.avatarUrl = user.avatarUrl();
             
             //Temporary solution for twitter which does not have email in OAuth answer
             if(!(user.email().toString()).equals("None")){
