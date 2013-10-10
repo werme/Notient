@@ -42,4 +42,10 @@ public class Notes extends Controller {
 		Note.delete(id);
 		return redirect(routes.Notes.list());
 	}
+
+	@SecureSocial.SecuredAction
+	public static Result newComment(Long id) {
+		// Unicorn
+		return redirect(routes.Notes.list());
+	}
 }
