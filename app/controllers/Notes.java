@@ -46,6 +46,13 @@ public class Notes extends Controller {
 	@SecureSocial.SecuredAction
 	public static Result newComment(Long id) {
 		// Unicorn
+		Form<Note> filledForm = commentForm.bindFromRequest();
+		if (filledForm.hasErrors()) {
+			return badRequest(views.html.index.render(Note.all(), filledForm)); // should redirect to show note view later 
+		} else {
+			Comment.create(id, filledForm.get());
+			return redirect(routes.Notes.list()); // should also redirect to show note view
+		}
 		return redirect(routes.Notes.list());
 	}
 }
