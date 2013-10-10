@@ -17,8 +17,12 @@
     text:
 
 # Users
-
-- !!models.User
-    email: student@notes.com
-    username: student
-    password: password
+- !!models.LocalUser
+    id: 123456789
+    username: Pingu1
+    firstName: Pingu1
+    lastName: Pingusson1
+    email: notient1@gmail.com
+    provider: userpass
+    password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+#password = $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
