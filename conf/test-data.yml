@@ -6,7 +6,7 @@
 
 # Users
 
-- !!models.User
+- !!models.LocalUser
     email: test@notes.com
     username: teststudent
     password: mysecretpassword
@@ -14,3 +14,13 @@
 # Tags
 - !!models.Tag
     title: Test tag title
+
+- !!models.LocalUser
+    id: 1234567890
+    username: Pingu
+    provider: userpass
+    firstName: Pingu
+    lastName: Pingusson
+    email: pingu@notient.com
+    password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+#password = $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW

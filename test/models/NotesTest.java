@@ -16,15 +16,18 @@ import static play.test.Helpers.inMemoryDatabase;
 
 public class NotesTest extends WithApplication {
 
+  LocalUser testUser;
+
   @Before
   public void setUp() {
     start(fakeApplication(inMemoryDatabase()));
     Ebean.save((List) Yaml.load("test-data.yml"));
+    testUser = LocalUser.findById("1234567890");
   }
 
   @Test
   public void createAndRetrieveNote() {
-    Note.create(new Note("My note", User.findByEmail("test@notes.com")));
+    Note.create(new Note("My note", testUser));
     Note myNote = Note.find.where().eq("title", "My note").findUnique();
     assertNotNull(myNote);
     assertEquals("My note", myNote.title);
@@ -53,12 +56,10 @@ public class NotesTest extends WithApplication {
   }
   @Test
   public void notesBy() {
-      new User("test1@notes.com", "Student", "password").save();
+      Note.create(new Note("My first note", testUser));
+      Note.create(new Note("My second note", testUser));
 
-      Note.create(new Note("My first note", User.findByEmail("test1@notes.com")));
-      Note.create(new Note("My second note", User.findByEmail("test1@notes.com")));
-
-      List<Note> results = Note.notesBy("test1@notes.com");
+      List<Note> results = Note.notesBy(testUser);
       assertEquals(2, results.size());
       assertEquals("My first note", results.get(0).title);
   }
