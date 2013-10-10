@@ -34,48 +34,17 @@ public class UsersTest extends WithApplication {
 	public void createAndRetrieveUser() {
 
 		// Valid user
-		new User("pingu@notes.com", "Pingu", "mysecretpasword").save();
-		User pingu = User.find.where().eq("email", "pingu@notes.com")
+		LocalUser pingu = new LocalUser();
+		pingu.email = "pingu1@notient.com";
+		pingu.username = "newPingu";
+		pingu.save();
+		pingu = LocalUser.find.where().eq("email", "pingu1@notient.com")
 				.findUnique();
 		assertNotNull(pingu);
-		assertEquals("Pingu", pingu.username);
-
-		// Invalid users
-		new User("invalidPingu@notes.com", "P", "mysecretpasword").save();
-		pingu = User.find.where().eq("email", "invalidPingu@notes.com")
-				.findUnique();
-		
-		
-		// Should not create user with too short username
-		Result result = callAction(
-				controllers.routes.ref.Application.newUser(),
-				fakeRequest().withFormUrlEncodedBody(
-						ImmutableMap.of("email", "pinguUser@notes.com",
-								"username", "p", "password",
-								"mysecret password")).withSession("email",
-						"test@notes.com"));
-		//assertThat(status(result)).isEqualTo(BAD_REQUEST);
-		// Username should be unique
-		
-		result = callAction(
-				controllers.routes.ref.Application.newUser(),
-				fakeRequest().withFormUrlEncodedBody(
-						ImmutableMap.of("email", "pinguUser@notes.com",
-								"username", "unique", "password",
-								"mysecret password")).withSession("email",
-						"test@notes.com"));
-		assertThat(status(result)).isEqualTo(SEE_OTHER);
-						
-		result = callAction(
-				controllers.routes.ref.Application.newUser(),
-				fakeRequest().withFormUrlEncodedBody(
-						ImmutableMap.of("email", "otherPinguUser@notes.com",
-								"username", "unique", "password",
-								"mysecret password")).withSession("email",
-						"test@notes.com"));
-		//assertThat(status(result)).isEqualTo(BAD_REQUEST);
+		assertEquals("newPingu", pingu.username);
 		
 		// TODO: More invalid user cases
+		
 	}
 
 	@Test
@@ -85,11 +54,10 @@ public class UsersTest extends WithApplication {
 
 	@Test
 	public void deleteUser() {
-		User student = User.find.where().eq("email", "student@notes.com")
-				.findUnique();
-		User.deleteUser("student@notes.com");
-
-		User myDeletedUser = User.find.where().eq("email", "student@notes.com")
+		LocalUser user = LocalUser.findById("1234567890");
+		String userEmail = user.email;
+		user.delete();
+		LocalUser myDeletedUser = LocalUser.find.where().eq("email", userEmail)
 				.findUnique();
 		assertNull(myDeletedUser);
 	}
@@ -98,7 +66,11 @@ public class UsersTest extends WithApplication {
 
 	@Test
 	public void findUserByEmail() {
-		User student = User.findByEmail("student@notes.com");
-		assertEquals("student", student.username);
+		LocalUser student = new LocalUser();
+		student.email = "student@notient.com";
+		student.username = "foundStudent";
+		student.save();
+		LocalUser foundUser = LocalUser.findByEmail("student@notient.com");
+		assertEquals("foundStudent", foundUser.username);
 	}
 }

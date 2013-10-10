@@ -2,6 +2,9 @@ import com.avaje.ebean.Ebean;
 import com.google.common.collect.ImmutableMap;
 
 import models.Note;
+import models.LocalToken;
+import service.UserService;
+
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +13,20 @@ import play.libs.Yaml;
 import play.mvc.Result;
 import play.test.WithApplication;
 
+import securesocial.core.java.Token;
 import java.util.*;
+import models.LocalUser;
+import play.Logger;
+import securesocial.core.Authenticator;
+import securesocial.core.IdentityId;
+import securesocial.core.SocialUser;
+import securesocial.core.PasswordInfo;
+import scala.Some;
+import securesocial.core.AuthenticationMethod;
+import scala.Option;
+import scala.util.Right;
+import scala.util.Either;
+import play.mvc.Http.Cookie;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.*;
@@ -28,25 +44,29 @@ public class NotesFunctionalTest extends WithApplication {
 	public void createNewNote() {
 		Result result;
 
-		// Should return bad request if no data is given
-		result = callAction(
-				controllers.routes.ref.Notes.newNote(),
-				fakeRequest().withFormUrlEncodedBody(
-						ImmutableMap.of("title", "", "text",
-								"")).withSession("email",
-						"test@notes.com"));
-		assertThat(status(result)).isEqualTo(BAD_REQUEST);
+		Cookie cookie = Utils.fakeCookie("pingu@notient.com");
 
 		result = callAction(
 				controllers.routes.ref.Notes.newNote(),
 				fakeRequest().withFormUrlEncodedBody(
 						ImmutableMap.of("title", "My note title", "text",
-								"My note content")).withSession("email",
-						"test@notes.com"));
+								"My note content")).withCookies(cookie));
 
 		// Should return redirect status if successful
 		assertThat(status(result)).isEqualTo(SEE_OTHER);
 		assertThat(redirectLocation(result)).isEqualTo("/notes");
+
+
+		// Should return bad request if no data is given
+		result = callAction(
+				controllers.routes.ref.Notes.newNote(),
+				fakeRequest().withFormUrlEncodedBody(
+						ImmutableMap.of("title", "", "text",
+								"")).withCookies(cookie));
+		assertThat(status(result)).isEqualTo(BAD_REQUEST);
+		
+
+
 
 		Note newNote = Note.find.where().eq("title", "My note title")
 				.findUnique();
@@ -55,16 +75,18 @@ public class NotesFunctionalTest extends WithApplication {
 		assertNotNull(newNote);
 		assertEquals("My note title", newNote.title);
 		assertEquals("My note content", newNote.text);
+		
 	}
 
 	@Test
 	public void createNoteWithTags() {
+
+		Cookie cookie = Utils.fakeCookie("pingu@notient.com");
 		Result result = callAction(
 				controllers.routes.ref.Notes.newNote(),
 				fakeRequest().withFormUrlEncodedBody(
 						ImmutableMap.of("title", "My note title", "text",
-								"My note content", "tagList", "tag1 tag2")).withSession("email",
-						"test@notes.com"));
+								"My note content", "tagList", "tag1 tag2")).withCookies(cookie));
 
 		// Should return redirect status if successful
 		assertThat(status(result)).isEqualTo(SEE_OTHER);
@@ -81,37 +103,34 @@ public class NotesFunctionalTest extends WithApplication {
 
 	@Test
 	public void createInvalidNote() {
+
+		Cookie cookie = Utils.fakeCookie("pingu@notient.com");
 		String title = "";
 		Result result = callAction(
 				controllers.routes.ref.Notes.newNote(),
 				fakeRequest()
-						.withFormUrlEncodedBody(ImmutableMap.of("title", title))
-						.withSession("email", "test@notes.com")
-						.withSession("email", "test@notes.com"));
+						.withFormUrlEncodedBody(ImmutableMap.of("title", title)).withCookies(cookie));
 		assertThat(status(result)).isEqualTo(BAD_REQUEST);
 
 		title = " ";
 		result = callAction(
 				controllers.routes.ref.Notes.newNote(),
 				fakeRequest().withFormUrlEncodedBody(
-						ImmutableMap.of("title", title)).withSession("email",
-						"test@notes.com"));
+						ImmutableMap.of("title", title)).withCookies(cookie));
 		assertThat(status(result)).isEqualTo(BAD_REQUEST);
 
 		title = "N";
 		result = callAction(
 				controllers.routes.ref.Notes.newNote(),
 				fakeRequest().withFormUrlEncodedBody(
-						ImmutableMap.of("title", title)).withSession("email",
-						"test@notes.com"));
+						ImmutableMap.of("title", title)).withCookies(cookie));
 		assertThat(status(result)).isEqualTo(BAD_REQUEST);
 
 		title = "Lorem ipsum Veniam sunt nulla enim esse incididunt eiusmod qui aliqua dolor nisi";
 		result = callAction(
 				controllers.routes.ref.Notes.newNote(),
 				fakeRequest().withFormUrlEncodedBody(
-						ImmutableMap.of("title", title)).withSession("email",
-						"test@notes.com"));
+						ImmutableMap.of("title", title)).withCookies(cookie));
 		assertThat(status(result)).isEqualTo(BAD_REQUEST);
 	}
 }

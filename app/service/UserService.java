@@ -10,7 +10,7 @@ import java.util.List;
 import org.joda.time.DateTime;
 
 import models.LocalToken;
-import models.User;
+import models.LocalUser;
 import play.Application;
 import play.Logger;
 import scala.Option;
@@ -60,7 +60,17 @@ public class UserService extends BaseUserService {
 
         }
 
-        User localUser = User.find.byId(identityId.userId());
+        //Might should be findByEmail
+        LocalUser localUser;
+
+        localUser = LocalUser.findById(identityId.userId());
+        if(localUser == null){
+            localUser = LocalUser.findByEmail(identityId.userId());
+        }
+        if(localUser == null){
+            localUser = LocalUser.findByUsername(identityId.userId());
+        }
+
         Logger.debug(String.format("localUser = " + localUser));
         if(localUser == null) return null;
         SocialUser socialUser = new SocialUser(new IdentityId(localUser.id, localUser.provider),    
@@ -83,14 +93,15 @@ public class UserService extends BaseUserService {
 
     @Override
     public Identity doFindByEmailAndProvider(String email, String providerId) {
-        List<User> list = User.find.where().eq("email", email).eq("provider", providerId).findList();
+        List<LocalUser> list = LocalUser.find.where().eq("email", email).eq("provider", providerId).findList();
         if(list.size() != 1){
-            Logger.debug("found a null in findByEmailAndProvider...");
+            Logger.debug("found a null in findByEmailAndProvider..." + "Provider: " + providerId + " Email: " + email + " #Results: " + list.size());
             return null;
         }
-        User localUser = list.get(0);
+        Logger.debug("Provider: "+ list.get(0).provider + " Password: " + list.get(0).password);
+        LocalUser localUser = list.get(0);
         SocialUser socialUser = 
-                new SocialUser(new IdentityId(localUser.email, localUser.provider),
+                new SocialUser(new IdentityId(localUser.id, localUser.provider),
                         localUser.firstName, 
                         localUser.lastName, 
                         String.format("%s %s", localUser.firstName, localUser.lastName),
@@ -130,8 +141,8 @@ public class UserService extends BaseUserService {
             Logger.debug("save...!_!");
             Logger.debug(String.format("user = %s", user));
         }
-        User localUser = null;
-        localUser = User.find.byId(user.identityId().userId());
+        LocalUser localUser = null;
+        localUser = LocalUser.find.byId(user.identityId().userId());
         Logger.debug("id = " + user.identityId().userId());
         Logger.debug("provider = " + user.identityId().providerId());
         Logger.debug("firstName = " + user.firstName());
@@ -142,7 +153,7 @@ public class UserService extends BaseUserService {
 
         if (localUser == null) {
             Logger.debug("adding new...");
-            localUser = new User();
+            localUser = new LocalUser();
             localUser.id = user.identityId().userId();
             localUser.provider = user.identityId().providerId();
             localUser.firstName = user.firstName();
@@ -153,7 +164,9 @@ public class UserService extends BaseUserService {
                 localUser.email = user.email().get();
             }
             if(!(user.passwordInfo() + "").equals("None")){
+
                 localUser.password = user.passwordInfo().get().password();
+                Logger.debug(localUser.password + "");
             }
             localUser.save();
         } else {

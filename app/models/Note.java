@@ -27,12 +27,12 @@ public class Note extends Model {
 	@OneToMany(mappedBy="note", cascade=CascadeType.ALL)
 	public List<Comment> comments = new ArrayList<Comment>();
 
-	public Note(String title, User author) {
+	public Note(String title, LocalUser author) {
 		this.title = title;
 		this.author = author.id;
 	}
 
-	public Note(String title, String text, User author) {
+	public Note(String title, String text, LocalUser author) {
 		this.title = title;
 		this.text = text;
 		this.author = author.id;
@@ -40,9 +40,9 @@ public class Note extends Model {
 
 	public static Finder<Long, Note> find = new Finder(Long.class, Note.class);
 
-    public static List<Note> notesBy(String id) {
+    public static List<Note> notesBy(LocalUser author) {
         return find.where()
-            .eq("author", id)
+            .eq("author", author.id)
             .findList();
     }
     

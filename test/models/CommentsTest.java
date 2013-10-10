@@ -16,15 +16,18 @@ import static play.test.Helpers.inMemoryDatabase;
 
 public class CommentsTest extends WithApplication {
 
+	LocalUser testUser;
+	
 	@Before
 	public void setUp() {
 		start(fakeApplication(inMemoryDatabase()));
 		Ebean.save((List) Yaml.load("test-data.yml"));
+		testUser = LocalUser.findById("1234567890");
 	}
 
 	@Test
 	public void useTheCommentsRelation() {
-		Note.create(new Note("My note", User.findByEmail("test@notes.com")));
+		Note.create(new Note("My note", testUser));
 		Note note = Note.find.where().eq("title", "My note").findUnique();
 
 		note.addComment("Jeff", "Nice post");
@@ -42,7 +45,7 @@ public class CommentsTest extends WithApplication {
 
 	@Test
 	public void createComment() {
-		Note.create(new Note("My note", User.findByEmail("test@notes.com")));
+		Note.create(new Note("My note", testUser));
     	Note note = Note.find.where().eq("title", "My note").findUnique();
 
 		new Comment(note, "Jeff", "Nice post").save();
