@@ -50,6 +50,6 @@ public class Notes extends Controller {
 		} else {
 			Comment.create(id, filledForm.get());
 		}
-		return redirect(routes.Notes.list());
+		return redirect(routes.Notes.show(id));
 	}
 }
