@@ -20,8 +20,11 @@ public class Comment extends Model {
   //@Required
   public User author;
 
-  //@Required
-  public Date postedAt;
+  @Column(name = "created_at")
+  public Date createdAt;
+ 
+  @Column(name = "updated_at")
+  public Date updatedAt;
 
   @Required
   @NonEmpty
@@ -34,13 +37,11 @@ public class Comment extends Model {
 
   public Comment(String content, LocalUser author) { // User key?
     this.content = content;
-    this.postedAt = new Date();
   }
 
   public Comment(Long noteId, String content, LocalUser author) { // User key?
     this.note = Note.find.ref(noteId);
     this.content = content;
-    this.postedAt = new Date();
   }
 
   public static Finder<Long, Comment> find = new Finder(Long.class, Comment.class);
@@ -59,5 +60,27 @@ public class Comment extends Model {
 
   public String toString() {
     return content.length() > 50 ? content.substring(0, 50) + "..." : content;
+  }
+
+  @Override
+  public void save() {
+    createdAt();
+    super.save();
+  }
+ 
+  @Override
+  public void update() {
+    updatedAt();
+    super.update();
+  }
+ 
+  @PrePersist
+  void createdAt() {
+    this.createdAt = this.updatedAt = new Date();
+  }
+ 
+  @PreUpdate
+  void updatedAt() {
+    this.updatedAt = new Date();
   }
 }
