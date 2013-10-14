@@ -146,6 +146,7 @@ public class UserService extends BaseUserService {
         LocalUser localUser = null;
         localUser = LocalUser.find.byId(user.identityId().userId());
         
+        /*
         Logger.debug("id = " + user.identityId().userId() + "  " + user.identityId().userId().toLowerCase());
         Logger.debug("provider = " + user.identityId().providerId());
         Logger.debug("firstName = " + user.firstName());
@@ -153,7 +154,8 @@ public class UserService extends BaseUserService {
         Logger.debug(user.fullName() + "");
         Logger.debug("email = " + user.email());
         Logger.debug(user.email().getClass() + "");
-        Logger.debug(user.avatarUrl());
+        Logger.debug(user.avatarUrl() + "");
+        */
         
         if (localUser == null) {
             Logger.debug("adding new...");
