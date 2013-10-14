@@ -153,6 +153,7 @@ public class UserService extends BaseUserService {
         Logger.debug(user.fullName() + "");
         Logger.debug("email = " + user.email());
         Logger.debug(user.email().getClass() + "");
+        Logger.debug(user.avatarUrl());
         
         if (localUser == null) {
             Logger.debug("adding new...");
@@ -163,7 +164,7 @@ public class UserService extends BaseUserService {
             localUser.lastName = user.lastName();
 
             //If the user doesnt have an gravatar or his social account doesnt return a avatar then set the avatar to our default avatar.
-            if(user.avatarUrl() != null){
+            if(user.avatarUrl() instanceof scala.Some){
                 localUser.avatarUrl = user.avatarUrl().get();
             } else{
                 localUser.avatarUrl = defaultAvatarUrl;
@@ -184,7 +185,7 @@ public class UserService extends BaseUserService {
             localUser.lastName = user.lastName();
             
             //If the user doesnt have an gravatar or his social account doesnt return a avatar then set the avatar to our default avatar.
-            if(user.avatarUrl() != null){
+            if(user.avatarUrl() instanceof scala.Some){
                 localUser.avatarUrl = user.avatarUrl().get();
             } else{
                 localUser.avatarUrl = defaultAvatarUrl;
