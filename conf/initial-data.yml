@@ -24,6 +24,6 @@
     lastName: Pingusson1
     email: notient1@gmail.com
     provider: userpass
-    privilege: admin
+    privilege: ADMIN
     password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
 #password = $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW

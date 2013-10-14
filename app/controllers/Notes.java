@@ -36,7 +36,7 @@ public class Notes extends Controller {
 		}
 	}
 
-	@SecureSocial.SecuredAction(authorization = WithPrivilegeLevel.class, params = {PrivilegeLevel.ADMIN})
+	@SecureSocial.SecuredAction(authorization = WithPrivilegeLevel.class, params = {PrivilegeLevel.USER, PrivilegeLevel.ADMIN})
 	public static Result delete(Long id) {
 		Note.delete(id);
 		return redirect(routes.Notes.list());
