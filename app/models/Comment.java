@@ -15,6 +15,7 @@ import securesocial.core.Identity;
 public class Comment extends Model {
 
   @Id
+  @Version
   public Long id;
 
   //@Required
@@ -82,5 +83,10 @@ public class Comment extends Model {
   @PreUpdate
   void updatedAt() {
     this.updatedAt = new Date();
+  }
+
+  public static void delete(Long id) {
+    Comment comment = find.ref(id);
+    comment.delete();
   }
 }

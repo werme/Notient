@@ -57,5 +57,9 @@ public class Notes extends Controller {
 		return redirect(routes.Notes.show(id));
 	}
 
-
+	//@SecureSocial.SecuredAction(authorization = WithPrivilegeLevel.class, params = {PrivilegeLevel.USER, PrivilegeLevel.ADMIN})
+	public static Result deleteComment(Long id, Long commentId) {
+		Comment.delete(commentId);
+		return redirect(routes.Notes.show(id));
+	}
 }

@@ -39,6 +39,9 @@
                 @comment.author
                 @comment 
                 @comment.createdAt
+                @form(routes.Notes.deleteComment(note.id, comment.id)) {
+                    <input type="submit" value="Delete">
+                }
             </p>
             }
 
