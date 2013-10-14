@@ -12,6 +12,7 @@ object ApplicationBuild extends Build {
     javaCore,
     javaJdbc,
     javaEbean,
+    cache,
     "securesocial" %% "securesocial" % "master-SNAPSHOT"
   )
   val main = play.Project(appName, appVersion, appDependencies).settings(
@@ -19,4 +20,3 @@ object ApplicationBuild extends Build {
   )
 
 }
-
