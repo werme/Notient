@@ -169,13 +169,11 @@ public class UserService extends BaseUserService {
                 localUser.avatarUrl = defaultAvatarUrl;
             }
             //Temporary solution for twitter which does not have email in OAuth answer
-            if(!(user.email().toString()).equals("None")){
+            if(user.email() instanceof scala.Some){
                 localUser.email = user.email().get().toLowerCase();
             }
-            if(!(user.passwordInfo() + "").equals("None")){
-
+            if(user.passwordInfo() instanceof scala.Some){
                 localUser.password = user.passwordInfo().get().password();
-                Logger.debug(localUser.password + "");
             }
             localUser.save();
         } else {
@@ -193,10 +191,10 @@ public class UserService extends BaseUserService {
             }
             
             //Temporary solution for twitter which does not have email in OAuth answer
-            if(!(user.email().toString()).equals("None")){
+            if(user.email() instanceof scala.Some){
                 localUser.email = user.email().get().toLowerCase();
             }
-            if(!(user.passwordInfo() + "").equals("None")){
+            if(user.passwordInfo() instanceof scala.Some){
                 localUser.password = user.passwordInfo().get().password();
             }
             localUser.update();
