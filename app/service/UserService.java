@@ -25,6 +25,8 @@ import securesocial.core.java.Token;
 
 public class UserService extends BaseUserService {
 
+    final static String defaultAvatarUrl = "defaultAvatarUrl";
+
     public UserService(Application application) {
         super(application);
     }
@@ -159,8 +161,13 @@ public class UserService extends BaseUserService {
             localUser.provider = user.identityId().providerId();
             localUser.firstName = user.firstName();
             localUser.lastName = user.lastName();
-            localUser.avatarUrl = user.avatarUrl().get();
-            
+
+            //If the user doesnt have an gravatar or his social account doesnt return a avatar then set the avatar to our default avatar.
+            if(user.avatarUrl() != null){
+                localUser.avatarUrl = user.avatarUrl().get();
+            } else{
+                localUser.avatarUrl = defaultAvatarUrl;
+            }
             //Temporary solution for twitter which does not have email in OAuth answer
             if(!(user.email().toString()).equals("None")){
                 localUser.email = user.email().get();
@@ -177,7 +184,13 @@ public class UserService extends BaseUserService {
             localUser.provider = user.identityId().providerId();
             localUser.firstName = user.firstName();
             localUser.lastName = user.lastName();
-            localUser.avatarUrl = user.avatarUrl().get();
+            
+            //If the user doesnt have an gravatar or his social account doesnt return a avatar then set the avatar to our default avatar.
+            if(user.avatarUrl() != null){
+                localUser.avatarUrl = user.avatarUrl().get();
+            } else{
+                localUser.avatarUrl = defaultAvatarUrl;
+            }
             
             //Temporary solution for twitter which does not have email in OAuth answer
             if(!(user.email().toString()).equals("None")){
