@@ -17,7 +17,7 @@
 
 - !!models.LocalUser
     id: 1234567890
-    username: Pingu
+    username: pingu
     provider: userpass
     firstName: Pingu
     lastName: Pingusson

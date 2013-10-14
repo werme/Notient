@@ -67,10 +67,10 @@ public class UserService extends BaseUserService {
 
         localUser = LocalUser.findById(identityId.userId());
         if(localUser == null){
-            localUser = LocalUser.findByEmail(identityId.userId());
+            localUser = LocalUser.findByEmail(identityId.userId().toLowerCase());
         }
         if(localUser == null){
-            localUser = LocalUser.findByUsername(identityId.userId());
+            localUser = LocalUser.findByUsername(identityId.userId().toLowerCase());
         }
 
         Logger.debug(String.format("localUser = " + localUser));
@@ -145,19 +145,19 @@ public class UserService extends BaseUserService {
         }
         LocalUser localUser = null;
         localUser = LocalUser.find.byId(user.identityId().userId());
-        /*
-        Logger.debug("id = " + user.identityId().userId());
+        
+        Logger.debug("id = " + user.identityId().userId() + "  " + user.identityId().userId().toLowerCase());
         Logger.debug("provider = " + user.identityId().providerId());
         Logger.debug("firstName = " + user.firstName());
         Logger.debug("lastName = " + user.lastName());
         Logger.debug(user.fullName() + "");
         Logger.debug("email = " + user.email());
         Logger.debug(user.email().getClass() + "");
-        */
+        
         if (localUser == null) {
             Logger.debug("adding new...");
             localUser = new LocalUser();
-            localUser.id = user.identityId().userId();
+            localUser.id = user.identityId().userId().toLowerCase();
             localUser.provider = user.identityId().providerId();
             localUser.firstName = user.firstName();
             localUser.lastName = user.lastName();
@@ -170,7 +170,7 @@ public class UserService extends BaseUserService {
             }
             //Temporary solution for twitter which does not have email in OAuth answer
             if(!(user.email().toString()).equals("None")){
-                localUser.email = user.email().get();
+                localUser.email = user.email().get().toLowerCase();
             }
             if(!(user.passwordInfo() + "").equals("None")){
 
@@ -180,7 +180,7 @@ public class UserService extends BaseUserService {
             localUser.save();
         } else {
             Logger.debug("existing one...");
-            localUser.id = user.identityId().userId();
+            localUser.id = user.identityId().userId().toLowerCase();
             localUser.provider = user.identityId().providerId();
             localUser.firstName = user.firstName();
             localUser.lastName = user.lastName();
@@ -194,7 +194,7 @@ public class UserService extends BaseUserService {
             
             //Temporary solution for twitter which does not have email in OAuth answer
             if(!(user.email().toString()).equals("None")){
-                localUser.email = user.email().get();
+                localUser.email = user.email().get().toLowerCase();
             }
             if(!(user.passwordInfo() + "").equals("None")){
                 localUser.password = user.passwordInfo().get().password();
