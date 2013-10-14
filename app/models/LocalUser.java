@@ -32,7 +32,7 @@ public class LocalUser extends Model {
 
     public String avatarUrl;
 
-    public String privilege = "user";
+    public String privilege = PrivilegeLevel.USER;
 
 	@MinLength(5)
 	@MaxLength(20)
