@@ -6,6 +6,7 @@ import play.Logger;
 import models.*;
 import views.html.*;
 import securesocial.core.java.SecureSocial;
+import securesocial.core.Identity;
 
 public class Notes extends Controller {
 
@@ -44,12 +45,17 @@ public class Notes extends Controller {
 
 	@SecureSocial.SecuredAction
 	public static Result newComment(Long id) {
+		Identity user = (Identity) ctx().args.get(SecureSocial.USER_KEY);
+    	LocalUser localUser = LocalUser.find.byId(user.identityId().userId());
+
 		Form<Comment> filledForm = commentForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			//return badRequest(views.html.index.render(Note.all(), filledForm)); // should redirect to show note view later 
 		} else {
-			Comment.create(id, filledForm.get());
+			Comment.create(id, filledForm.get(), localUser);
 		}
 		return redirect(routes.Notes.show(id));
 	}
+
+
 }

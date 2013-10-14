@@ -8,6 +8,9 @@ import javax.persistence.*;
 import java.util.regex.PatternSyntaxException;
 import play.Logger;
 
+import securesocial.core.java.SecureSocial;
+import securesocial.core.Identity;
+
 @Entity
 public class Comment extends Model {
 
@@ -30,22 +33,21 @@ public class Comment extends Model {
   public Note note;
 
   public Comment(String content, LocalUser author) { // User key?
-    this.author = author.id;
     this.content = content;
     this.postedAt = new Date();
   }
 
   public Comment(Long noteId, String content, LocalUser author) { // User key?
     this.note = Note.find.ref(noteId);
-    this.author = author.id;
     this.content = content;
     this.postedAt = new Date();
   }
 
   public static Finder<Long, Comment> find = new Finder(Long.class, Comment.class);
 
-  public static Comment create(Long noteId, Comment comment) {
+  public static Comment create(Long noteId, Comment comment, LocalUser author) {
     comment.note = Note.find.ref(noteId);
+    comment.author = author.firstName + " " + author.lastName;
     comment.save();
     return comment;
   }
