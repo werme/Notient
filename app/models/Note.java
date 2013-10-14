@@ -32,11 +32,13 @@ public class Note extends Model {
 	public List<Comment> comments = new ArrayList<Comment>();
 
 	public Note(String title, LocalUser author) {
+		Logger.debug("HEJHEJ " + author);
 		this.title = title;
 		this.author = author.id;
 	}
 
 	public Note(String title, String content, LocalUser author) {
+		Logger.debug("HEJHEJ " + author);
 		this.title = title;
 		this.content = content;
 		this.author = author.id;
@@ -80,12 +82,13 @@ public class Note extends Model {
 
 		Tag.clean();
 	}
-	public Note addComment(String author, String content) {
-	    Comment comment = new Comment(this, author, content);
-	    this.comments.add(comment);
-	    this.save();
-	    return this;
-	}
+
+	public Note addComment(String content, LocalUser author) {
+    Comment comment = new Comment(id, content, author);
+    this.comments.add(comment);
+    this.save();
+    return this;
+  }
 
 	public String extract(int length) {
 		if(content != null) {

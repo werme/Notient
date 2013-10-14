@@ -6,6 +6,7 @@ import play.data.validation.Constraints.*;
 import play.data.format.Formats.*;
 import javax.persistence.*;
 import java.util.regex.PatternSyntaxException;
+import play.Logger;
 
 @Entity
 public class Comment extends Model {
@@ -14,7 +15,7 @@ public class Comment extends Model {
   public Long id;
 
   //@Required
-  public User author;
+  public String author;
 
   //@Required
   public Date postedAt;
@@ -28,15 +29,15 @@ public class Comment extends Model {
   @ManyToOne
   public Note note;
 
-  public Comment(String author, String content) { // User key?
-    this.author = User.find.ref(author);
+  public Comment(String content, LocalUser author) { // User key?
+    this.author = author.id;
     this.content = content;
     this.postedAt = new Date();
   }
 
-  public Comment(Long noteId, String authorEmail, String content) { // User key?
+  public Comment(Long noteId, String content, LocalUser author) { // User key?
     this.note = Note.find.ref(noteId);
-    this.author = User.find.ref(authorEmail);
+    this.author = author.id;
     this.content = content;
     this.postedAt = new Date();
   }
