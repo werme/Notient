@@ -32,6 +32,8 @@ public class LocalUser extends Model {
 
     public String avatarUrl;
 
+    public String privilege = "user";
+
 	@MinLength(5)
 	@MaxLength(20)
 	public String username;

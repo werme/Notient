@@ -6,6 +6,7 @@ import play.Logger;
 import models.*;
 import views.html.*;
 import securesocial.core.java.SecureSocial;
+import java.lang.annotation.Annotation;
 
 public class Notes extends Controller {
 
@@ -36,7 +37,7 @@ public class Notes extends Controller {
 		}
 	}
 
-	@SecureSocial.SecuredAction
+	@SecureSocial.SecuredAction(authorization = WithPrivilegeLevel.class, params = {"admin"})
 	public static Result delete(Long id) {
 		Note.delete(id);
 		return redirect(routes.Notes.list());
