@@ -20,7 +20,7 @@
     <div class="container main">
         <section class="note-wrapper">
             <h1>@note.title</h1>
-            <p>@note.text</p>
+            <p>@note.content</p>
         </section>
     </div>
 
@@ -29,7 +29,7 @@
 
     <footer>
         <div class="container">
-        @form(routes.Comments.newNoteComment(note.id)) {
+        @form(routes.Notes.newComment(note.id)) {
             
             @inputText(commentForm("content"))
             <input type="submit" value="Post comment">
