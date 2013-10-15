@@ -40,16 +40,17 @@ public class Comment extends Model {
     this.content = content;
   }
 
-  public Comment(Long noteId, String content, LocalUser author) { // User key?
+  public Comment(Long noteId, String content, User author) { // User key?
     this.note = Note.find.ref(noteId);
     this.content = content;
+    this.author = author;
   }
 
   public static Finder<Long, Comment> find = new Finder(Long.class, Comment.class);
 
-  public static Comment create(Long noteId, Comment comment, LocalUser author) {
+  public static Comment create(Long noteId, Comment comment, User author) {
     comment.note = Note.find.ref(noteId);
-    comment.author = author.firstName + " " + author.lastName;
+    comment.author = author;
     comment.save();
     return comment;
   }

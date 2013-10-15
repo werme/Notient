@@ -1,7 +1,7 @@
 import com.avaje.ebean.Ebean;
 import com.google.common.collect.ImmutableMap;
 
-import models.LocalUser;
+import models.User;
 
 import org.junit.Before;
 import org.junit.Test;

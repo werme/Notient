@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import play.db.ebean.Model;
 
 @Entity
-public class LocalToken extends Model {
+public class Token extends Model {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,7 +24,7 @@ public class LocalToken extends Model {
 
     public boolean isSignUp;
 
-    public static Finder<String, LocalToken> find = new Finder<String, LocalToken>(
-            String.class, LocalToken.class
+    public static Finder<String, Token> find = new Finder<String, Token>(
+            String.class, Token.class
     );
 }

@@ -17,7 +17,7 @@
     content:
 
 # Users
-- !!models.LocalUser
+- !!models.User
     id: 123456789
     username: pingu1
     firstName: Pingu1

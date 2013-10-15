@@ -16,13 +16,13 @@ import static play.test.Helpers.inMemoryDatabase;
 
 public class NotesTest extends WithApplication {
 
-  LocalUser testUser;
+  User testUser;
 
   @Before
   public void setUp() {
     start(fakeApplication(inMemoryDatabase()));
     Ebean.save((List) Yaml.load("test-data.yml"));
-    testUser = LocalUser.findById("1234567890");
+    testUser = User.findById("1234567890");
   }
 
   @Test

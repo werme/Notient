@@ -2,7 +2,6 @@ import com.avaje.ebean.Ebean;
 import com.google.common.collect.ImmutableMap;
 
 import models.Note;
-import models.Token;
 import service.UserService;
 
 
@@ -13,9 +12,8 @@ import play.libs.Yaml;
 import play.mvc.Result;
 import play.test.WithApplication;
 
-import securesocial.core.java.Token;
 import java.util.*;
-import models.LocalUser;
+import models.User;
 import play.Logger;
 import securesocial.core.Authenticator;
 import securesocial.core.IdentityId;

@@ -9,8 +9,8 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
-import models.LocalToken;
-import models.LocalUser;
+import models.Token;
+import models.User;
 import play.Application;
 import play.Logger;
 import scala.Option;
@@ -21,7 +21,6 @@ import securesocial.core.PasswordInfo;
 import securesocial.core.SocialUser;
 import securesocial.core.IdentityId;
 import securesocial.core.java.BaseUserService;
-import securesocial.core.java.Token;
 
 public class UserService extends BaseUserService {
 
@@ -36,8 +35,8 @@ public class UserService extends BaseUserService {
         if (Logger.isDebugEnabled()) {
             Logger.debug("deleteExpiredTokens...");
         }
-        List<LocalToken> list = LocalToken.find.where().lt("expireAt", new DateTime().toString()).findList();
-        for(LocalToken localToken : list) {
+        List<Token> list = Token.find.where().lt("expireAt", new DateTime().toString()).findList();
+        for(Token localToken : list) {
             localToken.delete();
         }
     }
@@ -48,7 +47,7 @@ public class UserService extends BaseUserService {
             Logger.debug("deleteToken...");
             Logger.debug(String.format("uuid = %s", uuid));
         }
-        LocalToken localToken = LocalToken.find.byId(uuid);
+        Token localToken = Token.find.byId(uuid);
         if(localToken != null) {
             localToken.delete();
         }
@@ -63,14 +62,14 @@ public class UserService extends BaseUserService {
         }
 
         //Might should be findByEmail
-        LocalUser localUser;
+        User localUser;
 
-        localUser = LocalUser.findById(identityId.userId());
+        localUser = User.findById(identityId.userId());
         if(localUser == null){
-            localUser = LocalUser.findByEmail(identityId.userId().toLowerCase());
+            localUser = User.findByEmail(identityId.userId().toLowerCase());
         }
         if(localUser == null){
-            localUser = LocalUser.findByUsername(identityId.userId().toLowerCase());
+            localUser = User.findByUsername(identityId.userId().toLowerCase());
         }
 
         Logger.debug(String.format("localUser = " + localUser));
@@ -95,13 +94,13 @@ public class UserService extends BaseUserService {
 
     @Override
     public Identity doFindByEmailAndProvider(String email, String providerId) {
-        List<LocalUser> list = LocalUser.find.where().eq("email", email).eq("provider", providerId).findList();
+        List<User> list = User.find.where().eq("email", email).eq("provider", providerId).findList();
         if(list.size() != 1){
             Logger.debug("found a null in findByEmailAndProvider..." + "Provider: " + providerId + " Email: " + email + " #Results: " + list.size());
             return null;
         }
         //Logger.debug("Provider: "+ list.get(0).provider + " Password: " + list.get(0).password);
-        LocalUser localUser = list.get(0);
+        User localUser = list.get(0);
         SocialUser socialUser = 
                 new SocialUser(new IdentityId(localUser.id, localUser.provider),
                         localUser.firstName, 
@@ -118,14 +117,14 @@ public class UserService extends BaseUserService {
     }
 
     @Override
-    public Token doFindToken(String token) {
+    public securesocial.core.java.Token doFindToken(String token) {
         if (Logger.isDebugEnabled()) {
             Logger.debug("findToken...");
             Logger.debug(String.format("token = %s", token));
         }
-        LocalToken localToken = LocalToken.find.byId(token);
+        Token localToken = Token.find.byId(token);
         if(localToken == null) return null;
-        Token result = new Token();
+        securesocial.core.java.Token result = new securesocial.core.java.Token();
         result.uuid = localToken.uuid;
         result.creationTime = new DateTime(localToken.createdAt);
         result.email = localToken.email;
@@ -143,8 +142,8 @@ public class UserService extends BaseUserService {
             Logger.debug("save...!_!");
             Logger.debug(String.format("user = %s", user));
         }
-        LocalUser localUser = null;
-        localUser = LocalUser.find.byId(user.identityId().userId());
+        User localUser = null;
+        localUser = User.find.byId(user.identityId().userId());
         
         /*
         Logger.debug("id = " + user.identityId().userId() + "  " + user.identityId().userId().toLowerCase());
@@ -159,7 +158,7 @@ public class UserService extends BaseUserService {
 
         if (localUser == null) {
             Logger.debug("adding new...");
-            localUser = new LocalUser();
+            localUser = new User();
             localUser.id = user.identityId().userId().toLowerCase();
             localUser.provider = user.identityId().providerId();
             localUser.firstName = user.firstName();
@@ -206,8 +205,8 @@ public class UserService extends BaseUserService {
     }
 
     @Override
-    public void doSave(Token token) {
-        LocalToken localToken = new LocalToken();
+    public void doSave(securesocial.core.java.Token token) {
+        Token localToken = new Token();
         localToken.uuid = token.uuid;
         localToken.email = token.email;
         try {

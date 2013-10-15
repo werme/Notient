@@ -34,11 +34,11 @@ public class UsersTest extends WithApplication {
 	public void createAndRetrieveUser() {
 
 		// Valid user
-		LocalUser pingu = new LocalUser();
+		User pingu = new User();
 		pingu.email = "pingu1@notient.com";
 		pingu.username = "newPingu";
 		pingu.save();
-		pingu = LocalUser.find.where().eq("email", "pingu1@notient.com")
+		pingu = User.find.where().eq("email", "pingu1@notient.com")
 				.findUnique();
 		assertNotNull(pingu);
 		assertEquals("newPingu", pingu.username);
@@ -54,10 +54,10 @@ public class UsersTest extends WithApplication {
 
 	@Test
 	public void deleteUser() {
-		LocalUser user = LocalUser.findById("1234567890");
+		User user = User.findById("1234567890");
 		String userEmail = user.email;
 		user.delete();
-		LocalUser myDeletedUser = LocalUser.find.where().eq("email", userEmail)
+		User myDeletedUser = User.find.where().eq("email", userEmail)
 				.findUnique();
 		assertNull(myDeletedUser);
 	}
@@ -66,11 +66,11 @@ public class UsersTest extends WithApplication {
 
 	@Test
 	public void findUserByEmail() {
-		LocalUser student = new LocalUser();
+		User student = new User();
 		student.email = "student@notient.com";
 		student.username = "foundStudent";
 		student.save();
-		LocalUser foundUser = LocalUser.findByEmail("student@notient.com");
+		User foundUser = User.findByEmail("student@notient.com");
 		assertEquals("foundStudent", foundUser.username);
 	}
 }

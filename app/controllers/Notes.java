@@ -22,7 +22,7 @@ public class Notes extends Controller {
 	}
 
 	public static Result show(Long id) {
-		return ok(views.html.show.render(Note.find.ref(id), commentForm));
+		return ok(views.html.notes.show.render(Note.find.ref(id), commentForm));
 	}
 
 	@SecureSocial.SecuredAction
@@ -46,7 +46,7 @@ public class Notes extends Controller {
 	@SecureSocial.SecuredAction
 	public static Result newComment(Long id) {
 		Identity user = (Identity) ctx().args.get(SecureSocial.USER_KEY);
-    	LocalUser localUser = LocalUser.find.byId(user.identityId().userId());
+    	User localUser = User.find.byId(user.identityId().userId());
 
 		Form<Comment> filledForm = commentForm.bindFromRequest();
 		if (filledForm.hasErrors()) {

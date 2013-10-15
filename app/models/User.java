@@ -13,7 +13,7 @@ import play.db.ebean.Model;
 	    uniqueConstraints=
 	        @UniqueConstraint(columnNames={"username"}))
 @Entity
-public class LocalUser extends Model {
+public class User extends Model {
 
 	    private static final long serialVersionUID = 1L;
 
@@ -38,17 +38,17 @@ public class LocalUser extends Model {
 	@MaxLength(20)
 	public String username;
 
-	public static Finder<String, LocalUser> find = new Finder<String, LocalUser>(
-			String.class, LocalUser.class);
+	public static Finder<String, User> find = new Finder<String, User>(
+			String.class, User.class);
 	
-	public static LocalUser findById(String id) {
+	public static User findById(String id) {
 		return find.where().eq("id", id).findUnique();
 	}
-    public static LocalUser findByEmail(String email) {
+    public static User findByEmail(String email) {
         return find.where().eq("email", email).findUnique();
     }
 
-    public static LocalUser findByUsername(String username) {
+    public static User findByUsername(String username) {
         return find.where().eq("username", username).findUnique();
     }
 	@Override

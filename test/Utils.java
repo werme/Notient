@@ -1,5 +1,5 @@
 
-import models.LocalUser;
+import models.User;
 import play.Logger;
 import securesocial.core.Authenticator;
 import securesocial.core.IdentityId;
@@ -15,7 +15,7 @@ import play.mvc.Http.Cookie;
 public class Utils {
     public static Cookie fakeCookie(String user){
 
-        LocalUser localUser = LocalUser.findByEmail(user);
+        User localUser = User.findByEmail(user);
         Logger.debug("Username: " + localUser.username +" - ID: " + localUser.id);
         
         SocialUser socialUser = new SocialUser(new IdentityId(localUser.id, localUser.provider),    
