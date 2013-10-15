@@ -6,6 +6,7 @@ import play.data.validation.Constraints.*;
 import play.data.format.Formats.*;
 import play.Logger;
 import javax.persistence.*;
+import securesocial.core.java.SecureSocial;
 
 @Entity
 public class Note extends Model {
@@ -19,7 +20,7 @@ public class Note extends Model {
 	@MaxLength(30)
 	public String title;
 
-    @Column(columnDefinition = "TEXT")
+  @Column(columnDefinition = "TEXT")
 	public String content;
 
 	public String author;
@@ -85,12 +86,12 @@ public class Note extends Model {
     this.comments.add(comment);
     this.save();
     return this;
-    }
+  }
 
-    public String extract(int length) {
+  public String extract(int length) {
   	if(content != null) {
     	return content.length() > length ? content.substring(0, length-1) + " ..." : content;
   	}
   	return null;
-    }
+  }
 }
