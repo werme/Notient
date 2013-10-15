@@ -2,7 +2,7 @@ import com.avaje.ebean.Ebean;
 import com.google.common.collect.ImmutableMap;
 
 import models.Note;
-import models.LocalToken;
+import models.Token;
 import service.UserService;
 
 
