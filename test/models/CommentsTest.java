@@ -32,9 +32,22 @@ public class CommentsTest extends WithApplication {
 		Note.create(new Note("My note", testUser));
     	Note note = Note.find.where().eq("title", "My note").findUnique();
 
-    	Comment.create(note.id, new Comment("Awesome post", testUser));
+    	Comment.create(note.id, new Comment("Awesome post"), testUser);
     	Comment myComment = Comment.find.where().eq("content", "Awesome post").findUnique();
     	assertNotNull(myComment);
     	assertEquals("Awesome post", myComment.content);
+	}
+
+	@Test
+	public void deleteComment() {
+		Note.create(new Note("Delete this", testUser));
+    	Note note = Note.find.where().eq("title", "Delete this").findUnique();
+
+    	Comment.create(note.id, new Comment("Will do"), testUser);
+    	Comment myComment = Comment.find.where().eq("content", "Will do").findUnique();
+
+    	Comment.delete(myComment.id);
+    	Comment myDeletedComment = Comment.find.where().eq("content", "Will do").findUnique();
+    	assertNull(myDeletedComment);
 	}
 }
