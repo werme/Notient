@@ -36,7 +36,7 @@ public class Comment extends Model {
   @ManyToOne
   public Note note;
 
-  public Comment(String content, LocalUser author) { // User key?
+  public Comment(String content) { // User key?
     this.content = content;
   }
 
