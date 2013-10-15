@@ -6,6 +6,7 @@ import play.data.validation.Constraints.*;
 import play.data.format.Formats.*;
 import play.Logger;
 import javax.persistence.*;
+import securesocial.core.java.SecureSocial;
 
 @Entity
 public class Note extends Model {
@@ -19,7 +20,7 @@ public class Note extends Model {
 	@MaxLength(30)
 	public String title;
 
-    @Column(columnDefinition = "TEXT")
+  @Column(columnDefinition = "TEXT")
 	public String content;
 
 	public String author;
@@ -31,11 +32,13 @@ public class Note extends Model {
 	public List<Comment> comments = new ArrayList<Comment>();
 
 	public Note(String title, LocalUser author) {
+		Logger.debug("HEJHEJ " + author);
 		this.title = title;
 		this.author = author.id;
 	}
 
 	public Note(String title, String content, LocalUser author) {
+		Logger.debug("HEJHEJ " + author);
 		this.title = title;
 		this.content = content;
 		this.author = author.id;
@@ -80,17 +83,17 @@ public class Note extends Model {
 		Tag.clean();
 	}
 
-	public Note addComment(String author, String content) {
-    Comment comment = new Comment(this, author, content);
+	public Note addComment(String content, LocalUser author) {
+    Comment comment = new Comment(id, content, author);
     this.comments.add(comment);
     this.save();
     return this;
-    }
+  }
 
-    public String extract(int length) {
-  	if(content != null) {
-    	return content.length() > length ? content.substring(0, length-1) + " ..." : content;
-  	}
-  	return null;
-    }
+	public String extract(int length) {
+		if(content != null) {
+		  return content.length() > length ? content.substring(0, length-1) + " ..." : content;
+		}
+		return null;
+	}
 }

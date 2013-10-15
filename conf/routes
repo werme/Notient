@@ -3,11 +3,13 @@
 GET     /                       controllers.Application.index()
 
 # Notes
-GET     /notes                  controllers.Notes.list()
-POST    /notes                  controllers.Notes.newNote()
-GET     /note/:id               controllers.Notes.show(id: Long)
-POST    /note/:id/delete        controllers.Notes.delete(id: Long)
-GET     /note/:id/delete        controllers.Notes.delete(id: Long)
+
+GET     /notes                  			controllers.Notes.list()
+POST    /notes                  			controllers.Notes.newNote()
+GET     /note/:id               			controllers.Notes.show(id: Long)
+POST    /note/:id                     controllers.Notes.delete(id: Long)
+POST    /note/:id/comments      			controllers.Notes.newComment(id: Long)
+POST    /note/:id/comments/:comments_id     controllers.Notes.deleteComment(id: Long, comments_id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file           controllers.Assets.at(path="/public", file)

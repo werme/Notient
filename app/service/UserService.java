@@ -156,7 +156,7 @@ public class UserService extends BaseUserService {
         Logger.debug(user.email().getClass() + "");
         Logger.debug(user.avatarUrl() + "");
         */
-        
+
         if (localUser == null) {
             Logger.debug("adding new...");
             localUser = new LocalUser();
