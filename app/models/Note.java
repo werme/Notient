@@ -52,11 +52,11 @@ public class Note extends Model {
 
 	public static Finder<Long, Note> find = new Finder(Long.class, Note.class);
 
-    public static List<Note> notesBy(User author) {
-        return find.where()
-            .eq("author", author.id)
-            .findList();
-    }
+  public static List<Note> notesBy(User author) {
+      return find.where()
+          .eq("author", author.id)
+          .findList();
+  }
     
 	public static List<Note> all() {
 		return find.all();
@@ -151,4 +151,38 @@ public class Note extends Model {
 		}
 		return null;
 	}
+
+  public static List<Note> similarNotes(Note note) {
+    List<Note> allNotes = Note.all();   
+
+    // Do not compare with self 
+    allNotes.remove(note);
+    Collections.sort(allNotes, new NoteComparator(note));
+    Collections.reverse(allNotes);
+    return allNotes;
+  }
+
+  public static class NoteComparator implements Comparator<Note> {
+
+    Note note;
+    public NoteComparator (Note note) {
+      super();
+      this.note = note;
+    }
+
+    @Override
+    public int compare(Note o1, Note o2) {
+      int matchingTagsO1 = 0;
+      int matchingTagsO2 = 0;
+      for (Tag tag : o1.tags) {
+        if (note.tags.contains(tag))
+          matchingTagsO1++;
+      }
+      for (Tag tag : o2.tags) {
+        if (note.tags.contains(tag))
+          matchingTagsO2++;
+      }
+      return matchingTagsO1 - matchingTagsO2;
+    }
+  }
 }
