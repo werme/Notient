@@ -24,3 +24,23 @@
     email: pingu@notient.com
     password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
 #password = $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+
+- !!models.User
+    id: 1234567891
+    username: test1
+    provider: userpass
+    firstName: First1
+    lastName: Last1
+    email: test1@notient.com
+    password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+#password = $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+
+- !!models.User
+    id: 1234567892
+    username: test2
+    provider: userpass
+    firstName: First2
+    lastName: Last2
+    email: test2@notient.com
+    password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+#password = $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
