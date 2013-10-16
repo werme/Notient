@@ -27,25 +27,23 @@
     <section>
     </section>
 
-    <footer>
-        <div class="container">
-        @form(routes.Notes.newComment(note.id)) {
-            
-            @inputText(commentForm("content"))
-            <input type="submit" value="Post comment">
-        }
-            @for(comment <- note.comments) {
-            <p>
-                @comment.author
-                @comment 
-                @comment.createdAt
-                @form(routes.Notes.deleteComment(note.id, comment.id)) {
+    <div class="container">
 
-                    <input type="submit" value="Delete">
-                }
-            </p>
+    @form(routes.Notes.newComment(note.id)) {
+        
+        @inputText(commentForm("content"))
+        <input class="flat-button" type="submit" value="Post comment">
+    }
+    @for(comment <- note.comments) {
+        <p>
+            @comment.author
+            @comment 
+            @comment.createdAt
+            @form(routes.Notes.deleteComment(note.id, comment.id)) {
+                <input class="flat-button" type="submit" value="Delete">
             }
+        </p>
+    }
 
-        </div>
-    </footer>
+    </div>
 }
