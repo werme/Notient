@@ -21,6 +21,15 @@
         <section class="note-wrapper">
             <h1>@note.title</h1>
             <p>@note.content</p>
+            <br>
+            <br>
+            
+            <h2>Similar notes</h2>
+            <p>
+                @for(note <- Note.similarNotes(note)) {
+                    @note.title
+                }
+            </p>
         </section>
     </div>
 
