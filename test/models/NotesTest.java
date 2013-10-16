@@ -17,12 +17,16 @@ import static play.test.Helpers.inMemoryDatabase;
 public class NotesTest extends WithApplication {
 
   User testUser;
+  User testUser1;
+  User testUser2;
 
   @Before
   public void setUp() {
     start(fakeApplication(inMemoryDatabase()));
     Ebean.save((List) Yaml.load("test-data.yml"));
     testUser = User.findById("1234567890");
+    testUser1 = User.findById("1234567891");
+    testUser2 = User.findById("1234567892");
   }
 
   @Test
@@ -62,5 +66,31 @@ public class NotesTest extends WithApplication {
       List<Note> results = Note.notesBy(testUser);
       assertEquals(2, results.size());
       assertEquals("My first note", results.get(0).title);
+  }
+  @Test
+  public void vote(){
+    Note.create(new Note("Note with votes", testUser));
+    Note voteNote = Note.find.where().eq("title", "Note with votes").findUnique();
+
+    //Check if user can toggle up vote correctly;
+    voteNote.toggleUpVote(testUser);
+    assertEquals(voteNote.getVoteStatus(testUser), 1);
+    voteNote.toggleUpVote(testUser);
+    assertEquals(voteNote.getVoteStatus(testUser), 0);
+
+    //Total score of vote should be equals to 2.
+    voteNote.toggleUpVote(testUser);
+    voteNote.toggleUpVote(testUser1);
+    assertEquals(voteNote.getScore(),2);
+
+    //With one a down vote we should have a score of 1
+    voteNote.toggleDownVote(testUser2);
+    assertEquals(voteNote.getScore(),1);
+
+    //Switch toggle testUsers vote and we should have a score of -1.
+    voteNote.toggleDownVote(testUser);
+    assertEquals(voteNote.getVoteStatus(testUser), -1);
+    assertEquals(voteNote.getScore(),-1);
+
   }
 }
