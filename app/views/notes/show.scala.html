@@ -45,12 +45,13 @@
             <h1>@note.title</h1>
             <p>@note.content</p>
         </section>
-        <aside class="sidebar">
+        <aside class="similar-notes">
+        <h2>Similar notes:</h2>
             <ul>
                 @for(note <- Note.similarNotes(note)) {
                     <li class="note">
                         <a href="@routes.Notes.show(note.id)"><h3>@note.title</h3></a>
-                        <p>@note.extract(55)</p>
+                        <p>@note.extract(25)</p>
                     </li>
                 }
             </ul>
@@ -58,39 +59,39 @@
     </div>
 
     <section class="comments">
-        <header>
-            <h2>Discussion</h2>
-        </header>
         <div class="container">
-        @for(comment <- note.comments) {
-            <div class="comment">
-            <div class="avatar"></div>
-            <div class="content">
-                <h2>@comment.author</h2><span class="date">@comment.createdAt</span>
-                <p>@comment</p>
-                @form(routes.Notes.deleteComment(note.id, comment.id)) {
-                    <input class="flat-button delete-comment-button" type="submit" value="Delete">
-                }
+            <header>
+                <h2>Discussion</h2>
+            </header>
+            @for(comment <- note.comments) {
+                <div class="comment">
+                <div class="avatar"><!--<img src="#" />--></div>
+                <div class="content">
+                    <h2>@comment.author</h2><span class="date">@comment.createdAt</span>
+                    <p>@comment</p>
+                    @form(routes.Notes.deleteComment(note.id, comment.id)) {
+                        <input class="flat-button delete-comment-button" type="submit" value="Delete">
+                    }
+                </div>
             </div>
-        </div>
-        }
-        <div class="comment">
-            <div class="avatar"></div>
-            <div class="content">
-                <h2>Username</h2><span class="date">Thu Oct 17 2013</span>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua.
-                </p>
-            </div>
-        </div>
-
-        @if(SecureSocial.currentUser != null) {
-            @form(routes.Notes.newComment(note.id)) {
-                
-                @textarea(commentForm("content"), '_label -> "Comment")
-                <input class="flat-button" type="submit" value="Post comment">
             }
-        }
+            <div class="comment">
+                <div class="avatar"><img src="http://bdb3b8.medialib.glogster.com/thumbnails/2e671a43746cd980b0c5a7c51c1ebc21d3162464f97572b8b9b4d5787ceceed8/10-hour-pikachu-song-source.jpg" /></div>
+                <div class="content">
+                    <h2>Username</h2><span class="date">Thu Oct 17 2013</span>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua.
+                    </p>
+                </div>
+            </div>
+
+            @if(SecureSocial.currentUser != null) {
+                @form(routes.Notes.newComment(note.id)) {
+                    
+                    @textarea(commentForm("content"), '_label -> "Leave a comment:")
+                    <input class="flat-button" type="submit" value="Post comment">
+                }
+            }
         </div>
     </section>
 }

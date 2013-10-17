@@ -3,13 +3,11 @@
 .comments {
 	margin-top: 1rem;
 	padding: 1rem 1rem 4rem;
-	//border-top: 2px solid darken(@light-yellow, 5%);
-	//background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, darken(@light-yellow, 5%)), color-stop(100%, @light-yellow));
 	border-top: 2px solid lighten(@dark, 25%);
 	color: lighten(@dark, 25%);
 	background: @dark;
 
-	header, .comment {
+	.container {
 		width: 100%;
 		margin: 0 auto 1rem;
 		max-width: 35rem;
@@ -18,10 +16,12 @@
 	header h2 {
 		font-size: 2rem;
 		margin: 1rem 0 2rem;
-		border-bottom: 1px solid lighten(@dark, 5%);
+		border-bottom: 2px dotted lighten(@dark, 5%);
 	}
 
 	.comment {
+		margin-bottom: 2rem;
+
 		&:after, &:before {
 			content: '';
 			display: table;
@@ -35,11 +35,10 @@
 			display: inline-block;
 			font-size: 1.1rem;
 			color: white;
-			margin-bottom: 0.4rem;
+			margin: 0 1rem 0.4rem 0;
 		}
 
 		.date {
-			margin-left: 1rem;
 			color: lighten(@dark, 10%);
 		}
 
@@ -51,6 +50,11 @@
 			padding-bottom: 20%;
 			border: 2px solid lighten(@dark, 25%);
 			border-radius: 100%;
+			overflow: hidden;
+
+			img {
+				height: 100%;
+			}
 		}
 
 		.content {
@@ -64,12 +68,14 @@
 			display: none;
 		}
 	}
+
+	textarea {
+	width: 100%;
+	height: 5rem;
+	background: lighten(@dark, 5%);
+	border-color: lighten(@dark, 10%);
+	color: white;
+	&:hover { background: lighten(@dark, 7%); }
+}
 }
 
-input, textarea {
-  display: block;
-}
-
-textarea {
-  width: 100%;
-}

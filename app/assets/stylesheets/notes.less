@@ -7,14 +7,19 @@
   border-bottom: 2px solid darken(@light-yellow, 5%);
 
   p {
-    font-size: 1rem;
-    line-height: 1.7;
+    font-size: 1.05rem;
+    line-height: 1.8;
   }
 }
 
-.sidebar {
+.similar-notes {
   margin-top: 1rem;
   width: 100%;
+
+  h2 {
+    // border-bottom: 2px dotted darken(@light-yellow, 10%);
+    margin: 2rem 0 1rem;
+  }
   
   .note {
     background: white;
@@ -106,12 +111,12 @@
 }
 
 @media (min-width: 50em) {
-  .small-note-wrapper {
+  .small-note-wrapper, .similar-notes .note {
     float: left;
     width: 32%;
     margin: 0 2% 2% 0;
   }
-  .small-note-wrapper:nth-child(3n) {
+  .small-note-wrapper:nth-child(3n), .similar-notes .note:nth-child(3n) {
     margin-right: 0;
   }
 }
