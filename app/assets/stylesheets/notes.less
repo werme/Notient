@@ -2,8 +2,41 @@
 
 .note-wrapper {
   padding: 1rem;
-  margin-top: 1rem;
   background: white;
+  width: 100%;
+  border-bottom: 2px solid darken(@light-yellow, 5%);
+
+  p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+}
+
+.similar-notes {
+  margin-top: 1rem;
+  width: 100%;
+
+  h2 {
+    // border-bottom: 2px dotted darken(@light-yellow, 10%);
+    margin: 2rem 0 1rem;
+  }
+  
+  .note {
+    background: white;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 2px solid darken(@light-yellow, 5%);
+    p { margin: 0; }
+    a:hover { color: @blue; }
+  }
+
+  .label {
+    margin: 0 0.8rem 0.8rem 0 !important;
+  }
+}
+
+.tags {
+  margin-top: 1rem;
 }
 
 .notes-wrapper {
@@ -54,7 +87,7 @@
       &:hover { color: #d33; }
     }
 
-    &:hover { -webkit-transform: rotatex(-180deg); }
+    // &:hover { -webkit-transform: rotatex(-180deg); }
 
     .side-base {
       width: 100%;
@@ -78,12 +111,12 @@
 }
 
 @media (min-width: 50em) {
-  .small-note-wrapper {
+  .small-note-wrapper, .similar-notes .note {
     float: left;
     width: 32%;
     margin: 0 2% 2% 0;
   }
-  .small-note-wrapper:nth-child(3n) {
+  .small-note-wrapper:nth-child(3n), .similar-notes .note:nth-child(3n) {
     margin-right: 0;
   }
 }
