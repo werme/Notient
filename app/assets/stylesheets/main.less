@@ -124,8 +124,16 @@ h1.center-form-header {
 @import "elements/basic.icon";
 @import "elements/icon";
 
-.ui.label.red {
-  border-bottom: 2px solid darken(@red, 10%) !important;
+.tag {
+  display: inline-block;
+  padding: 0.2rem 0.4rem;
+  margin: 0 1rem 1rem 0;
+  color: #333;
+  background: lighten(@yellow, 20%);
+  border-bottom: 1px solid @yellow;
+  text-decoration: none;
+  transition: 0.3s all;
+  &:hover { background: lighten(@yellow, 10%); border-bottom: 1px solid darken(@yellow, 10%); }
 }
 
 .flat-button {

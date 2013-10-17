@@ -38,6 +38,9 @@
     </div>
 
     <div class="container main">
+        <div class="tags">
+            @for(tag <- note.tags) { <a href="#" class="tag">@tag.title @tag.notes.size</a> }
+        </div>
         <section class="note-wrapper">
             <h1>@note.title</h1>
             <p>@note.content</p>
@@ -51,24 +54,35 @@
                     </li>
                 }
             </ul>
-           <p class="tags">
-            @for(tag <- note.tags) { <span class="ui red small label">@tag.title @tag.notes.size</span> }
-            </p>
         </aside>
     </div>
 
     <section class="comments">
+        <header>
+            <h2>Discussion</h2>
+        </header>
         <div class="container">
         @for(comment <- note.comments) {
-            <p>
-                @comment.author
-                @comment 
-                @comment.createdAt
+            <div class="comment">
+            <div class="avatar"></div>
+            <div class="content">
+                <h2>@comment.author</h2><span class="date">@comment.createdAt</span>
+                <p>@comment</p>
                 @form(routes.Notes.deleteComment(note.id, comment.id)) {
-                    <input class="flat-button" type="submit" value="Delete">
+                    <input class="flat-button delete-comment-button" type="submit" value="Delete">
                 }
-            </p>
+            </div>
+        </div>
         }
+        <div class="comment">
+            <div class="avatar"></div>
+            <div class="content">
+                <h2>Username</h2><span class="date">Thu Oct 17 2013</span>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                tempor incididunt ut labore et dolore magna aliqua.
+                </p>
+            </div>
+        </div>
 
         @if(SecureSocial.currentUser != null) {
             @form(routes.Notes.newComment(note.id)) {
