@@ -1,6 +1,9 @@
 @(note: Note, commentForm: Form[Comment])
 
+@implicitFieldConstructor = @{ FieldConstructor(plainFieldConstructor.render) }
+
 @import helper._
+@import securesocial.core.java.SecureSocial
 
 @main("Note list") {
     <header class="main-header">
@@ -33,28 +36,28 @@
         </section>
     </div>
 
-    <section>
-    </section>
 
-    <footer>
+
+    <section class="comments">
         <div class="container">
-        @form(routes.Notes.newComment(note.id)) {
-            
-            @inputText(commentForm("content"))
-            <input type="submit" value="Post comment">
-        }
-            @for(comment <- note.comments) {
+        @for(comment <- note.comments) {
             <p>
                 @comment.author
                 @comment 
                 @comment.createdAt
                 @form(routes.Notes.deleteComment(note.id, comment.id)) {
-
-                    <input type="submit" value="Delete">
+                    <input class="flat-button" type="submit" value="Delete">
                 }
             </p>
-            }
+        }
 
+        @if(SecureSocial.currentUser != null) {
+            @form(routes.Notes.newComment(note.id)) {
+                
+                @textarea(commentForm("content"))
+                <input class="flat-button" type="submit" value="Post comment">
+            }
+        }
         </div>
-    </footer>
+    </section>
 }
