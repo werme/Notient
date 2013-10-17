@@ -1,4 +1,4 @@
-@(note: Note, commentForm: Form[Comment])
+@(note: Note, noteForm: Form[Note], commentForm: Form[Comment])
 
 @implicitFieldConstructor = @{ FieldConstructor(plainFieldConstructor.render) }
 
@@ -19,24 +19,43 @@
             </nav>
         </div>
     </header>
+    <div class="dark-wrapper">
+    <section id="quick-create-form" class="quick-create-form">
+        <div class="container">
+            @views.html.quickCreateForm(noteForm)
+        </div>
+    </section>
+    <header id="sub-nav" class="sub-nav">
+        <div class="container">
+            <nav>
+                <ul>
+                    <li><a href="#"><i class="list layout icon"></i>List</a></li>
+                    <li><a href="#"><i class="grid layout icon"></i>Thumbnails</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    </div>
 
     <div class="container main">
         <section class="note-wrapper">
             <h1>@note.title</h1>
             <p>@note.content</p>
-            <br>
-            <br>
-            
-            <h2>Similar notes</h2>
-            <p>
-                @for(note <- Note.similarNotes(note)) {
-                    @note.title
-                }
-            </p>
         </section>
+        <aside class="sidebar">
+            <ul>
+                @for(note <- Note.similarNotes(note)) {
+                    <li class="note">
+                        <a href="@routes.Notes.show(note.id)"><h3>@note.title</h3></a>
+                        <p>@note.extract(55)</p>
+                    </li>
+                }
+            </ul>
+           <p class="tags">
+            @for(tag <- note.tags) { <span class="ui red small label">@tag.title @tag.notes.size</span> }
+            </p>
+        </aside>
     </div>
-
-
 
     <section class="comments">
         <div class="container">
@@ -54,7 +73,7 @@
         @if(SecureSocial.currentUser != null) {
             @form(routes.Notes.newComment(note.id)) {
                 
-                @textarea(commentForm("content"))
+                @textarea(commentForm("content"), '_label -> "Comment")
                 <input class="flat-button" type="submit" value="Post comment">
             }
         }
