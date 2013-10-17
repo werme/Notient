@@ -4,6 +4,7 @@
 
 @import helper._
 @import securesocial.core.java.SecureSocial
+@import helpers.MarkdownHelper
 
 @main("Note list") {
     <header class="main-header">
@@ -42,8 +43,7 @@
             @for(tag <- note.tags) { <a href="#" class="tag">@tag.title @tag.notes.size</a> }
         </div>
         <section class="note-wrapper">
-            <h1>@note.title</h1>
-            <p>@note.content</p>
+            <p>@Html(MarkdownHelper.toHtml(note.content))</p>
         </section>
         <aside class="similar-notes">
         <h2>Similar notes:</h2>
