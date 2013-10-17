@@ -57,7 +57,7 @@
                                 </ul>
                             </header>
                             <section>
-                                @for(tag <- note.tags) { <span class="ui red small label">@tag.title</span> }
+                                @for(tag <- note.tags) { <span><a href="#" class="tag">@tag.title</a></span> }
                             </section>
                         </div>
                     </div>
