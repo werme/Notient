@@ -98,7 +98,7 @@
                 </div>
             </div>
 
-            @if(SecureSocial.currentUser != null) {
+            @if(User.currentUser != null) {
                 @form(routes.Notes.newComment(note.id)) {
                     
                     @textarea(commentForm("content"), '_label -> "Leave a comment:")
