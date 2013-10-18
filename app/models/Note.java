@@ -23,7 +23,8 @@ public class Note extends Model {
   @Column(columnDefinition = "TEXT")
 	public String content;
 
-	public String author;
+	@ManyToOne
+  public User author;
 
 	@ManyToMany(cascade = CascadeType.REMOVE)
 	public List<Tag> tags = new ArrayList<Tag>();
@@ -42,14 +43,14 @@ public class Note extends Model {
 	public Note(String title, User author) {
 		Logger.debug("HEJHEJ " + author);
 		this.title = title;
-		this.author = author.id;
+		this.author = author;
 	}
 
 	public Note(String title, String content, User author) {
 		Logger.debug("HEJHEJ " + author);
 		this.title = title;
 		this.content = content;
-		this.author = author.id;
+		this.author = author;
 	}
 
 	public static Finder<Long, Note> find = new Finder(Long.class, Note.class);
@@ -69,7 +70,8 @@ public class Note extends Model {
 		return note;
 	}
 
-	public static Note create(Note note, String tagsList) {
+	public static Note create(Note note, String tagsList, User author) {
+    note.author = author;
 		note.save();
 		if(tagsList != null && !tagsList.equals("") && !tagsList.equals(" ")) {
 			note.tags.addAll(Tag.createOrFindAllFromString(tagsList));

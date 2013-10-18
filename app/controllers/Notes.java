@@ -32,7 +32,7 @@ public class Notes extends Controller {
 		if (filledForm.hasErrors()) {
 			return badRequest(views.html.index.render(Note.all(), filledForm));
 		} else {
-			Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"));
+			Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser());
 			return redirect(routes.Notes.list());
 		}
 	}
