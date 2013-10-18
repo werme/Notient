@@ -16,7 +16,7 @@
                     <li><a href="@securesocial.controllers.routes.LoginPage.logout"><i class="sign out icon"></i>Logout</a></li>
                     <li><a href="@securesocial.controllers.routes.Registration.startSignUp"><i class="user icon"></i>Register</a></li>
                     @if(SecureSocial.currentUser != null) {
-                        <li><a href="@controllers.routes.Users.show(User.currentUser().id)">Profile</li>
+                        <li><a href="@controllers.routes.Users.show(User.currentUser().id)">Profile</a></li>
                     }
                     <li><a href="#" id="sub-nav-toggle" class="menu-link"><i class="add icon"></i></a></li>
                 </ul>
