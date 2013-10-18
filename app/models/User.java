@@ -8,6 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import play.db.ebean.Model;
+import securesocial.core.java.SecureSocial;
+import securesocial.core.Identity;
+import play.Logger;
+
+
 
 @Table(
 	    uniqueConstraints=
@@ -51,6 +56,17 @@ public class User extends Model {
     public static User findByUsername(String username) {
         return find.where().eq("username", username).findUnique();
     }
+
+    public static User currentUser(){
+        Identity identity = SecureSocial.currentUser();
+        User localUser = null;
+        if (identity != null){
+           localUser = User.find.byId(identity.identityId().userId());
+        }
+        Logger.debug("identity: " + identity);
+        return localUser;
+    }
+
 	@Override
     public String toString() {
         return this.id + " - " + this.firstName;
