@@ -92,5 +92,10 @@ public class NotesTest extends WithApplication {
     assertEquals(voteNote.getVoteStatus(testUser), -1);
     assertEquals(voteNote.getScore(),-1);
 
+
+    Note.create(new Note("Second voteNote", testUser));
+    Note voteNote2 = Note.find.where().eq("title", "Second voteNote").findUnique();
+
+    assertEquals(voteNote2.getScore(), 0);
   }
 }
