@@ -1,23 +1,5 @@
-# Notes
-
-- !!models.Note
-    title: Note title 1
-    content: The first note
-
-- !!models.Note
-    title: Note title 2
-    content: Lorem ipsum Incididunt culpa ullamco voluptate quis eiusmod culpa dolor laboris occaecat.
-
-- !!models.Note
-    title: Note title 3
-    content: Lorem ipsum Ut aliquip aliqua adipisicing exercitation ut est voluptate consectetur deserunt ullamco Duis.
-
-- !!models.Note
-    title: Note title 4
-    content:
-
 # Users
-- !!models.User
+- &pingu !!models.User
     id: 123456789
     username: pingu1
     firstName: Pingu1
@@ -27,3 +9,26 @@
     privilege: ADMIN
     password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
 #password = $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+
+# Notes
+- &mynote !!models.Note
+    title: Note title 1
+    content: The first note
+    author: *pingu
+- !!models.Note
+    title: Note title 2
+    content: Lorem ipsum Incididunt culpa ullamco voluptate quis eiusmod culpa dolor laboris occaecat.
+    author: *pingu
+- !!models.Note
+    title: Note title 3
+    content: Lorem ipsum Ut aliquip aliqua adipisicing exercitation ut est voluptate consectetur deserunt ullamco Duis.
+    author: *pingu
+- !!models.Note
+    title: Note title 4
+    content:
+    author: *pingu
+
+- !!models.Comment
+    content: Tjabayo
+    note: *mynote
+    author: *pingu
