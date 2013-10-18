@@ -80,7 +80,14 @@
                 <div class="comment">
                 <div class="avatar"><!--<img src="#" />--></div>
                 <div class="content">
-                    <h2>@comment.author</h2><span class="date">@comment.createdAt</span>
+                    <h2>
+                        @if(comment.author.username != null) {
+                            @comment.author.username
+                        } else { 
+                            @comment.author
+                        }
+                    </h2>
+                    <span class="date">@comment.createdAt</span>
                     <p>@comment</p>
                     @form(routes.Notes.deleteComment(note.id, comment.id)) {
                         <input class="flat-button delete-comment-button" type="submit" value="Delete">
