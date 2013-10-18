@@ -1,9 +1,72 @@
 @import "config";
 
+.see-full-note-link {
+  display: block;
+  padding-bottom: 0.4rem;
+  background: none;
+  border: 0;
+  color: @black;
+
+  &:hover {
+    background: none;
+    border: 0;
+    color: @blue;
+  }
+}
+
 .note-wrapper {
   padding: 1rem;
-  margin-top: 1rem;
   background: white;
+  width: 100%;
+  border-bottom: 2px solid darken(@light-yellow, 5%);
+  font-size: 1.05rem;
+  line-height: 1.8;
+
+  ul {
+    margin-bottom: 1rem;
+    li {
+      list-style: disc;
+      margin-left: 3rem;
+    }
+  }
+  ol {
+    margin-bottom: 1rem;
+    li {
+      list-style: decimal;
+      margin-left: 3rem;
+    }
+  }
+
+}
+
+.similar-notes {
+  margin-top: 1rem;
+  width: 100%;
+
+  h2 {
+    // border-bottom: 2px dotted darken(@light-yellow, 10%);
+    margin: 2rem 0 1rem;
+  }
+  
+  .note {
+    background: white;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 2px solid darken(@light-yellow, 5%);
+    height: 5.5rem;
+    overflow: hidden;
+
+    p { margin: 0; }
+    a:hover { color: @blue; }
+  }
+
+  .label {
+    margin: 0 0.8rem 0.8rem 0 !important;
+  }
+}
+
+.tags {
+  margin-top: 1rem;
 }
 
 .notes-wrapper {
@@ -23,7 +86,7 @@
 
     color: #333;
 
-    transition: 0.4s all;
+    transition: 0.5s all;
     -webkit-transform-style: preserve-3d;
 
     header {
@@ -40,6 +103,7 @@
 
     a h2 {
       color: #333;
+      font-size: 1.2rem;
       &:hover { color: @blue; }
     }
 
@@ -51,17 +115,17 @@
       font-size: 1rem;
       border: 0;
       background: transparent;
-      &:hover { color: #d33; }
+      color: #d33;
+      &:hover { color: red; }
     }
 
     &:hover { -webkit-transform: rotatex(-180deg); }
 
     .side-base {
       width: 100%;
-      height: 100%;
+      min-height: 100%;
       position: absolute;
       -webkit-backface-visibility: hidden;
-      overflow: hidden;
 
       background: white;
       border-bottom: 2px solid darken(@light-yellow, 5%);
@@ -69,21 +133,28 @@
 
     .info {
       font-size: 0.8rem;
-      date { display: block; font-size: 0.7rem; margin-bottom: 0.4rem; }
 
       header { padding: 1rem; }
+      
+      date { 
+        display: block; 
+        font-size: 0.7rem; 
+        margin-bottom: 0.4rem; 
+      }
+      .tag { margin: 0 0.2rem 0.6rem 0; }
     }
-    .back { -webkit-transform: rotatex(-180deg); }
+    .back { -webkit-transform: rotatex(-180deg); 
+      border-top: 2px solid @light-yellow; }
   }
 }
 
 @media (min-width: 50em) {
-  .small-note-wrapper {
+  .small-note-wrapper, .similar-notes .note {
     float: left;
     width: 32%;
     margin: 0 2% 2% 0;
   }
-  .small-note-wrapper:nth-child(3n) {
+  .small-note-wrapper:nth-child(3n), .similar-notes .note:nth-child(3n) {
     margin-right: 0;
   }
 }

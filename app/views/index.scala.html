@@ -35,9 +35,6 @@
     </div>
 
     <div class="container main">
-        <br/>
-        Tags for debug:
-        @for(tag <- Tag.find.all()) { <span class="ui red small label">@tag.title @tag.notes.size</span> }
         <section class="notes-wrapper">
             @for(note <- notes) {
                 <div class="small-note-wrapper">
@@ -55,12 +52,12 @@
                                 <a href="#" class="delete-button"><i class="remove icon"></i></a>
                                 <date>Posted 1th Oct 2013</date>
                                 <ul>
-                                    <li>@note.title</li>
+                                    <li><a href="@routes.Notes.show(note.id)" class="see-full-note-link">@note.title</a></li>
                                     <li>By <a href="#">Ollmardandav</a></li>
                                 </ul>
                             </header>
                             <section>
-                                @for(tag <- note.tags) { <span class="ui red small label">@tag.title</span> }
+                                @for(tag <- note.tags) { <span><a href="#" class="tag">@tag.title</a></span> }
                             </section>
                         </div>
                     </div>

@@ -1,6 +1,10 @@
-@(note: Note, commentForm: Form[Comment])
+@(note: Note, noteForm: Form[Note], commentForm: Form[Comment])
+
+@implicitFieldConstructor = @{ FieldConstructor(plainFieldConstructor.render) }
 
 @import helper._
+@import securesocial.core.java.SecureSocial
+@import helpers.MarkdownHelper
 
 @main("Note list") {
     <header class="main-header">
@@ -16,47 +20,88 @@
             </nav>
         </div>
     </header>
+    <div class="dark-wrapper">
+    <section id="quick-create-form" class="quick-create-form">
+        <div class="container">
+            @views.html.quickCreateForm(noteForm)
+        </div>
+    </section>
+    <header id="sub-nav" class="sub-nav">
+        <div class="container">
+            <nav>
+                <ul>
+                    <li><a href="#"><i class="list layout icon"></i>List</a></li>
+                    <li><a href="#"><i class="grid layout icon"></i>Thumbnails</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    </div>
 
     <div class="container main">
+        <div class="tags">
+            @for(tag <- note.tags) { <a href="#" class="tag">@tag.title @tag.notes.size</a> }
+        </div>
         <section class="note-wrapper">
             <h1>@note.title</h1>
             <p>@note.content</p>
             <br>
             <br>
-                                    @User.currentUser
-                                    Score:  <a href='@routes.Notes.toggleUpVote(note.id)'>+</a> @note.getScore <a href='@routes.Notes.toggleDownVote(note.id)'>-</a>            
-
+            @User.currentUser
+            Score:  <a href='@routes.Notes.toggleUpVote(note.id)'>+</a> @note.getScore <a href='@routes.Notes.toggleDownVote(note.id)'>-</a>            
+            <br>
+            <br>
             <h2>Similar notes</h2>
             <p>
-                @for(note <- Note.similarNotes(note)) {
-                    @note.title
-                }
-            </p>
+            <p>@Html(MarkdownHelper.toHtml(note.content))</p>
         </section>
+        <aside class="similar-notes">
+        <h2>Similar notes:</h2>
+            <ul>
+                @for(note <- Note.similarNotes(note)) {
+                    <li class="note">
+                        <a href="@routes.Notes.show(note.id)"><h3>@note.title</h3></a>
+                        <p>@note.extract(25)</p>
+                    </li>
+                }
+            </ul>
+        </aside>
     </div>
 
-    <section>
-    </section>
-
-    <footer>
+    <section class="comments">
         <div class="container">
-        @form(routes.Notes.newComment(note.id)) {
-            
-            @inputText(commentForm("content"))
-            <input type="submit" value="Post comment">
-        }
+            <header>
+                <h2>Discussion</h2>
+            </header>
             @for(comment <- note.comments) {
-            <p>
-                @comment.author
-                @comment 
-                @comment.createdAt
-                @form(routes.Notes.deleteComment(note.id, comment.id)) {
-
-                    <input type="submit" value="Delete">
-                }
-            </p>
+                <div class="comment">
+                <div class="avatar"><!--<img src="#" />--></div>
+                <div class="content">
+                    <h2>@comment.author</h2><span class="date">@comment.createdAt</span>
+                    <p>@comment</p>
+                    @form(routes.Notes.deleteComment(note.id, comment.id)) {
+                        <input class="flat-button delete-comment-button" type="submit" value="Delete">
+                    }
+                </div>
+            </div>
             }
+            <div class="comment">
+                <div class="avatar"><img src="http://bdb3b8.medialib.glogster.com/thumbnails/2e671a43746cd980b0c5a7c51c1ebc21d3162464f97572b8b9b4d5787ceceed8/10-hour-pikachu-song-source.jpg" /></div>
+                <div class="content">
+                    <h2>Username</h2><span class="date">Thu Oct 17 2013</span>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua.
+                    </p>
+                </div>
+            </div>
 
+            @if(SecureSocial.currentUser != null) {
+                @form(routes.Notes.newComment(note.id)) {
+                    
+                    @textarea(commentForm("content"), '_label -> "Leave a comment:")
+                    <input class="flat-button" type="submit" value="Post comment">
+                }
+            }
         </div>
-    </footer>
+    </section>
 }
