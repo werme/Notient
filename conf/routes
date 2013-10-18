@@ -39,4 +39,4 @@ POST    /authenticate/:provider     securesocial.controllers.ProviderController.
 GET     /not-authorized             securesocial.controllers.ProviderController.notAuthorized
 
 # Users
-GET     /user/:id                   controllers.Users.show(id: Long)
+GET     /user/:id                   controllers.Users.show(id: String)

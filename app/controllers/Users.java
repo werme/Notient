@@ -10,7 +10,7 @@ import securesocial.core.Identity;
 
 public class Users extends Controller {
 
-  public static Result show(Long id) {
-    return ok(views.html.users.show.render(User.find.ref(id.toString())));
+  public static Result show(String id) {
+    return ok(views.html.users.show.render(User.find.ref(id)));
   }
 }
