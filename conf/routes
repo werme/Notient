@@ -37,3 +37,6 @@ POST    /password                   securesocial.controllers.PasswordChange.hand
 GET     /authenticate/:provider     securesocial.controllers.ProviderController.authenticate(provider)
 POST    /authenticate/:provider     securesocial.controllers.ProviderController.authenticateByPost(provider)
 GET     /not-authorized             securesocial.controllers.ProviderController.notAuthorized
+
+# Users
+GET     /user/:id                   controllers.Users.show(id: String)
