@@ -45,14 +45,11 @@ public class Notes extends Controller {
 
 	@SecureSocial.SecuredAction
 	public static Result newComment(Long id) {
-		Identity user = (Identity) ctx().args.get(SecureSocial.USER_KEY);
-    	User localUser = User.find.byId(user.identityId().userId());
-
 		Form<Comment> filledForm = commentForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			//return badRequest(views.html.index.render(Note.all(), filledForm)); // should redirect to show note view later 
 		} else {
-			Comment.create(id, filledForm.get(), localUser);
+			Comment.create(id, filledForm.get(), User.currentUser());
 		}
 		return redirect(routes.Notes.show(id));
 	}
