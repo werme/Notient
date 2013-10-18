@@ -55,9 +55,9 @@ public class Note extends Model {
 	public static Finder<Long, Note> find = new Finder(Long.class, Note.class);
 
   public static List<Note> notesBy(User author) {
-      return find.where()
-          .eq("author", author.id)
-          .findList();
+    return find.where()
+        .eq("author", author.id)
+        .findList();
   }
     
 	public static List<Note> all() {
@@ -96,72 +96,69 @@ public class Note extends Model {
     this.comments.add(comment);
     this.save();
     return this;
-    }
+  }
 
-    public void toggleUpVote(User user){
-    	if(user == null){
-    		// Do nothing
-    		Logger.debug("Vote: User is null!");
-    	}
-    	else if(upVotes.contains(user)){
-    		Logger.debug("Vote: removed upvote!");
-    		upVotes.remove(user);
-    		this.saveManyToManyAssociations("upVotes");
-    	} else {
-    		if(downVotes.contains(user)){
-    			Logger.debug("Vote: removed old downvote!");
-    			downVotes.remove(user);
-    			this.saveManyToManyAssociations("downVotes");
-    		}
-    		Logger.debug("Vote: Added upvote!");
-    		upVotes.add(user);
-    		this.saveManyToManyAssociations("upVotes");
-    	}
-    	Logger.debug("Uservotestatus: " + getVoteStatus(user));
-    	this.save();
-    }
+  public void toggleUpVote(User user){
+  	if(user == null){
+  		// Do nothing
+  		Logger.debug("Vote: User is null!");
+  	}
+  	else if(upVotes.contains(user)){
+  		Logger.debug("Vote: removed upvote!");
+  		upVotes.remove(user);
+  		this.saveManyToManyAssociations("upVotes");
+  	} else {
+  		if(downVotes.contains(user)){
+  			Logger.debug("Vote: removed old downvote!");
+  			downVotes.remove(user);
+  			this.saveManyToManyAssociations("downVotes");
+  		}
+  		Logger.debug("Vote: Added upvote!");
+  		upVotes.add(user);
+  		this.saveManyToManyAssociations("upVotes");
+  	}
+  	Logger.debug("Uservotestatus: " + getVoteStatus(user));
+  	this.save();
+  }
 
-    public void toggleDownVote(User user){
-    	if(user == null){
-    		// Do nothing
-    		Logger.debug("Vote: User is null!");
-    	} else if(downVotes.contains(user)){
-    		Logger.debug("Vote: removed downvote!");
-    		downVotes.remove(user);
-    		this.saveManyToManyAssociations("downVotes");
-    	} else {
-    		if(upVotes.contains(user)){
-    			Logger.debug("Vote: removed old upvote!");
-    			upVotes.remove(user);
-    			this.saveManyToManyAssociations("upVotes");
-    		}
-    		Logger.debug("Vote: Added downvote!");
-    		downVotes.add(user);
-    		this.saveManyToManyAssociations("downVotes");
-    	}
-    	Logger.debug("Uservotestatus: " + getVoteStatus(user));
-    	this.save();
-    }
+  public void toggleDownVote(User user){
+  	if(user == null){
+  		// Do nothing
+  		Logger.debug("Vote: User is null!");
+  	} else if(downVotes.contains(user)){
+  		Logger.debug("Vote: removed downvote!");
+  		downVotes.remove(user);
+  		this.saveManyToManyAssociations("downVotes");
+  	} else {
+  		if(upVotes.contains(user)){
+  			Logger.debug("Vote: removed old upvote!");
+  			upVotes.remove(user);
+  			this.saveManyToManyAssociations("upVotes");
+  		}
+  		Logger.debug("Vote: Added downvote!");
+  		downVotes.add(user);
+  		this.saveManyToManyAssociations("downVotes");
+  	}
+  	Logger.debug("Uservotestatus: " + getVoteStatus(user));
+  	this.save();
+  }
 
-    public int getVoteStatus(User user){
-    	if(upVotes.contains(user)){
-    		return 1;
-    	} else if (downVotes.contains(user)) {
-    		return -1;
-    	} else {
-    		return 0;
-    	}
-    }
+  public int getVoteStatus(User user){
+  	if(upVotes.contains(user)){
+  		return 1;
+  	} else if (downVotes.contains(user)) {
+  		return -1;
+  	} else {
+  		return 0;
+  	}
+  }
 
-    public int getScore(){
-    	Logger.debug("upVotes: " + upVotes.size());
-    	Logger.debug("downVotes: " + downVotes.size());
-
-    	Logger.debug("upvotes: "+ upVotes + "downvotes:" + downVotes);
-    	return (upVotes.size() - downVotes.size());
-    }
-
-
+  public int getScore(){
+  	Logger.debug("upVotes: " + upVotes.size());
+  	Logger.debug("downVotes: " + downVotes.size());
+  	Logger.debug("upvotes: "+ upVotes + "downvotes:" + downVotes);
+  	return (upVotes.size() - downVotes.size());
+  }
 
 	public String extract(int length) {
 		if(content != null) {
