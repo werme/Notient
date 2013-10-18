@@ -19,6 +19,7 @@ public class Comment extends Model {
   public Long id;
 
   //@Required
+  @ManyToOne
   public User author;
 
   @Column(name = "created_at")
