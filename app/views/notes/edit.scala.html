@@ -1,0 +1,22 @@
+@(note: Note, noteForm: Form[Note])
+
+@implicitFieldConstructor = @{ FieldConstructor(plainFieldConstructor.render) }
+
+@import helper._
+@import helpers.MarkdownHelper
+
+@main("Note list") {
+    <div class="container main">
+        @form(routes.Notes.newNote) {
+          <div class="module">
+            @inputText(noteForm("title"),'_showConstraints -> false)
+            <label>tags</label>
+            <input type="text" name="tagList" />
+          </div>
+          <div class="module">
+            @textarea(noteForm("content"))
+            <input class="flat-button" type="submit" value="Ok">
+          </div>
+        }
+    </div>
+}

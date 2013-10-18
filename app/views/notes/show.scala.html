@@ -32,6 +32,7 @@
             @User.currentUser
             Score:  <a href='@routes.Notes.toggleUpVote(note.id)'>+</a> @note.getScore <a href='@routes.Notes.toggleDownVote(note.id)'>-</a>            
             <p>@Html(MarkdownHelper.toHtml(note.content))</p>
+            <p><a href='@routes.Notes.edit(note.id)'>Edit</a></p>
         </section>
         <aside class="similar-notes">
         <h2>Similar notes:</h2>
