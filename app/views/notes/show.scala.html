@@ -46,16 +46,8 @@
             @for(tag <- note.tags) { <a href="#" class="tag">@tag.title @tag.notes.size</a> }
         </div>
         <section class="note-wrapper">
-            <h1>@note.title</h1>
-            <p>@note.content</p>
-            <br>
-            <br>
             @User.currentUser
             Score:  <a href='@routes.Notes.toggleUpVote(note.id)'>+</a> @note.getScore <a href='@routes.Notes.toggleDownVote(note.id)'>-</a>            
-            <br>
-            <br>
-            <h2>Similar notes</h2>
-            <p>
             <p>@Html(MarkdownHelper.toHtml(note.content))</p>
         </section>
         <aside class="similar-notes">
