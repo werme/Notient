@@ -53,15 +53,9 @@
             </header>
             @for(comment <- note.comments) {
                 <div class="comment">
-                <div class="avatar"><!--<img src="#" />--></div>
+                <div class="avatar"><img src="@comment.author.getAvatarUrl" /></div>
                 <div class="content">
-                    <h2>
-                        @if(comment.author != null) {
-                            @comment.author.username
-                        } else { 
-                            no author
-                        }
-                    </h2>
+                    <h2>@comment.author.displayName</h2>
                     <span class="date">@comment.createdAt</span>
                     <p>@comment</p>
                     @form(routes.Notes.deleteComment(note.id, comment.id)) {
@@ -82,7 +76,6 @@
 
             @if(User.currentUser != null) {
                 @form(routes.Notes.newComment(note.id)) {
-                    
                     @textarea(commentForm("content"), '_label -> "Leave a comment:")
                     <input class="flat-button" type="submit" value="Post comment">
                 }
