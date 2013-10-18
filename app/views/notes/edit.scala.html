@@ -7,7 +7,8 @@
 
 @main("Note list") {
     <div class="container main">
-        @form(routes.Notes.newNote) {
+        @form(routes.Notes.update(note.id)) {
+        <input type="hidden" name="id" value="@note.id">
           <div class="module">
             @inputText(noteForm("title"),'_showConstraints -> false)
             <label>tags</label>

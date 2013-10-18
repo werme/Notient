@@ -82,6 +82,12 @@ public class Notes extends Controller {
 
 	@SecureSocial.SecuredAction
 	public static Result update(Long id) {
-		return null;
+		Form<Note> filledForm = noteForm.bindFromRequest();
+		if (filledForm.hasErrors()) {
+			return badRequest(views.html.index.render(Note.all(), filledForm));
+		} else {
+			Note.update(filledForm.get(), Form.form().bindFromRequest().get("tagList"));
+		return redirect(routes.Notes.show(id));
+		}
 	}
 }
