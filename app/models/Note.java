@@ -32,9 +32,11 @@ public class Note extends Model {
 	public List<Comment> comments = new ArrayList<Comment>();
 
 	@ManyToMany(cascade=CascadeType.REMOVE)
+	@JoinTable(name="up_votes")
 	public List<User> upVotes = new ArrayList<User>();
 
 	@ManyToMany(cascade=CascadeType.REMOVE)
+	@JoinTable(name="down_votes")
 	public List<User> downVotes = new ArrayList<User>();
 
 	public Note(String title, User author) {
@@ -99,34 +101,46 @@ public class Note extends Model {
     public void toggleUpVote(User user){
     	if(user == null){
     		// Do nothing
+    		Logger.debug("Vote: User is null!");
     	}
     	else if(upVotes.contains(user)){
+    		Logger.debug("Vote: removed upvote!");
     		upVotes.remove(user);
     		this.saveManyToManyAssociations("upVotes");
     	} else {
     		if(downVotes.contains(user)){
+    			Logger.debug("Vote: removed old downvote!");
     			downVotes.remove(user);
     			this.saveManyToManyAssociations("downVotes");
     		}
+    		Logger.debug("Vote: Added upvote!");
     		upVotes.add(user);
     		this.saveManyToManyAssociations("upVotes");
     	}
+    	Logger.debug("Uservotestatus: " + getVoteStatus(user));
+    	this.save();
     }
 
     public void toggleDownVote(User user){
     	if(user == null){
     		// Do nothing
+    		Logger.debug("Vote: User is null!");
     	} else if(downVotes.contains(user)){
+    		Logger.debug("Vote: removed downvote!");
     		downVotes.remove(user);
     		this.saveManyToManyAssociations("downVotes");
     	} else {
     		if(upVotes.contains(user)){
+    			Logger.debug("Vote: removed old upvote!");
     			upVotes.remove(user);
     			this.saveManyToManyAssociations("upVotes");
     		}
+    		Logger.debug("Vote: Added downvote!");
     		downVotes.add(user);
     		this.saveManyToManyAssociations("downVotes");
     	}
+    	Logger.debug("Uservotestatus: " + getVoteStatus(user));
+    	this.save();
     }
 
     public int getVoteStatus(User user){
@@ -140,6 +154,10 @@ public class Note extends Model {
     }
 
     public int getScore(){
+    	Logger.debug("upVotes: " + upVotes.size());
+    	Logger.debug("downVotes: " + downVotes.size());
+
+    	Logger.debug("upvotes: "+ upVotes + "downvotes:" + downVotes);
     	return (upVotes.size() - downVotes.size());
     }
 
