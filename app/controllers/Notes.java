@@ -74,4 +74,20 @@ public class Notes extends Controller {
 		return redirect(routes.Notes.show(id));
 	}
 
+	@SecureSocial.SecuredAction
+	public static Result edit(Long id) {
+		Form<Note> filledForm = noteForm.fill(Note.find.ref(id));
+		return ok(views.html.notes.edit.render(Note.find.ref(id), filledForm));
+	}
+
+	@SecureSocial.SecuredAction
+	public static Result update(Long id) {
+		Form<Note> filledForm = noteForm.bindFromRequest();
+		if (filledForm.hasErrors()) {
+			return badRequest(views.html.index.render(Note.all(), filledForm));
+		} else {
+			Note.update(filledForm.get(), Form.form().bindFromRequest().get("tagList"));
+		return redirect(routes.Notes.show(id));
+		}
+	}
 }

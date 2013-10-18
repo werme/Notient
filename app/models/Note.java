@@ -74,6 +74,7 @@ public class Note extends Model {
     note.author = author;
 		note.save();
 		if(tagsList != null && !tagsList.equals("") && !tagsList.equals(" ")) {
+      note.tags.clear();
 			note.tags.addAll(Tag.createOrFindAllFromString(tagsList));
 			note.saveManyToManyAssociations("tags");
 		}
@@ -98,6 +99,14 @@ public class Note extends Model {
     this.comments.add(comment);
     this.save();
     return this;
+  }
+
+  public static Note update(Note note, String tagsList) {
+    Note existingNote = find.ref(note.id);
+    existingNote.title = note.title;
+    existingNote.content = note.content;
+    existingNote.save();
+    return note;
   }
 
   public void toggleUpVote(User user){
