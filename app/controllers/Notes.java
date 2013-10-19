@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.*;
 import play.mvc.*;
 import play.data.*;
 import play.Logger;
@@ -89,5 +90,11 @@ public class Notes extends Controller {
 			Note.update(filledForm.get(), Form.form().bindFromRequest().get("tagList"));
 		return redirect(routes.Notes.show(id));
 		}
+	}
+
+	public static Result searchNotes(String search) {
+		List<Note> notes = Note.searchNotes(search);
+		// Should return a list of notes
+		return redirect(routes.Notes.list());
 	}
 }
