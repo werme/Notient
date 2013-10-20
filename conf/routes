@@ -10,6 +10,9 @@ GET     /note/:id               			controllers.Notes.show(id: Long)
 POST    /note/:id                     controllers.Notes.update(id: Long)
 GET     /note/:id/edit                controllers.Notes.edit(id: Long)
 
+GET     /search/:query                controllers.Notes.listSearchResults(query: String)
+POST    /search                       controllers.Notes.searchNotes()
+
 POST    /note/:id/delete              controllers.Notes.delete(id: Long)
 POST    /note/:id/comments      			controllers.Notes.newComment(id: Long)
 POST    /note/:id/comments/:comments_id     controllers.Notes.deleteComment(id: Long, comments_id: Long)

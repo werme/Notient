@@ -13,17 +13,23 @@ public class Notes extends Controller {
 
 	static Form<Note> noteForm = Form.form(Note.class);
 	static Form<Comment> commentForm = Form.form(Comment.class);
+	static Form<String> searchForm = Form.form(String.class);
 
 	public static Result index() {
-		return ok(views.html.index.render(Note.all(), noteForm));
+		return ok(views.html.index.render(Note.all(), noteForm, searchForm));
 	}
 
 	public static Result list() {
-		return ok(views.html.index.render(Note.all(), noteForm));
+		return ok(views.html.index.render(Note.all(), noteForm, searchForm));
+	}
+
+	public static Result listSearchResults(String query) {
+		List<Note> notes = Note.searchNotes(query);
+		return ok(views.html.index.render(notes, noteForm, searchForm));
 	}
 
 	public static Result show(Long id) {
-		return ok(views.html.notes.show.render(Note.find.ref(id), noteForm, commentForm));
+		return ok(views.html.notes.show.render(Note.find.ref(id), noteForm, commentForm, searchForm));
 	}
 
 	@SecureSocial.SecuredAction
@@ -31,7 +37,7 @@ public class Notes extends Controller {
 		Form<Note> filledForm = noteForm.bindFromRequest();
 
 		if (filledForm.hasErrors()) {
-			return badRequest(views.html.index.render(Note.all(), filledForm));
+			return badRequest(views.html.index.render(Note.all(), filledForm, searchForm));
 		} else {
 			Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser());
 			return redirect(routes.Notes.list());
@@ -85,16 +91,16 @@ public class Notes extends Controller {
 	public static Result update(Long id) {
 		Form<Note> filledForm = noteForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
-			return badRequest(views.html.index.render(Note.all(), filledForm));
+			return badRequest(views.html.index.render(Note.all(), filledForm, searchForm));
 		} else {
 			Note.update(filledForm.get(), Form.form().bindFromRequest().get("tagList"));
 		return redirect(routes.Notes.show(id));
 		}
 	}
 
-	public static Result searchNotes(String search) {
-		List<Note> notes = Note.searchNotes(search);
-		// Should return a list of notes
-		return redirect(routes.Notes.list());
+	public static Result searchNotes() {
+		Form<String> filledForm = searchForm.bindFromRequest();
+		String query = filledForm.field("query").value();
+		return redirect(routes.Notes.listSearchResults(query));
 	}
 }

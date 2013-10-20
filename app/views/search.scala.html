@@ -1,4 +1,4 @@
-@(notes: List[Note], noteForm: Form[Note], searchForm: Form[String])
+@(notes: List[Note], noteForm: Form[Note])
 
 @import securesocial.core.java.SecureSocial;
 @import helper._
@@ -23,10 +23,6 @@
     </div>
 
     <div class="container main">
-        @helper.form(action = routes.Notes.searchNotes) {
-            <input type="text" name="query"></input>
-            <input class="flat-button" type="submit" value="Search"> 
-        }
         <section class="notes-wrapper">
             @for(note <- notes) {
                 <div class="small-note-wrapper">
