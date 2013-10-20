@@ -188,6 +188,13 @@ public class Note extends Model {
     return allNotes;
   }
 
+  // Prioritizes titles before contents 
+  public static List<Note> searchNotes(String query) {
+    List<Note> result = find.where().ilike("title", "%"+query+"%").findList();
+    result.addAll(find.where().ilike("content", "%"+query+"%").findList());
+    return result;
+  }
+
   public static class NoteComparator implements Comparator<Note> {
 
     Note note;

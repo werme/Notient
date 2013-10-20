@@ -1,4 +1,4 @@
-@(notes: List[Note], noteForm: Form[Note], searchForm: Form[String])
+@(notes: List[Note], users: List[User], noteForm: Form[Note], searchForm: Form[String])
 
 @import securesocial.core.java.SecureSocial;
 @import helper._
@@ -58,5 +58,12 @@
         </section>
     </div>
     <footer>
+        <div>
+            @for(user <- users) {
+                <div>
+                    <p>Found user @user.firstName user.lastName</p>
+                </div>
+            }
+        </div>
     </footer>
 }

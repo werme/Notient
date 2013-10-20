@@ -43,7 +43,8 @@ public class ApplicationTest {
     public void renderFrontPage() {
 
         Form<Note> noteForm = Form.form(Note.class);
-        Content html = views.html.index.render(Note.all(), noteForm);
+        Form<String> searchForm = Form.form(String.class);
+        Content html = views.html.index.render(Note.all(), noteForm, searchForm);
 
         assertThat(contentType(html)).isEqualTo("text/html");
         assertThat(contentAsString(html)).contains("The first note");
