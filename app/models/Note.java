@@ -189,9 +189,9 @@ public class Note extends Model {
   }
 
   // Prioritizes titles before contents 
-  public static List<Note> searchNotes(String search) {
-    List<Note> result = find.where().ilike("title", "%"+search+"%").findList();
-    result.addAll(find.where().ilike("content", "%"+search+"%").findList());
+  public static List<Note> searchNotes(String query) {
+    List<Note> result = find.where().ilike("title", "%"+query+"%").findList();
+    result.addAll(find.where().ilike("content", "%"+query+"%").findList());
     return result;
   }
 

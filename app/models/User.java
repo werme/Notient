@@ -1,7 +1,7 @@
 package models;
 
 import play.data.validation.Constraints.*;
-
+import java.util.*;
 import javax.persistence.*;
 
 import javax.persistence.Entity;
@@ -88,5 +88,12 @@ public class User extends Model {
 	@Override
     public String toString() {
         return this.id + " - " + this.firstName;
+    }
+
+    public static List<User> searchUsers(String query) {
+        List<User> result = find.where().ilike("username", "%"+query+"%").findList();
+        result.addAll(find.where().ilike("firstName", "%"+query+"%").findList());
+        result.addAll(find.where().ilike("lastName", "%"+query+"%").findList());
+        return result;
     }
 }

@@ -25,7 +25,8 @@ public class Notes extends Controller {
 
 	public static Result listSearchResults(String query) {
 		List<Note> notes = Note.searchNotes(query);
-		return ok(views.html.index.render(notes, noteForm, searchForm));
+		List<User> users = User.searchUsers(query);
+		return ok(views.html.search.render(notes, users, noteForm, searchForm));
 	}
 
 	public static Result show(Long id) {
@@ -98,7 +99,7 @@ public class Notes extends Controller {
 		}
 	}
 
-	public static Result searchNotes() {
+	public static Result search() {
 		Form<String> filledForm = searchForm.bindFromRequest();
 		String query = filledForm.field("query").value();
 		return redirect(routes.Notes.listSearchResults(query));
