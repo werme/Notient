@@ -4,7 +4,7 @@
 
 @implicitFieldConstructor = @{ FieldConstructor(plainFieldConstructor.render) }
 
-@form(routes.Notes.newNote) {
+@form(routes.Notes.newNote, 'enctype -> "multipart/form-data") {
     <div class="module">
       @inputText(
           noteForm("title"),
@@ -12,6 +12,7 @@
       )
       <label>tags</label>
       <input type="text" name="tagList" />
+      <input type="file" name="upload">
     </div>
     <div class="module">
       @textarea(noteForm("content"))

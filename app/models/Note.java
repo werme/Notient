@@ -6,6 +6,7 @@ import play.data.validation.Constraints.*;
 import play.data.format.Formats.*;
 import play.Logger;
 import javax.persistence.*;
+import java.net.MalformedURLException;
 import securesocial.core.java.SecureSocial;
 
 @Entity
@@ -20,7 +21,7 @@ public class Note extends Model {
 	@MaxLength(30)
 	public String title;
 
-  @Column(columnDefinition = "TEXT")
+  	@Column(columnDefinition = "TEXT")
 	public String content;
 
 	public String author;
@@ -30,6 +31,10 @@ public class Note extends Model {
 
 	@OneToMany(mappedBy="note", cascade=CascadeType.ALL)
 	public List<Comment> comments = new ArrayList<Comment>();
+
+
+  @ManyToMany(cascade=CascadeType.ALL)
+  public List<S3File> images = new ArrayList<S3File>();
 
 	@ManyToMany(cascade=CascadeType.REMOVE)
 	@JoinTable(name="up_votes")
@@ -54,14 +59,21 @@ public class Note extends Model {
 
 	public static Finder<Long, Note> find = new Finder(Long.class, Note.class);
 
-  public static List<Note> notesBy(User author) {
+  	public static List<Note> notesBy(User author) {
       return find.where()
           .eq("author", author.id)
           .findList();
-  }
+  	}
     
 	public static List<Note> all() {
 		return find.all();
+	}
+
+	public String getInfo() {
+
+      Logger.debug("Image set is!:" + this.images.get(0) + " image url is: ");
+
+		return ("Info printed!");
 	}
 
 	public static Note create(Note note) {
@@ -69,12 +81,21 @@ public class Note extends Model {
 		return note;
 	}
 
-	public static Note create(Note note, String tagsList) {
-		note.save();
+	public static Note create(Note note, String tagsList, S3File image) {
+    try{
+      Logger.debug("Image set is!:" + image + " image url is: " + image.getUrl());
+    } catch (MalformedURLException e){
+      Logger.debug("error happend!");
+    }
+    note.save();
 		if(tagsList != null && !tagsList.equals("") && !tagsList.equals(" ")) {
 			note.tags.addAll(Tag.createOrFindAllFromString(tagsList));
 			note.saveManyToManyAssociations("tags");
 		}
+    if(image != null){
+      note.images.add(image);
+      note.saveManyToManyAssociations("images");
+    }
 		return note;
 	}
 

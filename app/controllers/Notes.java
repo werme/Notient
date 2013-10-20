@@ -2,11 +2,18 @@ package controllers;
 
 import play.mvc.*;
 import play.data.*;
+import play.db.ebean.*;
 import play.Logger;
 import models.*;
 import views.html.*;
 import securesocial.core.java.SecureSocial;
 import securesocial.core.Identity;
+import play.mvc.Http.MultipartFormData;
+import play.mvc.Http.MultipartFormData.FilePart;
+import java.io.File;
+import models.S3File;
+import java.util.*;
+
 
 public class Notes extends Controller {
 
@@ -22,7 +29,8 @@ public class Notes extends Controller {
 	}
 
 	public static Result show(Long id) {
-		return ok(views.html.notes.show.render(Note.find.ref(id), noteForm, commentForm));
+		List<S3File> uploads = new Model.Finder(UUID.class, S3File.class).all();
+		return ok(views.html.notes.show.render(Note.find.ref(id), noteForm, commentForm, uploads));
 	}
 
 	@SecureSocial.SecuredAction
@@ -32,8 +40,21 @@ public class Notes extends Controller {
 		if (filledForm.hasErrors()) {
 			return badRequest(views.html.index.render(Note.all(), filledForm));
 		} else {
-			Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"));
+            //Temporary solution since i dont know how the form works with files.
+            Http.MultipartFormData body = request().body().asMultipartFormData();
+            Http.MultipartFormData.FilePart uploadFilePart = body.getFile("upload");
+            Logger.debug("uploadFilePart" + uploadFilePart);
+            if (uploadFilePart != null) {
+                S3File s3File = new S3File();
+                s3File.name = uploadFilePart.getFilename();
+                s3File.file = uploadFilePart.getFile();
+                s3File.save();
+                Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), s3File);
+                return redirect(routes.Notes.list());
+            } else {
+            Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), null);
 			return redirect(routes.Notes.list());
+            }
 		}
 	}
 
@@ -65,16 +86,29 @@ public class Notes extends Controller {
 
 	@SecureSocial.SecuredAction
 	public static Result toggleUpVote(Long id) {
-		Logger.debug("WE GOT HERE! UP");
 		Note.find.ref(id).toggleUpVote(User.currentUser());
 		return redirect(routes.Notes.show(id));
 	}
 	
 	@SecureSocial.SecuredAction
 	public static Result toggleDownVote(Long id) {
-		Logger.debug("WE GOT HERE! DOWN");
 		Note.find.ref(id).toggleDownVote(User.currentUser());
 		return redirect(routes.Notes.show(id));
 	}
 
+    public static Result upload(Long id) {
+        Http.MultipartFormData body = request().body().asMultipartFormData();
+        Http.MultipartFormData.FilePart uploadFilePart = body.getFile("upload");
+        Logger.debug("uploadFilePart" + uploadFilePart);
+        if (uploadFilePart != null) {
+            S3File s3File = new S3File();
+            s3File.name = uploadFilePart.getFilename();
+            s3File.file = uploadFilePart.getFile();
+            s3File.save();
+            return redirect(routes.Application.index());
+        }
+        else {
+            return badRequest("File upload error");
+        }
+    }
 }
