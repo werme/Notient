@@ -7,6 +7,7 @@ import play.data.format.Formats.*;
 import play.Logger;
 import javax.persistence.*;
 import securesocial.core.java.SecureSocial;
+import com.avaje.ebean.Expr;
 
 @Entity
 public class Note extends Model {
@@ -35,6 +36,8 @@ public class Note extends Model {
 	@ManyToMany(cascade=CascadeType.REMOVE)
 	@JoinTable(name="up_votes")
 	public List<User> upVotes = new ArrayList<User>();
+
+  public int rating;
 
 	@ManyToMany(cascade=CascadeType.REMOVE)
 	@JoinTable(name="down_votes")
@@ -116,15 +119,18 @@ public class Note extends Model {
   	}
   	else if(upVotes.contains(user)){
   		Logger.debug("Vote: removed upvote!");
+      rating--;
   		upVotes.remove(user);
   		this.saveManyToManyAssociations("upVotes");
   	} else {
   		if(downVotes.contains(user)){
   			Logger.debug("Vote: removed old downvote!");
+        rating++;
   			downVotes.remove(user);
   			this.saveManyToManyAssociations("downVotes");
   		}
   		Logger.debug("Vote: Added upvote!");
+      rating++;
   		upVotes.add(user);
   		this.saveManyToManyAssociations("upVotes");
   	}
@@ -133,20 +139,24 @@ public class Note extends Model {
   }
 
   public void toggleDownVote(User user){
+    rating--;
   	if(user == null){
   		// Do nothing
   		Logger.debug("Vote: User is null!");
   	} else if(downVotes.contains(user)){
   		Logger.debug("Vote: removed downvote!");
+      rating++;
   		downVotes.remove(user);
   		this.saveManyToManyAssociations("downVotes");
   	} else {
   		if(upVotes.contains(user)){
   			Logger.debug("Vote: removed old upvote!");
+        rating--;
   			upVotes.remove(user);
   			this.saveManyToManyAssociations("upVotes");
   		}
   		Logger.debug("Vote: Added downvote!");
+      rating--;
   		downVotes.add(user);
   		this.saveManyToManyAssociations("downVotes");
   	}
@@ -190,8 +200,13 @@ public class Note extends Model {
 
   // Prioritizes titles before contents 
   public static List<Note> searchNotes(String query) {
-    List<Note> result = find.where().ilike("title", "%"+query+"%").findList();
-    result.addAll(find.where().ilike("content", "%"+query+"%").findList());
+    List<Note> result = new ArrayList<Note>();
+    for (String word : query.split("\\s")) {
+      result.addAll(find.where()
+        .or(Expr.ilike("title", "%"+query+"%"), Expr.ilike("content", "%"+query+"%")).orderBy("rating")
+        .findList());
+    }
+
     return result;
   }
 
