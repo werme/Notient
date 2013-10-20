@@ -12,6 +12,8 @@ import securesocial.core.java.SecureSocial;
 import securesocial.core.Identity;
 import play.Logger;
 
+import com.avaje.ebean.Expr;
+
 
 
 @Table(
@@ -91,9 +93,12 @@ public class User extends Model {
     }
 
     public static List<User> searchUsers(String query) {
-        List<User> result = find.where().ilike("username", "%"+query+"%").findList();
-        result.addAll(find.where().ilike("firstName", "%"+query+"%").findList());
-        result.addAll(find.where().ilike("lastName", "%"+query+"%").findList());
+        List<User> result = new ArrayList<User>();
+        for (String word : query.split("\\s")) {
+            result.addAll(find.where()
+                .or(Expr.or(Expr.like("firstName", "%"+word+"%"), Expr.ilike("lastName", "%"+word+"%")), Expr.ilike("userName", "%"+word+"%"))
+                .findList());
+        }
         return result;
     }
 }

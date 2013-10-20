@@ -203,7 +203,7 @@ public class Note extends Model {
     List<Note> result = new ArrayList<Note>();
     for (String word : query.split("\\s")) {
       result.addAll(find.where()
-        .or(Expr.ilike("title", "%"+query+"%"), Expr.ilike("content", "%"+query+"%")).orderBy("rating")
+        .or(Expr.ilike("title", "%"+word+"%"), Expr.ilike("content", "%"+word+"%")).orderBy("rating")
         .findList());
     }
 
