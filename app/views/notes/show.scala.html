@@ -24,11 +24,12 @@
             </div>
         </header>            
         <section class="note-wrapper">
-            @for(image <- note.images) {
-            <IMG SRC=@image.getUrl ALT="some text" WIDTH=500 HEIGHT=500> 
-            }
             <p>@Html(MarkdownHelper.toHtml(note.content))</p>
 
+            @for(image <- note.images) {
+                <img src="@image.getUrl"> 
+            }
+            
             <div><small>Last updated @note.getUpdatedAt</small></div>
 
             @if(note.author.equals(User.currentUser)) {
