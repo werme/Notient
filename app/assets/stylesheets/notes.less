@@ -23,6 +23,33 @@
   font-size: 1.05rem;
   line-height: 1.8;
 
+  .clearfix;
+
+  input[type="text"], textarea {
+    display: block;
+    width: 100%;
+  }
+
+  textarea {
+    height: 35rem;
+    border: 0;
+  }
+
+  input[type="submit"] {
+    margin: 0;
+    float: right;
+  }
+
+  .title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    
+    border: 0;
+    border-bottom: 2px dotted darken(@light-yellow, 5%);
+
+    &::-webkit-input-placeholder { color: @black; }
+  }
+
   ul {
     margin-bottom: 1rem;
     li {

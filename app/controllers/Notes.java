@@ -31,10 +31,15 @@ public class Notes extends Controller {
 
 	@SecureSocial.SecuredAction
 	public static Result newNote() {
+		return ok(new_note.render(noteForm));
+	}
+
+	@SecureSocial.SecuredAction
+	public static Result create() {
 		Form<Note> filledForm = noteForm.bindFromRequest();
 
 		if (filledForm.hasErrors()) {
-			return badRequest(index.render(Note.all(), filledForm, searchForm));
+			return badRequest(new_note.render(filledForm));
 		} else {
 			Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser());
 			return redirect(routes.Notes.list());

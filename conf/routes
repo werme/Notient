@@ -8,7 +8,8 @@ GET     /search/:query                		controllers.Search.show(query: String)
 
 # Notes
 GET     /notes                  			controllers.Notes.list()
-POST    /notes                  			controllers.Notes.newNote()
+POST    /notes                  			controllers.Notes.create()
+GET		/notes/new 							controllers.Notes.newNote()
 GET     /note/:id               			controllers.Notes.show(id: Long)
 POST    /note/:id                     		controllers.Notes.update(id: Long)
 GET     /note/:id/edit                		controllers.Notes.edit(id: Long)
