@@ -45,13 +45,11 @@ public class Note extends Model {
 	public List<User> downVotes = new ArrayList<User>();
 
 	public Note(String title, User author) {
-		Logger.debug("HEJHEJ " + author);
 		this.title = title;
 		this.author = author;
 	}
 
 	public Note(String title, String content, User author) {
-		Logger.debug("HEJHEJ " + author);
 		this.title = title;
 		this.content = content;
 		this.author = author;
