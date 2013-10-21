@@ -29,8 +29,7 @@ public class Notes extends Controller {
 	}
 
 	public static Result show(Long id) {
-		List<S3File> uploads = new Model.Finder(UUID.class, S3File.class).all();
-		return ok(views.html.notes.show.render(Note.find.ref(id), noteForm, commentForm, uploads));
+		return ok(views.html.notes.show.render(Note.find.ref(id), noteForm, commentForm));
 	}
 
 	@SecureSocial.SecuredAction
@@ -95,20 +94,4 @@ public class Notes extends Controller {
 		Note.find.ref(id).toggleDownVote(User.currentUser());
 		return redirect(routes.Notes.show(id));
 	}
-
-    public static Result upload(Long id) {
-        Http.MultipartFormData body = request().body().asMultipartFormData();
-        Http.MultipartFormData.FilePart uploadFilePart = body.getFile("upload");
-        Logger.debug("uploadFilePart" + uploadFilePart);
-        if (uploadFilePart != null) {
-            S3File s3File = new S3File();
-            s3File.name = uploadFilePart.getFilename();
-            s3File.file = uploadFilePart.getFile();
-            s3File.save();
-            return redirect(routes.Application.index());
-        }
-        else {
-            return badRequest("File upload error");
-        }
-    }
 }

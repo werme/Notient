@@ -1,4 +1,4 @@
-@(note: Note, noteForm: Form[Note], commentForm: Form[Comment], uploads: List[models.S3File])
+@(note: Note, noteForm: Form[Note], commentForm: Form[Comment])
 @implicitFieldConstructor = @{ FieldConstructor(plainFieldConstructor.render) }
 
 @import helper._
@@ -49,24 +49,9 @@
             @User.currentUser
             Score:  <a href='@routes.Notes.toggleUpVote(note.id)'>+</a> @note.getScore <a href='@routes.Notes.toggleDownVote(note.id)'>-</a>            
             <br>
-            <h1>Upload a file:</h1>
-            @helper.form(action = routes.Notes.upload(note.id), 'enctype -> "multipart/form-data") {
-                <input type="file" name="upload">
-                <input type="submit">
-            }
-
-            <h1>Uploads:</h1>
-            <ul>
-            @for(upload <- uploads) {
-                <li><a href="@upload.getUrl()">@upload.name</a></li>
-            }
-            </ul>
-
             @for(image <- note.images) {
-            <IMG SRC=@image.getUrl ALT="some text" WIDTH=32 HEIGHT=32>
+            <IMG SRC=@image.getUrl ALT="some text" WIDTH=500 HEIGHT=500> 
             }
-            @note.getInfo
-            <br>
             <h2>Similar notes</h2>
             <p>
             <p>@Html(MarkdownHelper.toHtml(note.content))</p>

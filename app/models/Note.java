@@ -69,24 +69,12 @@ public class Note extends Model {
 		return find.all();
 	}
 
-	public String getInfo() {
-
-      Logger.debug("Image set is!:" + this.images.get(0) + " image url is: ");
-
-		return ("Info printed!");
-	}
-
 	public static Note create(Note note) {
 		note.save();
 		return note;
 	}
 
 	public static Note create(Note note, String tagsList, S3File image) {
-    try{
-      Logger.debug("Image set is!:" + image + " image url is: " + image.getUrl());
-    } catch (MalformedURLException e){
-      Logger.debug("error happend!");
-    }
     note.save();
 		if(tagsList != null && !tagsList.equals("") && !tagsList.equals(" ")) {
 			note.tags.addAll(Tag.createOrFindAllFromString(tagsList));
