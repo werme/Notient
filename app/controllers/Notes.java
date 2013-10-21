@@ -6,6 +6,7 @@ import play.data.*;
 import play.Logger;
 import models.*;
 import views.html.*;
+import views.html.notes.*;
 import securesocial.core.java.SecureSocial;
 import securesocial.core.Identity;
 
@@ -16,15 +17,15 @@ public class Notes extends Controller {
 	static Form<String> searchForm = Form.form(String.class);
 
 	public static Result index() {
-		return ok(views.html.index.render(Note.all(), noteForm, searchForm));
+		return ok(index.render(Note.all(), noteForm, searchForm));
 	}
 
 	public static Result list() {
-		return ok(views.html.index.render(Note.all(), noteForm, searchForm));
+		return ok(index.render(Note.all(), noteForm, searchForm));
 	}
 
 	public static Result show(Long id) {
-		return ok(views.html.notes.show.render(Note.find.ref(id), noteForm, commentForm, searchForm));
+		return ok(show.render(Note.find.ref(id), noteForm, commentForm, searchForm));
 	}
 
 	@SecureSocial.SecuredAction
@@ -32,7 +33,7 @@ public class Notes extends Controller {
 		Form<Note> filledForm = noteForm.bindFromRequest();
 
 		if (filledForm.hasErrors()) {
-			return badRequest(views.html.index.render(Note.all(), filledForm, searchForm));
+			return badRequest(index.render(Note.all(), filledForm, searchForm));
 		} else {
 			Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser());
 			return redirect(routes.Notes.list());
@@ -49,7 +50,7 @@ public class Notes extends Controller {
 	public static Result newComment(Long id) {
 		Form<Comment> filledForm = commentForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
-			//return badRequest(views.html.index.render(Note.all(), filledForm)); // should redirect to show note view later 
+			//return badRequest(index.render(Note.all(), filledForm)); // should redirect to show note view later 
 		} else {
 			Comment.create(id, filledForm.get(), User.currentUser());
 		}
@@ -77,14 +78,14 @@ public class Notes extends Controller {
 	@SecureSocial.SecuredAction
 	public static Result edit(Long id) {
 		Form<Note> filledForm = noteForm.fill(Note.find.ref(id));
-		return ok(views.html.notes.edit.render(Note.find.ref(id), filledForm));
+		return ok(edit.render(Note.find.ref(id), filledForm));
 	}
 
 	@SecureSocial.SecuredAction
 	public static Result update(Long id) {
 		Form<Note> filledForm = noteForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
-			return badRequest(views.html.index.render(Note.all(), filledForm, searchForm));
+			return badRequest(index.render(Note.all(), filledForm, searchForm));
 		} else {
 			Note.update(filledForm.get(), Form.form().bindFromRequest().get("tagList"));
 		return redirect(routes.Notes.show(id));
