@@ -1,5 +1,7 @@
 package models;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
 import java.util.*;
 
 import javax.persistence.*;
@@ -44,7 +46,6 @@ public class Note extends Model {
 
 	@OneToMany(mappedBy="note", cascade=CascadeType.ALL)
 	public List<Comment> comments = new ArrayList<Comment>();
-
 
   @ManyToMany(cascade=CascadeType.ALL)
   public List<S3File> images = new ArrayList<S3File>();
@@ -260,6 +261,13 @@ public class Note extends Model {
   @PreUpdate
   void updatedAt() {
     this.updatedAt = new Date();
+  }
+
+  public String getCreatedAt() {
+    PrettyTime p = new PrettyTime(new Locale("en"));
+    if (this.createdAt != null)
+      return p.format(this.createdAt);
+    return null;
   }
 
   public static class NoteComparator implements Comparator<Note> {
