@@ -92,19 +92,21 @@ public class Note extends Model implements Authorizable {
 		return note;
 	}
 
+  public static Note update(Note note, String tagList) {
+    Note existingNote = find.ref(note.id);
+    existingNote.title = note.title;
+    existingNote.content = note.content;
+    existingNote.update();
+    existingNote.replaceTags(tagList);
+    existingNote.save();
+    return note;
+  }
+
 	public static void delete(Long id) {
 		Note note = find.ref(id);
     note.delete();
 	  Tag.clean();
 	}
-
-  public static Note update(Note noteUpdates, String tagsList) {
-    Note note = find.ref(noteUpdates.id);  
-    note.title = noteUpdates.title;
-    note.content = noteUpdates.content;
-    note.save();
-    return note;
-  }
 
   public void replaceTags(String tagList) {
     if(tagList != null && !tagList.equals("") && !tagList.equals(" ")) {
@@ -128,15 +130,6 @@ public class Note extends Model implements Authorizable {
     this.comments.add(comment);
     this.save();
     return this;
-  }
-
-  public static Note update(Note note, String tagsList) {
-    Note existingNote = find.ref(note.id);
-    existingNote.title = note.title;
-    existingNote.content = note.content;
-    existingNote.update();
-    existingNote.save();
-    return note;
   }
 
   public void toggleUpVote(User user){
