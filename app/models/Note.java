@@ -29,7 +29,7 @@ public class Note extends Model implements Authorizable {
 	@MaxLength(30)
 	public String title;
 
-  	@Column(columnDefinition = "TEXT")
+  @Column(columnDefinition = "TEXT")
 	public String content;
 
 	@ManyToOne
@@ -82,11 +82,6 @@ public class Note extends Model implements Authorizable {
     
 	public static List<Note> all() {
 		return find.all();
-	}
-
-	public static Note create(Note note) {
-		note.save();
-		return note;
 	}
 
 	public static Note create(Note note, String tagsList, User author, S3File image) {
