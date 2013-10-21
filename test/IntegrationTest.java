@@ -10,17 +10,7 @@ import static org.fluentlenium.core.filter.FilterConstructor.*;
 
 public class IntegrationTest {
     
-    @Test
-    public void testFrontPage() {
-        running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
-            public void invoke(TestBrowser browser) {
-                browser.goTo("http://localhost:3333");
-                
-                assertThat(browser.$("header h1").first().getText()).isEqualTo("notient");
-            }
-        });
-    }
-    @Test
+    @Before
     public void testLogin() {
         running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
             public void invoke(TestBrowser browser) {
@@ -36,16 +26,42 @@ public class IntegrationTest {
             }
         });        
     }
+
     @Test
-    public void testLogout() {
+    public void testFrontPage() {
         running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
             public void invoke(TestBrowser browser) {
                 browser.goTo("http://localhost:3333");
-
+                
+                assertThat(browser.$("header h1").first().getText()).isEqualTo("notient");
+            }
+        });
+    }
+  @Test
+  public void testLogout() {
+    running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                browser.goTo("http://localhost:3333");
+                
                 browser.$("#logout-button").click();
                 assertThat(browser.$("header h1").first().getText()).isEqualTo("Login");
             }
-        });        
-    }
-  
+        });   
+  }
+  @Test
+  public void testCreateNote() {
+    running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                browser.goTo("http://localhost:3333");
+                
+                browser.$("#newnote-button").click();
+                browser.fill("#title").with("IntegrationTest");
+                browser.fill("#tags").with("tests");
+                browser.fill("#content").with("This text is for testing the note creation");
+                browser.$("#createnote-button").click();
+
+                assertThat(browser.$("new note is found").first().getText()).isEqualTo("IntegratonTest");
+            }
+        });     
+  }
 }
