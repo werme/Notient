@@ -34,10 +34,35 @@ footer {
   }
 }
 
-.message {
-  .success { color: @green; }
-  .error { color: @red; }
-  .info { color: @blue; }
+#message-wrapper {
+  background: @dark;
+  
+  .message {
+    padding: 0.8rem;
+    a {
+      background: none;
+      border: 0;
+    }
+    
+    &.info { 
+      color: @green;
+      a { 
+        color: @green;
+        &:hover { color: lighten(@green, 10%); }
+      }
+    }
+    &.error {
+      color: @red;
+      a { 
+        color: @red;
+        &:hover { color: lighten(@red, 10%); }
+      }
+    }
+    
+    .dismiss-message-button {
+      float: right;
+    }
+  }
 }
 
 // .center-form {

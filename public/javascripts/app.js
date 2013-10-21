@@ -30,4 +30,8 @@
     $.post($(this).data("url"));
   });
 
+  $('.dismiss-message-button').click(function() {
+    $('#message-wrapper').slideUp();
+  });
+
 })();
