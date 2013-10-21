@@ -1,20 +1,19 @@
 package models;
 
-import play.data.validation.Constraints.*;
 import java.util.*;
-import javax.persistence.*;
 
+import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import play.data.validation.Constraints.*;
 import play.db.ebean.Model;
-import securesocial.core.java.SecureSocial;
-import securesocial.core.Identity;
 import play.Logger;
 
+import securesocial.core.java.SecureSocial;
+import securesocial.core.Identity;
+
 import com.avaje.ebean.Expr;
-
-
 
 @Table(
 	    uniqueConstraints=
@@ -87,15 +86,6 @@ public class User extends Model {
         return currentUser() == null ? false : true;
     }
 
-    public String getAvatarUrl() {
-        return avatarUrl != null ? avatarUrl : "https://sigil.cupcake.io/" + displayName();
-    }
-
-	@Override
-    public String toString() {
-        return this.id + " - " + this.firstName;
-    }
-
     /**
      * Returns a list of users related to the search query.
      * Will look at names and usernames.
@@ -108,5 +98,14 @@ public class User extends Model {
                 .findList());
         }
         return result;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl != null ? avatarUrl : "https://sigil.cupcake.io/" + displayName();
+    }
+
+	@Override
+    public String toString() {
+        return this.id + " - " + this.firstName;
     }
 }
