@@ -14,8 +14,8 @@
         </div>
         <header class="note-header">
             <div class="module">
-                Posted @note.getCreatedAt by 
-                <a href="@routes.Users.show(note.author.id)">@note.author.displayName</a>
+                <em>@note.title</em> by 
+                <a href="@routes.Users.show(note.author.id)">@note.author.displayName</a> &hearts; Posted @note.getCreatedAt 
             </div>
             <div class="module right">
                 <a href="@routes.Notes.toggleUpVote(note.id)"><i class="thumbs up icon"></i></a>
