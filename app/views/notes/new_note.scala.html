@@ -10,6 +10,7 @@
       @form(routes.Notes.create, 'enctype -> "multipart/form-data") {
         @inputText(noteForm("title"),'_showConstraints -> false, '_label -> "Title:", 'placeholder -> "Write your note title here...", 'class -> "title")
         <textarea id="content" name="content">
+        @if(noteForm("content").value == null) {
 This is your note body. If you want, you could use markdown in here.
 
 # This is a header
@@ -29,7 +30,9 @@ This is how you make a link: [Click to go to google](https://www.google.com)
 *This* word in in italics.
 
 You can do all sort of cool stuff, make a search for markdown to learn more.
-
+        } else {
+          @noteForm("content").value
+        }
         </textarea> 
         <label>Tags:</label>
         <input type="text" name="tagList" placeholder="rainbow unicorn-ponies">

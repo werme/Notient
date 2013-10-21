@@ -3,21 +3,19 @@
 @implicitFieldConstructor = @{ FieldConstructor(plainFieldConstructor.render) }
 
 @import helper._
-@import helpers.MarkdownHelper
 
 @main("Edit note: " + note.title, noteForm) {
-    <div class="container main">
-        @form(routes.Notes.update(note.id)) {
+  <div class="container" role="main">
+    <div class="note-wrapper">
+      @form(routes.Notes.update(note.id), 'enctype -> "multipart/form-data") {
         <input type="hidden" name="id" value="@note.id">
-          <div class="module">
-            @inputText(noteForm("title"),'_showConstraints -> false)
-            <label>tags</label>
-            <input type="text" name="tagList" />
-          </div>
-          <div class="module">
-            @textarea(noteForm("content"))
-            <input class="flat-button" type="submit" value="Ok">
-          </div>
-        }
+        @inputText(noteForm("title"),'_showConstraints -> false, '_label -> "Title:", 'placeholder -> "Write your note title here...", 'class -> "title")
+        <textarea id="content" name="content">@noteForm("content").value</textarea> 
+        <label>Tags:</label>
+        <input type="text" name="tagList" placeholder="rainbow unicorn-ponies" value="@if(note.tags != null) { @for(tag <- note.tags ) {@tag.title } }">
+        <input type="file" name="upload">
+        <input class="flat-button" type="submit" value="Create note">
+      }
     </div>
+  </div>
 }

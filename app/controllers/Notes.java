@@ -1,22 +1,23 @@
 package controllers;
 
 import java.util.*;
+import java.io.File;
+
 import play.mvc.*;
-import play.data.*;
-import play.db.ebean.*;
-import play.Logger;
-import models.*;
-import views.html.*;
-import views.html.notes.*;
-import helpers.UnauthorizedException;
-import securesocial.core.java.SecureSocial;
-import securesocial.core.Identity;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
-import java.io.File;
-import models.S3File;
-import java.util.*;
+import play.data.*;
+import play.data.validation.*;
+import play.db.ebean.*;
+import play.Logger;
 
+import securesocial.core.java.SecureSocial;
+import securesocial.core.Identity;
+
+import helpers.UnauthorizedException;
+import views.html.*;
+import views.html.notes.*;
+import models.*;
 
 public class Notes extends Controller {
 
@@ -44,8 +45,14 @@ public class Notes extends Controller {
 	@SecureSocial.SecuredAction
 	public static Result create() {
 		Form<Note> filledForm = noteForm.bindFromRequest();
-
-		if (filledForm.hasErrors()) {
+		
+		if(filledForm.hasErrors()) {
+			for(String key : filledForm.errors().keySet()){
+				List<ValidationError> currentError = filledForm.errors().get(key);
+				for(ValidationError error : currentError){
+					flash("error", key + ": " + error.message());
+				}
+			}     
 			return badRequest(new_note.render(filledForm));
 		} else {
             Http.MultipartFormData body = request().body().asMultipartFormData();
@@ -67,8 +74,14 @@ public class Notes extends Controller {
 
 	@SecureSocial.SecuredAction
 	public static Result edit(Long id) {
-		Form<Note> filledForm = noteForm.fill(Note.find.ref(id));
-		return ok(edit.render(Note.find.ref(id), filledForm));
+		Note note = Note.find.ref(id);
+		if(note.allows(User.currentUser())) {
+			Form<Note> filledForm = noteForm.fill(note);
+			return ok(edit.render(note, filledForm));
+		} else {
+			flash("error", "You are not authorized to edit this note!");
+			return badRequest(index.render(Note.all(), noteForm, searchForm));
+		}
 	}
 
 	@SecureSocial.SecuredAction
@@ -77,7 +90,7 @@ public class Notes extends Controller {
 		if (filledForm.hasErrors()) {
 			return badRequest(index.render(Note.all(), filledForm, searchForm));
 		} else {
-			Note.update(filledForm.get(), Form.form().bindFromRequest().get("tagList"));
+			Note.update(id, filledForm.get(), Form.form().bindFromRequest().get("tagList"));
 			flash("info", "Successfully update note!");
 			return redirect(routes.Notes.show(id));
 		}

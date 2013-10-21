@@ -90,18 +90,19 @@ public class Note extends Model implements Authorizable {
 	public static Note create(Note note, String tagList, User author, S3File image) {
     note.author = author;
     note.save();
-    note.replaceTags(tagList);
+    note.updateTags(tagList);
+    note.saveManyToManyAssociations("tags");
     note.addFile(image);
 		return note;
 	}
 
-  public static Note update(Note note, String tagList) {
-    Note existingNote = find.ref(note.id);
-    existingNote.title = note.title;
-    existingNote.content = note.content;
-    existingNote.update();
-    existingNote.replaceTags(tagList);
-    existingNote.save();
+  public static Note update(Long id, Note noteUpdates, String tagList) {
+    Note note = find.ref(id);
+    note.title = noteUpdates.title;
+    note.content = noteUpdates.content;
+    note.update();
+    note.updateTags(tagList);
+    note.saveManyToManyAssociations("tags");
     return note;
   }
 
@@ -111,11 +112,9 @@ public class Note extends Model implements Authorizable {
 	  Tag.clean();
 	}
 
-  public void replaceTags(String tagList) {
+  public void updateTags(String tagList) {
     if(tagList != null && !tagList.equals("") && !tagList.equals(" ")) {
-      this.tags.clear();
-      this.tags.addAll(Tag.createOrFindAllFromString(tagList));
-      this.saveManyToManyAssociations("tags");
+      this.tags = Tag.createOrFindAllFromString(tagList);
     }
   }
 
