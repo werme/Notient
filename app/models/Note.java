@@ -36,6 +36,12 @@ public class Note extends Model {
 	@ManyToMany(cascade = CascadeType.REMOVE)
 	public List<Tag> tags = new ArrayList<Tag>();
 
+  @Column(name = "created_at")
+  public Date createdAt;
+ 
+  @Column(name = "updated_at")
+  public Date updatedAt;
+
 	@OneToMany(mappedBy="note", cascade=CascadeType.ALL)
 	public List<Comment> comments = new ArrayList<Comment>();
 
@@ -220,6 +226,28 @@ public class Note extends Model {
         }
     }
     return result;
+  }
+
+  @Override
+  public void save() {
+    createdAt();
+    super.save();
+  }
+ 
+  @Override
+  public void update() {
+    updatedAt();
+    super.update();
+  }
+ 
+  @PrePersist
+  void createdAt() {
+    this.createdAt = this.updatedAt = new Date();
+  }
+ 
+  @PreUpdate
+  void updatedAt() {
+    this.updatedAt = new Date();
   }
 
   public static class NoteComparator implements Comparator<Note> {
