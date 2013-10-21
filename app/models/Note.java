@@ -84,18 +84,11 @@ public class Note extends Model implements Authorizable {
 		return find.all();
 	}
 
-	public static Note create(Note note, String tagsList, User author, S3File image) {
+	public static Note create(Note note, String tagList, User author, S3File image) {
     note.author = author;
+    note.replaceTags(tagList);
+    note.addFile(image);
     note.save();
-		if(tagsList != null && !tagsList.equals("") && !tagsList.equals(" ")) {
-      note.tags.clear();
-			note.tags.addAll(Tag.createOrFindAllFromString(tagsList));
-			note.saveManyToManyAssociations("tags");
-		}
-    if(image != null){
-      note.images.add(image);
-      note.saveManyToManyAssociations("images");
-    }
 		return note;
 	}
 
@@ -108,6 +101,34 @@ public class Note extends Model implements Authorizable {
       throw new UnauthorizedException(User.currentUser(), "delete");
     }
 	}
+
+  public static Note update(Note note, String tagsList) {
+    Note note = find.ref(note.id);
+    if(note.allows(User.currentUser())) {
+      note.title = note.title;
+      note.content = note.content;
+      note.save();
+    } else {
+      throw new UnauthorizedException(User.currentUser(), "update");
+    }
+    return note;
+  }
+
+  public void replaceTags(String tagList) {
+    if(tagList != null && !tagList.equals("") && !tagList.equals(" ")) {
+      this.tags.clear();
+      this.tags.addAll(Tag.createOrFindAllFromString(tagList));
+      this.saveManyToManyAssociations("tags");
+    }
+  }
+
+  public void addFile(S3File image) {
+    if(image != null){
+      // TODO: Only add image files
+      note.images.add(image);
+      note.saveManyToManyAssociations("images");
+    }
+  }
 
 	public Note addComment(String content, User author) {
     Comment comment = new Comment(id, content, author);
