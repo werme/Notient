@@ -96,8 +96,10 @@ public class User extends Model {
         return this.id + " - " + this.firstName;
     }
 
-    // Returns a list of users related to the search query.
-    // Will look at names and usernames.
+    /**
+     * Returns a list of users related to the search query.
+     * Will look at names and usernames.
+     */
     public static List<User> searchUsers(String query) {
         List<User> result = new ArrayList<User>();
         for (String word : query.split("\\s")) {
