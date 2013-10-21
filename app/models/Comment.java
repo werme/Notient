@@ -14,7 +14,7 @@ import securesocial.core.java.SecureSocial;
 import securesocial.core.Identity;
 
 @Entity
-public class Comment extends Model {
+public class Comment extends Model implements Authorizable {
 
   @Id
   @Version
@@ -63,8 +63,10 @@ public class Comment extends Model {
     return comment;
   }
 
-  public String toString() {
-    return content.length() > 50 ? content.substring(0, 50) + "..." : content;
+
+  public static void delete(Long id) {
+    Comment comment = find.ref(id);
+    comment.delete();
   }
 
   @Override
@@ -77,6 +79,13 @@ public class Comment extends Model {
   public void update() {
     updatedAt();
     super.update();
+  }
+  
+  public String getCreatedAt() {
+    PrettyTime p = new PrettyTime(new Locale("en"));
+    if (this.createdAt != null)
+      return p.format(this.createdAt);
+    return null;
   }
  
   @PrePersist
@@ -95,9 +104,16 @@ public class Comment extends Model {
       return p.format(this.createdAt);
     return "never and always ago";
   }
-
-  public static void delete(Long id) {
-    Comment comment = find.ref(id);
-    comment.delete();
+  
+  @Override
+  public boolean allows(User user) {
+    if(user == null) {
+      return false;
+    }
+    return (this.author.equals(user) || user.privilege.equals(PrivilegeLevel.ADMIN));
+  }
+  
+  public String toString() {
+    return content.length() > 50 ? content.substring(0, 50) + "..." : content;
   }
 }
