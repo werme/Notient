@@ -23,7 +23,7 @@
     </div>
 
     <div class="container main">
-        @helper.form(action = routes.Notes.search) {
+        @helper.form(action = routes.Search.performSearch) {
             <input type="text" name="query"></input>
             <input class="flat-button" type="submit" value="Search"> 
         }
