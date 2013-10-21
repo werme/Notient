@@ -72,9 +72,10 @@ public class Notes extends Controller {
 		try {
 			Note.delete(id);
 		} catch (UnauthorizedException e) {
-			flash("error", "You are not authorized to delete this note.");
+			flash("error", "You are not authorized to delete this note!");
 			return badRequest(index.render(Note.all(), noteForm, searchForm));
 		}
+		flash("info", "Successfully deleted note!");
 		return redirect(routes.Notes.list());
 	}
 
@@ -82,10 +83,10 @@ public class Notes extends Controller {
 	public static Result newComment(Long id) {
 		Form<Comment> filledForm = commentForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
-			return badRequest(index.render(Note.all(), filledForm)); // should redirect to show note view later 
+			return badRequest(show.render(Note.find.ref(id), noteForm, commentForm, searchForm));
 		} else {
 			Comment.create(id, filledForm.get(), User.currentUser());
-			flash("info", "Successfully posted comment!")
+			flash("info", "Successfully posted comment!");
 			return redirect(routes.Notes.show(id));
 		}
 	}
