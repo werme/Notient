@@ -116,16 +116,35 @@
       &:hover { color: @blue; }
     }
 
-    .delete-button {
+    .quick-note-links-wrapper {
       display: inline-block;
-      position: absolute;
-      top: 0.7rem;
-      right: 0.7rem;
-      font-size: 1rem;
-      border: 0;
-      background: transparent;
-      color: #d33;
-      &:hover { color: red; }
+        position: absolute;
+        top: 0.7rem;
+        right: 0.7rem;
+        font-size: 1rem;
+
+      .quick-edit-note-button, .quick-delete-note-button {      
+        border: 0;
+        background: transparent;
+
+        i {
+          opacity: 1;
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      .quick-edit-note-button {
+        color: @blue;
+        &:hover { color: lighten(@blue, 5%); }
+      }
+
+      .quick-delete-note-button {
+        position: relative;
+        top: -1px;
+        color: @red;
+        &:hover { color: red; }
+      }
     }
 
     &:hover { -webkit-transform: rotatex(-180deg); }

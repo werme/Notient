@@ -24,4 +24,10 @@
     toggleMenu();
   });
 
+  $('.quick-delete-note-button').click(function() {
+    // TODO: Make dialog and notification modules
+    confirm("Are you sure you want to delete this note?");
+    $.post($(this).data("url"));
+  });
+
 })();
