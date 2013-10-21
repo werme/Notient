@@ -83,17 +83,17 @@ public class Notes extends Controller {
 		}
 	}
 
-	@SecureSocial.SecuredAction(authorization = WithPrivilegeLevel.class, params = {PrivilegeLevel.USER, PrivilegeLevel.ADMIN})
+	@SecureSocial.SecuredAction
 	public static Result delete(Long id) {
 		Note note = Note.find.ref(id);
 		if(note.allows(User.currentUser())) {
 			Note.delete(id);
+			flash("info", "Successfully deleted note!");
+			return redirect(routes.Notes.list());
 		} else {
 			flash("error", "You are not authorized to delete this note!");
 			return badRequest(index.render(Note.all(), noteForm, searchForm));
 		}
-		flash("info", "Successfully deleted note!");
-		return redirect(routes.Notes.list());
 	}
 
 	@SecureSocial.SecuredAction
@@ -108,11 +108,17 @@ public class Notes extends Controller {
 		}
 	}
 
-	//@SecureSocial.SecuredAction(authorization = WithPrivilegeLevel.class, params = {PrivilegeLevel.USER, PrivilegeLevel.ADMIN})
+	@SecureSocial.SecuredAction
 	public static Result deleteComment(Long id, Long commentId) {
-		// TODO: try/catch and flash this
-		Comment.delete(commentId);
-		return redirect(routes.Notes.show(id));
+		Comment comment = Comment.find.ref(commentId);
+		if(comment.allows(User.currentUser())) {
+			Comment.delete(commentId);
+			flash("info", "Successfully deleted comment!");
+			return redirect(routes.Notes.show(id));
+		} else {
+			flash("error", "You are not authorized to delete this comment!");
+			return badRequest(show.render(Note.find.ref(id), noteForm, commentForm, searchForm));
+		}
 	}
 
 	@SecureSocial.SecuredAction
