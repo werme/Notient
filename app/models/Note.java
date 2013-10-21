@@ -37,6 +37,7 @@ public class Note extends Model {
 	@JoinTable(name="up_votes")
 	public List<User> upVotes = new ArrayList<User>();
 
+  // Needed for ebean finder to be able to order notes by rating. Should not be needed since upVotes and downVotes exist
   public int rating;
 
 	@ManyToMany(cascade=CascadeType.REMOVE)
@@ -198,7 +199,8 @@ public class Note extends Model {
     return allNotes;
   }
 
-  // Prioritizes titles before contents 
+  // Returns a list of notes related to the search query. 
+  // Will look at both content and titles and order them by rating. 
   public static List<Note> searchNotes(String query) {
     List<Note> result = new ArrayList<Note>();
     for (String word : query.split("\\s")) {
