@@ -1,4 +1,5 @@
 @import "config";
+@import "mixins";
 
 .comments {
 	margin-top: 1rem;
@@ -22,14 +23,7 @@
 	.comment {
 		margin-bottom: 2rem;
 
-		&:after, &:before {
-			content: '';
-			display: table;
-		}
-
-		&:after {
-			clear: both;
-		}
+		.clearfix;
 		
 		h2 {
 			display: inline-block;

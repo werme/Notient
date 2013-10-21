@@ -1,4 +1,5 @@
 @import "config";
+@import "mixins";
 
 .see-full-note-link {
   display: block;
@@ -22,6 +23,8 @@
   font-size: 1.05rem;
   line-height: 1.8;
 
+  .clearfix;
+
   ul {
     margin-bottom: 1rem;
     li {
@@ -37,6 +40,9 @@
     }
   }
 
+  .note-links {
+    float: right;
+  }
 }
 
 .similar-notes {

@@ -1,5 +1,6 @@
 @import "reset";
 @import "config";
+@import "mixins";
 
 @import url(http://fonts.googleapis.com/css?family=Raleway:400,900,800,700,600,500,300,200,100);
 
@@ -68,14 +69,7 @@ blockquote {
   width: 100%;
   max-width: 50rem;
 
-  &:after, &:before {
-    content: '';
-    display: table;
-  }
-
-  &:after {
-    clear: both;
-  }
+  .clearfix;
 }
 
 @import "header";
