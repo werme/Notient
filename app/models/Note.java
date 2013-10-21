@@ -212,8 +212,10 @@ public class Note extends Model {
     return allNotes;
   }
 
-  // Returns a list of notes related to the search query. 
-  // Will look at both content and titles and order them by rating. 
+  /**
+   * Returns a list of notes related to the search query. 
+   * Will look at both content and titles and order them by rating. 
+   */ 
   public static List<Note> searchNotes(String query) {
     List<Note> result = new ArrayList<Note>();
     for (String word : query.split("\\s")) {
