@@ -60,8 +60,9 @@ public class Notes extends Controller {
                 Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser(), s3File);
                 return redirect(routes.Notes.list());
             } else {
-            Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser(), null);
-			return redirect(routes.Notes.list());
+	            Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser(), null);
+				flash("info", "Successfully created note!");
+				return redirect(routes.Notes.list());
             }
 		}
 	}
@@ -81,15 +82,17 @@ public class Notes extends Controller {
 	public static Result newComment(Long id) {
 		Form<Comment> filledForm = commentForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
-			//return badRequest(index.render(Note.all(), filledForm)); // should redirect to show note view later 
+			return badRequest(index.render(Note.all(), filledForm)); // should redirect to show note view later 
 		} else {
 			Comment.create(id, filledForm.get(), User.currentUser());
+			flash("info", "Successfully posted comment!")
+			return redirect(routes.Notes.show(id));
 		}
-		return redirect(routes.Notes.show(id));
 	}
 
 	//@SecureSocial.SecuredAction(authorization = WithPrivilegeLevel.class, params = {PrivilegeLevel.USER, PrivilegeLevel.ADMIN})
 	public static Result deleteComment(Long id, Long commentId) {
+		// TODO: try/catch and flash this
 		Comment.delete(commentId);
 		return redirect(routes.Notes.show(id));
 	}
@@ -118,7 +121,8 @@ public class Notes extends Controller {
 			return badRequest(index.render(Note.all(), filledForm, searchForm));
 		} else {
 			Note.update(filledForm.get(), Form.form().bindFromRequest().get("tagList"));
-		return redirect(routes.Notes.show(id));
+			flash("info", "Successfully update note!");
+			return redirect(routes.Notes.show(id));
 		}
 	}
 }
