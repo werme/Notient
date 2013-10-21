@@ -93,9 +93,13 @@ public class User extends Model {
     public static List<User> searchUsers(String query) {
         List<User> result = new ArrayList<User>();
         for (String word : query.split("\\s")) {
-            result.addAll(find.where()
+            List<User> wordResult = find.where()
                 .or(Expr.or(Expr.like("firstName", "%"+word+"%"), Expr.ilike("lastName", "%"+word+"%")), Expr.ilike("userName", "%"+word+"%"))
-                .findList());
+                .findList();
+            for (User user : wordResult) {
+                if (!result.contains(user))
+                    result.add(user);
+            }
         }
         return result;
     }

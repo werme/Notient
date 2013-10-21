@@ -211,11 +211,14 @@ public class Note extends Model {
   public static List<Note> searchNotes(String query) {
     List<Note> result = new ArrayList<Note>();
     for (String word : query.split("\\s")) {
-      result.addAll(find.where()
+      List<Note> wordResult = find.where()
         .or(Expr.ilike("title", "%"+word+"%"), Expr.ilike("content", "%"+word+"%")).orderBy("rating")
-        .findList());
+        .findList();
+        for (Note note : wordResult) {
+          if (!result.contains(note))
+            result.add(note);
+        }
     }
-
     return result;
   }
 
