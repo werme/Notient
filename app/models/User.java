@@ -83,6 +83,10 @@ public class User extends Model {
         return localUser;
     }
 
+    public static boolean userSignedIn() {
+        return currentUser() == null ? false : true;
+    }
+
     public String getAvatarUrl() {
         return avatarUrl != null ? avatarUrl : "https://sigil.cupcake.io/" + displayName();
     }
