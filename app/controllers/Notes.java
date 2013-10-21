@@ -65,11 +65,30 @@ public class Notes extends Controller {
 		}
 	}
 
+	@SecureSocial.SecuredAction
+	public static Result edit(Long id) {
+		Form<Note> filledForm = noteForm.fill(Note.find.ref(id));
+		return ok(edit.render(Note.find.ref(id), filledForm));
+	}
+
+	@SecureSocial.SecuredAction
+	public static Result update(Long id) {
+		Form<Note> filledForm = noteForm.bindFromRequest();
+		if (filledForm.hasErrors()) {
+			return badRequest(index.render(Note.all(), filledForm, searchForm));
+		} else {
+			Note.update(filledForm.get(), Form.form().bindFromRequest().get("tagList"));
+			flash("info", "Successfully update note!");
+			return redirect(routes.Notes.show(id));
+		}
+	}
+
 	@SecureSocial.SecuredAction(authorization = WithPrivilegeLevel.class, params = {PrivilegeLevel.USER, PrivilegeLevel.ADMIN})
 	public static Result delete(Long id) {
-		try {
+		Note note = Note.find.ref(id);
+		if(note.allows(User.currentUser())) {
 			Note.delete(id);
-		} catch (UnauthorizedException e) {
+		} else {
 			flash("error", "You are not authorized to delete this note!");
 			return badRequest(index.render(Note.all(), noteForm, searchForm));
 		}
@@ -106,22 +125,5 @@ public class Notes extends Controller {
 	public static Result toggleDownVote(Long id) {
 		Note.find.ref(id).toggleDownVote(User.currentUser());
 		return redirect(routes.Notes.show(id));
-	}
-	@SecureSocial.SecuredAction
-	public static Result edit(Long id) {
-		Form<Note> filledForm = noteForm.fill(Note.find.ref(id));
-		return ok(edit.render(Note.find.ref(id), filledForm));
-	}
-
-	@SecureSocial.SecuredAction
-	public static Result update(Long id) {
-		Form<Note> filledForm = noteForm.bindFromRequest();
-		if (filledForm.hasErrors()) {
-			return badRequest(index.render(Note.all(), filledForm, searchForm));
-		} else {
-			Note.update(filledForm.get(), Form.form().bindFromRequest().get("tagList"));
-			flash("info", "Successfully update note!");
-			return redirect(routes.Notes.show(id));
-		}
 	}
 }

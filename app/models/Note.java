@@ -94,23 +94,15 @@ public class Note extends Model implements Authorizable {
 
 	public static void delete(Long id) {
 		Note note = find.ref(id);
-    if(note.allows(User.currentUser())) {
-		  note.delete();
-	   	Tag.clean();
-    } else {
-      throw new UnauthorizedException(User.currentUser(), "delete");
-    }
+    note.delete();
+	  Tag.clean();
 	}
 
   public static Note update(Note noteUpdates, String tagsList) {
-    Note note = find.ref(noteUpdates.id);
-    if(note.allows(User.currentUser())) {
-      note.title = noteUpdates.title;
-      note.content = noteUpdates.content;
-      note.save();
-    } else {
-      throw new UnauthorizedException(User.currentUser(), "update");
-    }
+    Note note = find.ref(noteUpdates.id);  
+    note.title = noteUpdates.title;
+    note.content = noteUpdates.content;
+    note.save();
     return note;
   }
 
