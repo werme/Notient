@@ -30,7 +30,9 @@
                 <img src="@image.getUrl"> 
             }
             
-            <div><small>Last updated @note.getUpdatedAt</small></div>
+            @if(note.updatedAt!=null) {
+                <div><small>Last updated @note.getUpdatedAt</small></div>
+            }
 
             @if(note.author.equals(User.currentUser)) {
                 <div class="note-links">

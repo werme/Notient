@@ -74,7 +74,6 @@ public class Note extends Model implements Authorizable {
 
 	public static Finder<Long, Note> find = new Finder(Long.class, Note.class);
 
-
   public static List<Note> notesBy(User author) {
     return find.where()
         .eq("author", author.id)
@@ -132,6 +131,7 @@ public class Note extends Model implements Authorizable {
     Note existingNote = find.ref(note.id);
     existingNote.title = note.title;
     existingNote.content = note.content;
+    existingNote.update();
     existingNote.save();
     return note;
   }
@@ -255,7 +255,7 @@ public class Note extends Model implements Authorizable {
  
   @PrePersist
   void createdAt() {
-    this.createdAt = this.updatedAt = new Date();
+    this.createdAt = new Date();
   }
  
   @PreUpdate
@@ -267,13 +267,13 @@ public class Note extends Model implements Authorizable {
     PrettyTime p = new PrettyTime(new Locale("en"));
     if (this.createdAt != null)
       return p.format(this.createdAt);
-    return null;
+    return "never and always ago";
   }
 
   public String getUpdatedAt() {
     PrettyTime p = new PrettyTime(new Locale("en"));
-    if (this.createdAt != null)
-      return p.format(this.createdAt);
+    if (this.updatedAt != null)
+      return p.format(this.updatedAt);
     return null;
   }
 

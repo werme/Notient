@@ -81,7 +81,7 @@ public class Comment extends Model {
  
   @PrePersist
   void createdAt() {
-    this.createdAt = this.updatedAt = new Date();
+    this.createdAt = new Date();
   }
  
   @PreUpdate
@@ -93,7 +93,7 @@ public class Comment extends Model {
     PrettyTime p = new PrettyTime(new Locale("en"));
     if (this.createdAt != null)
       return p.format(this.createdAt);
-    return null;
+    return "never and always ago";
   }
 
   public static void delete(Long id) {
