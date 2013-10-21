@@ -1,8 +1,8 @@
-@(user: User)
+@(user: User, noteForm: Form[Note])
 
 @import helper._
 
-@main("User: " + user.displayName) {
+@main("User: " + user.displayName, noteForm) {
     <div class="container main">
         <section class="note-wrapper">
             <h1>@user.username</h1>

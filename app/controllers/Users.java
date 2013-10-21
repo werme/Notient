@@ -10,7 +10,9 @@ import securesocial.core.Identity;
 
 public class Users extends Controller {
 
+  static Form<Note> noteForm = Form.form(Note.class);
+
   public static Result show(String id) {
-    return ok(views.html.users.show.render(User.find.ref(id)));
+    return ok(views.html.users.show.render(User.find.ref(id), noteForm));
   }
 }

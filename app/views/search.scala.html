@@ -3,25 +3,7 @@
 @import securesocial.core.java.SecureSocial;
 @import helper._
 
-@main("Note list") {
-    <div class="dark-wrapper">
-    <section id="quick-create-form" class="quick-create-form">
-        <div class="container">
-            @views.html.quickCreateForm(noteForm)
-        </div>
-    </section>
-    <header id="sub-nav" class="sub-nav">
-        <div class="container">
-            <nav>
-                <ul>
-                    <li><a href="#"><i class="list layout icon"></i>List</a></li>
-                    <li><a href="#"><i class="grid layout icon"></i>Thumbnails</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-    </div>
-
+@main("Search result", noteForm) {
     <div class="container main">
         @helper.form(action = routes.Search.performSearch) {
             <input type="text" name="query"></input>
@@ -45,7 +27,7 @@
                                 <date>Posted 1th Oct 2013</date>
                                 <ul>
                                     <li><a href="@routes.Notes.show(note.id)" class="see-full-note-link">@note.title</a></li>
-                                    <li>By <a href="@routes.Users.show(note.author.id)">@note.author.firstName @note.author.lastName</a></li>
+                                    <li>By <a href="@routes.Users.show(note.author.id)">@note.author.displayName</a></li>
                                 </ul>
                             </header>
                             <section>
@@ -57,13 +39,11 @@
             }
         </section>
     </div>
-    <footer>
-        <div>
-            @for(user <- users) {
-                <div>
-                    <p>Found user @user.firstName user.lastName</p>
-                </div>
-            }
-        </div>
-    </footer>
+    <div>
+        @for(user <- users) {
+            <div>
+                <p>Found user @user.displayName</p>
+            </div>
+        }
+    </div>
 }

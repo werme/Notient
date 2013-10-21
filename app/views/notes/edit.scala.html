@@ -5,7 +5,7 @@
 @import helper._
 @import helpers.MarkdownHelper
 
-@main("Edit note: " + note.title) {
+@main("Edit note: " + note.title, noteForm) {
     <div class="container main">
         @form(routes.Notes.update(note.id)) {
         <input type="hidden" name="id" value="@note.id">

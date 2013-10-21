@@ -3,31 +3,7 @@
 @import securesocial.core.java.SecureSocial;
 @import helper._
 
-@main("Notient") {
-    <div class="dark-wrapper">
-    <section id="quick-create-form" class="quick-create-form">
-        <div class="container">
-            @views.html.quickCreateForm(noteForm)
-        </div>
-    </section>
-    <header id="sub-nav" class="sub-nav">
-        <div class="container">
-            <nav>
-                <ul>
-                    <li><a href="#"><i class="list layout icon"></i>List</a></li>
-                    <li><a href="#"><i class="grid layout icon"></i>Thumbnails</a></li>
-                </ul>
-            </nav>
-            <div class="search">
-                @helper.form(action = routes.Search.performSearch) {
-                    <input type="text" name="query" placeholder="Search..."></input>
-                    <input type="submit" class="flat-button" value="Search" />
-                }
-            </div>  
-        </div>
-    </header>
-    </div>
-
+@main("Notient", noteForm) {
     <div class="container main">
         <section class="notes-wrapper">
             @for(note <- notes) {
