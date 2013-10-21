@@ -8,6 +8,8 @@ import javax.persistence.*;
 import java.util.regex.PatternSyntaxException;
 import play.Logger;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
 import securesocial.core.java.SecureSocial;
 import securesocial.core.Identity;
 
@@ -85,6 +87,13 @@ public class Comment extends Model {
   @PreUpdate
   void updatedAt() {
     this.updatedAt = new Date();
+  }
+
+  public String getCreatedAt() {
+    PrettyTime p = new PrettyTime(new Locale("en"));
+    if (this.createdAt != null)
+      return p.format(this.createdAt);
+    return null;
   }
 
   public static void delete(Long id) {
