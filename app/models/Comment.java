@@ -63,7 +63,6 @@ public class Comment extends Model implements Authorizable {
     return comment;
   }
 
-
   public static void delete(Long id) {
     Comment comment = find.ref(id);
     comment.delete();
@@ -80,7 +79,7 @@ public class Comment extends Model implements Authorizable {
     updatedAt();
     super.update();
   }
- 
+  
   @PrePersist
   void createdAt() {
     this.createdAt = new Date();
