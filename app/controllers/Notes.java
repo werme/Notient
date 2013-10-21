@@ -64,14 +64,12 @@ public class Notes extends Controller {
 
 	@SecureSocial.SecuredAction
 	public static Result toggleUpVote(Long id) {
-		Logger.debug("WE GOT HERE! UP");
 		Note.find.ref(id).toggleUpVote(User.currentUser());
 		return redirect(routes.Notes.show(id));
 	}
 	
 	@SecureSocial.SecuredAction
 	public static Result toggleDownVote(Long id) {
-		Logger.debug("WE GOT HERE! DOWN");
 		Note.find.ref(id).toggleDownVote(User.currentUser());
 		return redirect(routes.Notes.show(id));
 	}
