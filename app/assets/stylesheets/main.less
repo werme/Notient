@@ -21,6 +21,11 @@
 @import "search";
 @import "notes";
 @import "comments";
+@import "components";
+
+/* Semantic UI */
+@import "elements/basic.icon";
+@import "elements/icon";
 
 footer {
   .container {
@@ -29,93 +34,42 @@ footer {
   }
 }
 
-p {
-  margin-bottom: 1em;
-}
-
-.success { color: @blue; }
-.error { color: @blue; }
-
-form {
-  dd { display: inline-block; }
+.message {
+  .success { color: @green; }
+  .error { color: @red; }
   .info { color: @blue; }
-
-  label { line-height: 2em }
-
-  input[type=text], input[type=password], textarea { //, input[type=submit] {
-    border: 2px solid darken(@light-yellow, 5%);
-    margin-bottom: 1em;
-    font-size: 1em;
-    padding: 0.4em;
-
-    &:hover { background: lighten(@light-yellow, 2%); }
-    &::-webkit-input-placeholder { color: darken(@light-yellow, 30%); }
-  }
 }
 
-.center-form {
-  margin: 0 auto;
-  padding: 1.2rem 1rem 1rem;
-  width: 100%;
-  max-width: 20rem;
-  background: white;
-  border-bottom: 2px solid darken(@light-yellow, 10%);
+// .center-form {
+//   margin: 0 auto;
+//   padding: 1.2rem 1rem 1rem;
+//   width: 100%;
+//   max-width: 20rem;
+//   background: white;
+//   border-bottom: 2px solid darken(@light-yellow, 10%);
 
-  input, dd {
-    width: 100%;
-  }
-  input[type=submit] { margin: 0; }
+//   input, dd {
+//     width: 100%;
+//   }
+//   input[type=submit] { margin: 0; }
 
-  .form-after {
-    margin: 1rem 0 0;
-  }
-}
+//   .form-after {
+//     margin: 1rem 0 0;
+//   }
+// }
 
-h1.center-form-header {
-  margin: 4rem auto -0.6rem;
-  width: 100%;
-  max-width: 20rem;
-  padding: 0 1rem;
-  border: 0;
+// h1.center-form-header {
+//   margin: 4rem auto -0.6rem;
+//   width: 100%;
+//   max-width: 20rem;
+//   padding: 0 1rem;
+//   border: 0;
 
-  font: 2.6rem 'Raleway';
-  font-weight: 600;
-}
+//   font: 2.6rem 'Raleway';
+//   font-weight: 600;
+// }
 
-@import "components/button";
-@import "elements/label";
-@import "elements/basic.icon";
-@import "elements/icon";
-
-.tag {
-  display: inline-block;
-  padding: 0.2rem 0.4rem;
-  margin: 0 1rem 1rem 0;
-  color: #333;
-  background: lighten(@yellow, 20%);
-  border-bottom: 1px solid @yellow;
-  text-decoration: none;
-  transition: 0.3s all;
-  &:hover { background: lighten(@yellow, 10%); border-bottom: 1px solid darken(@yellow, 10%); }
-}
-
-.flat-button {
-  font-family: 'Raleway';
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  line-height: 1;
-  color: white;
-  border: 0;
-  padding: 0.7rem 1.25rem 0.55rem;
-  background: @blue;
-  border-bottom: 3px solid darken(@blue, 5%);
-  transition: background 0.2s;
-
-  &:hover { background: lighten(@blue, 5%); }
-}
-
+/* Larger devices */
 @media (min-width: 50em) {
   .main {
     padding: 0;

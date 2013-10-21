@@ -1,3 +1,5 @@
+@import "config";
+
 * { box-sizing: border-box; }
 
 body {
@@ -55,4 +57,23 @@ blockquote {
   border-left: 5px solid darken(@yellow, 10%);
   margin: 1rem;
   p { margin: 0; }
+}
+
+p {
+  margin-bottom: 1em;
+}
+
+form {
+  label { line-height: 2em }
+
+  input, input[type=text], input[type=password], textarea {
+    border: 2px solid darken(@light-yellow, 5%);
+    margin-bottom: 1em;
+    font-size: 1em;
+    padding: 0.4em;
+
+    &:hover { background: lighten(@light-yellow, 2%); }
+    &::-webkit-input-placeholder { color: darken(@light-yellow, 30%); }
+    &:focus { outline: none; }
+  }
 }
