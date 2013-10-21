@@ -10,6 +10,7 @@ import play.test.WithApplication;
 
 import java.util.*;
 
+import play.Logger;
 import static org.junit.Assert.*;
 import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.inMemoryDatabase;
@@ -62,7 +63,7 @@ public class NotesTest extends WithApplication {
   public void notesBy() {
       Note.create(new Note("My first note", testUser));
       Note.create(new Note("My second note", testUser));
-
+      Logger.debug(testUser + "");
       List<Note> results = Note.notesBy(testUser);
       assertEquals(2, results.size());
       assertEquals("My first note", results.get(0).title);

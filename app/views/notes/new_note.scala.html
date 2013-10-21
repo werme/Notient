@@ -7,7 +7,7 @@
 @main("New note", noteForm) {
   <div class="container" role="main">
     <div class="note-wrapper">
-      @form(routes.Notes.create) {
+      @form(routes.Notes.create, 'enctype -> "multipart/form-data") {
         @inputText(noteForm("title"),'_showConstraints -> false, '_label -> "Title:", 'placeholder -> "Write your note title here...", 'class -> "title")
         <textarea id="content" name="content">
 This is your note body. If you want, you could use markdown in here.

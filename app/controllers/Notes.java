@@ -50,31 +50,33 @@ public class Notes extends Controller {
 		} else {
             //Temporary solution since i dont know how the form works with files.
             Http.MultipartFormData body = request().body().asMultipartFormData();
-            Http.MultipartFormData.FilePart uploadFilePart = body.getFile("upload");
-            Logger.debug("uploadFilePart" + uploadFilePart);
-            if (uploadFilePart != null) {
-                S3File s3File = new S3File();
-                s3File.name = uploadFilePart.getFilename();
-                s3File.file = uploadFilePart.getFile();
-                s3File.save();
-                Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser(), s3File);
-                return redirect(routes.Notes.list());
-            } else {
-            Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser(), null);
-			return redirect(routes.Notes.list());
+            if(body != null){
+	            Http.MultipartFormData.FilePart uploadFilePart = body.getFile("upload");
+	            Logger.debug("uploadFilePart" + uploadFilePart);
+	            if (uploadFilePart != null) {
+	                S3File s3File = new S3File();
+	                s3File.name = uploadFilePart.getFilename();
+	                s3File.file = uploadFilePart.getFile();
+	                s3File.save();
+	                Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser(), s3File);
+	                return redirect(routes.Notes.list());
+	            }
             }
+        Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser(), null);
+		return redirect(routes.Notes.list());
+   
 		}
 	}
 
 	@SecureSocial.SecuredAction(authorization = WithPrivilegeLevel.class, params = {PrivilegeLevel.USER, PrivilegeLevel.ADMIN})
 	public static Result delete(Long id) {
-		try {
+		Note note = Note.find.ref(id);
+		if(note.author.equals(User.currentUser())) {
 			Note.delete(id);
-		} catch (UnauthorizedException e) {
-			flash("error", "You are not authorized to delete this note.");
+			return redirect(routes.Notes.list());
+		} else {
 			return badRequest(index.render(Note.all(), noteForm, searchForm));
 		}
-		return redirect(routes.Notes.list());
 	}
 
 	@SecureSocial.SecuredAction

@@ -76,7 +76,7 @@ public class Note extends Model {
 
   public static List<Note> notesBy(User author) {
     return find.where()
-        .eq("author", author.id)
+        .eq("author", author)
         .findList();
   }
     
@@ -112,12 +112,8 @@ public class Note extends Model {
 
 	public static void delete(Long id) {
 		Note note = find.ref(id);
-    if(note.author.equals(User.currentUser())) {
-		  note.delete();
-	   	Tag.clean();
-    } else {
-      throw new UnauthorizedException(User.currentUser(), "delete");
-    }
+	  note.delete();
+   	Tag.clean();
 	}
 
 	public Note addComment(String content, User author) {

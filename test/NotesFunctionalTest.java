@@ -45,26 +45,20 @@ public class NotesFunctionalTest extends WithApplication {
 		Cookie cookie = Utils.fakeCookie("pingu@notient.com");
 
 		result = callAction(
-				controllers.routes.ref.Notes.newNote(),
+				controllers.routes.ref.Notes.create(),
 				fakeRequest().withFormUrlEncodedBody(
 						ImmutableMap.of("title", "My note title", "content",
 								"My note content")).withCookies(cookie));
-
 		// Should return redirect status if successful
 		assertThat(status(result)).isEqualTo(SEE_OTHER);
 		assertThat(redirectLocation(result)).isEqualTo("/notes");
-
-
 		// Should return bad request if no data is given
 		result = callAction(
-				controllers.routes.ref.Notes.newNote(),
+				controllers.routes.ref.Notes.create(),
 				fakeRequest().withFormUrlEncodedBody(
 						ImmutableMap.of("title", "", "content",
 								"")).withCookies(cookie));
 		assertThat(status(result)).isEqualTo(BAD_REQUEST);
-		
-
-
 
 		Note newNote = Note.find.where().eq("title", "My note title")
 				.findUnique();
@@ -80,13 +74,15 @@ public class NotesFunctionalTest extends WithApplication {
 
 		Cookie cookie = Utils.fakeCookie("pingu@notient.com");
 		Result result = callAction(
-				controllers.routes.ref.Notes.newNote(),
+				controllers.routes.ref.Notes.create(),
 				fakeRequest().withFormUrlEncodedBody(
 						ImmutableMap.of("title", "My note title", "content",
 								"My note content", "tagList", "tag1 tag2")).withCookies(cookie));
 
 		// Should return redirect status if successful
+		Logger.debug("TEST1");
 		assertThat(status(result)).isEqualTo(SEE_OTHER);
+		Logger.debug("TEST2");
 		assertThat(redirectLocation(result)).isEqualTo("/notes");
 
 		Note newNote = Note.find.where().eq("title", "My note title")
@@ -104,28 +100,28 @@ public class NotesFunctionalTest extends WithApplication {
 		Cookie cookie = Utils.fakeCookie("pingu@notient.com");
 		String title = "";
 		Result result = callAction(
-				controllers.routes.ref.Notes.newNote(),
+				controllers.routes.ref.Notes.create(),
 				fakeRequest()
 						.withFormUrlEncodedBody(ImmutableMap.of("title", title)).withCookies(cookie));
 		assertThat(status(result)).isEqualTo(BAD_REQUEST);
 
 		title = " ";
 		result = callAction(
-				controllers.routes.ref.Notes.newNote(),
+				controllers.routes.ref.Notes.create(),
 				fakeRequest().withFormUrlEncodedBody(
 						ImmutableMap.of("title", title)).withCookies(cookie));
 		assertThat(status(result)).isEqualTo(BAD_REQUEST);
 
 		title = "N";
 		result = callAction(
-				controllers.routes.ref.Notes.newNote(),
+				controllers.routes.ref.Notes.create(),
 				fakeRequest().withFormUrlEncodedBody(
 						ImmutableMap.of("title", title)).withCookies(cookie));
 		assertThat(status(result)).isEqualTo(BAD_REQUEST);
 
 		title = "Lorem ipsum Veniam sunt nulla enim esse incididunt eiusmod qui aliqua dolor nisi";
 		result = callAction(
-				controllers.routes.ref.Notes.newNote(),
+				controllers.routes.ref.Notes.create(),
 				fakeRequest().withFormUrlEncodedBody(
 						ImmutableMap.of("title", title)).withCookies(cookie));
 		assertThat(status(result)).isEqualTo(BAD_REQUEST);
