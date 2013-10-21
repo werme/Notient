@@ -32,12 +32,15 @@
             @User.currentUser
             Score:  <a href="@routes.Notes.toggleUpVote(note.id)">+</a> @note.getScore <a href="@routes.Notes.toggleDownVote(note.id)">-</a>            
             <p>@Html(MarkdownHelper.toHtml(note.content))</p>
-            <div class="note-links">
-                <a href="@routes.Notes.edit(note.id)" class="flat-button icon"><i class="edit icon"></i>Edit</a>
-                @form(routes.Notes.delete(note.id)) {
-                    <button class="flat-button icon delete"><i class="remove icon"></i>Delete</a></button>
-                }
-            </div>
+
+            @if(note.author.equals(User.currentUser)) {
+                <div class="note-links">
+                    <a href="@routes.Notes.edit(note.id)" class="flat-button icon"><i class="edit icon"></i>Edit</a>
+                    @form(routes.Notes.delete(note.id)) {
+                        <button class="flat-button icon delete"><i class="remove icon"></i>Delete</a></button>
+                    }
+                </div>
+            }
         </section>
         <aside class="similar-notes">
         <h2>Similar notes:</h2>

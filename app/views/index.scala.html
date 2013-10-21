@@ -43,10 +43,12 @@
                         </div>
                         <div class="side-base info back">
                             <header>
-                                <div class="quick-note-links-wrapper">
-                                    <a href="@routes.Notes.edit(note.id)" class="quick-edit-note-button"><i class="edit icon"></i></a>
-                                    <a href="#" class="quick-delete-note-button" data-url="@routes.Notes.delete(note.id)" ><i class="remove icon"></i></a>
-                                </div>
+                                @if(note.author.equals(User.currentUser)) {
+                                    <div class="quick-note-links-wrapper">
+                                        <a href="@routes.Notes.edit(note.id)" class="quick-edit-note-button"><i class="edit icon"></i></a>
+                                        <a href="#" class="quick-delete-note-button" data-url="@routes.Notes.delete(note.id)" ><i class="remove icon"></i></a>
+                                    </div>
+                                }
                                 <date>Posted 1th Oct 2013</date>
                                 <ul>
                                     <li><a href="@routes.Notes.show(note.id)" class="see-full-note-link">@note.title</a></li>
