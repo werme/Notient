@@ -47,7 +47,7 @@ public class Note extends Model implements Authorizable {
 	@OneToMany(mappedBy="note", cascade=CascadeType.ALL)
 	public List<Comment> comments = new ArrayList<Comment>();
 
-  @ManyToMany(cascade=CascadeType.ALL)
+  @OneToMany(mappedBy="note", cascade=CascadeType.ALL)
   public List<S3File> images = new ArrayList<S3File>();
 
 	@ManyToMany(cascade=CascadeType.REMOVE)
@@ -86,9 +86,9 @@ public class Note extends Model implements Authorizable {
 
 	public static Note create(Note note, String tagList, User author, S3File image) {
     note.author = author;
+    note.save();
     note.replaceTags(tagList);
     note.addFile(image);
-    note.save();
 		return note;
 	}
 
@@ -102,11 +102,11 @@ public class Note extends Model implements Authorizable {
     }
 	}
 
-  public static Note update(Note note, String tagsList) {
-    Note note = find.ref(note.id);
+  public static Note update(Note noteUpdates, String tagsList) {
+    Note note = find.ref(noteUpdates.id);
     if(note.allows(User.currentUser())) {
-      note.title = note.title;
-      note.content = note.content;
+      note.title = noteUpdates.title;
+      note.content = noteUpdates.content;
       note.save();
     } else {
       throw new UnauthorizedException(User.currentUser(), "update");
@@ -125,8 +125,9 @@ public class Note extends Model implements Authorizable {
   public void addFile(S3File image) {
     if(image != null){
       // TODO: Only add image files
-      note.images.add(image);
-      note.saveManyToManyAssociations("images");
+      image.note = this;
+      this.images.add(image);
+      this.save();
     }
   }
 
