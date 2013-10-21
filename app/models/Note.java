@@ -270,6 +270,13 @@ public class Note extends Model {
     return null;
   }
 
+  public String getUpdatedAt() {
+    PrettyTime p = new PrettyTime(new Locale("en"));
+    if (this.createdAt != null)
+      return p.format(this.createdAt);
+    return null;
+  }
+
   public static class NoteComparator implements Comparator<Note> {
 
     Note note;

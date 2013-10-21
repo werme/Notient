@@ -14,7 +14,7 @@
         </div>
         <header class="note-header">
             <div class="module">
-                Posted on @note.createdAt by 
+                Posted @note.getCreatedAt by 
                 <a href="@routes.Users.show(note.author.id)">@note.author.displayName</a>
             </div>
             <div class="module right">
@@ -29,7 +29,7 @@
             }
             <p>@Html(MarkdownHelper.toHtml(note.content))</p>
 
-            <div><small>Last updated on @note.updatedAt</small></div>
+            <div><small>Last updated @note.getUpdatedAt</small></div>
 
             @if(note.author.equals(User.currentUser)) {
                 <div class="note-links">
@@ -63,7 +63,7 @@
                 <div class="avatar"><img src="@comment.author.getAvatarUrl" /></div>
                 <div class="content">
                     <h2><a href="@routes.Users.show(comment.author.id)">@comment.author.displayName</a></h2>
-                    <span class="date">@comment.createdAt</span>
+                    <span class="date">@comment.getCreatedAt</span>
                     <p>@comment</p>
                     @form(routes.Notes.deleteComment(note.id, comment.id)) {
                         <input class="flat-button delete-comment-button" type="submit" value="Delete">
