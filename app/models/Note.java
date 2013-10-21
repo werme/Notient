@@ -227,6 +227,7 @@ public class Note extends Model {
             result.add(note);
         }
     }
+    Collections.reverse(result);
     return result;
   }
 
