@@ -48,22 +48,20 @@ public class Notes extends Controller {
 		if (filledForm.hasErrors()) {
 			return badRequest(new_note.render(filledForm));
 		} else {
-            //Temporary solution since i dont know how the form works with files.
             Http.MultipartFormData body = request().body().asMultipartFormData();
             Http.MultipartFormData.FilePart uploadFilePart = body.getFile("upload");
-            Logger.debug("uploadFilePart" + uploadFilePart);
+
+            S3File s3File = null;
             if (uploadFilePart != null) {
-                S3File s3File = new S3File();
+                s3File = new S3File();
                 s3File.name = uploadFilePart.getFilename();
                 s3File.file = uploadFilePart.getFile();
                 s3File.save();
-                Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser(), s3File);
-                return redirect(routes.Notes.list());
-            } else {
-	            Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser(), null);
-				flash("info", "Successfully created note!");
-				return redirect(routes.Notes.list());
             }
+			
+			Note note = Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser(), s3File);
+            flash("info", "Successfully created note!");
+			return redirect(routes.Notes.show(note.id));
 		}
 	}
 
