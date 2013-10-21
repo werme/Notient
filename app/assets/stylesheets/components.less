@@ -6,10 +6,10 @@
   margin: 0 1rem 1rem 0;
   color: #333;
   background: lighten(@yellow, 20%);
-  border-bottom: 1px solid @yellow;
+  border: 1px dashed @yellow;
   text-decoration: none;
   transition: 0.3s all;
-  &:hover { background: lighten(@yellow, 10%); border-bottom: 1px solid darken(@yellow, 10%); }
+  &:hover { background: lighten(@yellow, 10%); border: 1px solid darken(@yellow, 10%); }
 }
 
 .flat-button {
@@ -44,6 +44,22 @@
     &:hover { 
       background: lighten(@red, 5%);
       border-bottom: 3px solid darken(@red, 5%);
+    }
+  }
+}
+
+.right {
+  text-align: right;
+}
+
+@media (min-width: 42em) {
+  .module {
+    width: 50%;
+    float: left;
+
+    input[type=submit] {
+      width: 50%;
+      float: right;
     }
   }
 }

@@ -11,10 +11,22 @@
         <div class="tags">
             @for(tag <- note.tags) { <a href="#" class="tag">@tag.title @tag.notes.size</a> }
         </div>
+        <header class="note-header">
+            <div class="module">
+                Posted on @note.createdAt by 
+                <a href="@routes.Users.show(note.author.id)">@note.author.displayName</a>
+            </div>
+            <div class="module right">
+                <a href="@routes.Notes.toggleUpVote(note.id)"><i class="thumbs up icon"></i></a>
+                @note.getScore 
+                <a href="@routes.Notes.toggleDownVote(note.id)"><i class="thumbs down icon"></i></a>
+            </div>
+        </header>            
         <section class="note-wrapper">
-            @User.currentUser
-            Score:  <a href="@routes.Notes.toggleUpVote(note.id)">+</a> @note.getScore <a href="@routes.Notes.toggleDownVote(note.id)">-</a>            
+
             <p>@Html(MarkdownHelper.toHtml(note.content))</p>
+
+            <div><small>Last updated on @note.updatedAt</small></div>
 
             @if(note.author.equals(User.currentUser)) {
                 <div class="note-links">
