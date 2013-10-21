@@ -1,13 +1,19 @@
 package models;
 
 import java.util.*;
+
+import javax.persistence.*;
+
+import com.avaje.ebean.Expr;
+
 import play.db.ebean.*;
 import play.data.validation.Constraints.*;
 import play.data.format.Formats.*;
 import play.Logger;
-import javax.persistence.*;
+
 import securesocial.core.java.SecureSocial;
-import com.avaje.ebean.Expr;
+
+import helpers.UnauthorizedException;
 
 @Entity
 public class Note extends Model {
@@ -91,9 +97,12 @@ public class Note extends Model {
 
 	public static void delete(Long id) {
 		Note note = find.ref(id);
-		note.delete();
-
-		Tag.clean();
+    if(note.author.equals(User.currentUser())) {
+		  note.delete();
+	   	Tag.clean();
+    } else {
+      throw new UnauthorizedException(User.currentUser(), "delete");
+    }
 	}
 
 	public Note addComment(String content, User author) {

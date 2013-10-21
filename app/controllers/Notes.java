@@ -7,6 +7,7 @@ import play.Logger;
 import models.*;
 import views.html.*;
 import views.html.notes.*;
+import helpers.UnauthorizedException;
 import securesocial.core.java.SecureSocial;
 import securesocial.core.Identity;
 
@@ -42,7 +43,12 @@ public class Notes extends Controller {
 
 	@SecureSocial.SecuredAction(authorization = WithPrivilegeLevel.class, params = {PrivilegeLevel.USER, PrivilegeLevel.ADMIN})
 	public static Result delete(Long id) {
-		Note.delete(id);
+		try {
+			Note.delete(id);
+		} catch (UnauthorizedException e) {
+			flash("error", "You are not authorized to delete this note.");
+			return badRequest(index.render(Note.all(), noteForm, searchForm));
+		}
 		return redirect(routes.Notes.list());
 	}
 
