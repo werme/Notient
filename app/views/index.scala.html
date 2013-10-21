@@ -19,7 +19,7 @@
                         </div>
                         <div class="side-base info back">
                             <header>
-                                @if(note.author.equals(User.currentUser)) {
+                                @if(note.allows(User.currentUser)) {
                                     <div class="quick-note-links-wrapper">
                                         <a href="@routes.Notes.edit(note.id)" class="quick-edit-note-button"><i class="edit icon"></i></a>
                                         <a href="#" class="quick-delete-note-button" data-url="@routes.Notes.delete(note.id)" ><i class="remove icon"></i></a>

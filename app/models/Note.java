@@ -18,7 +18,7 @@ import securesocial.core.java.SecureSocial;
 import helpers.UnauthorizedException;
 
 @Entity
-public class Note extends Model {
+public class Note extends Model implements Authorizable {
 
 	@Id
 	public Long id;
@@ -113,7 +113,7 @@ public class Note extends Model {
 
 	public static void delete(Long id) {
 		Note note = find.ref(id);
-    if(note.author.equals(User.currentUser())) {
+    if(note.allows(User.currentUser())) {
 		  note.delete();
 	   	Tag.clean();
     } else {
@@ -275,6 +275,14 @@ public class Note extends Model {
     if (this.createdAt != null)
       return p.format(this.createdAt);
     return null;
+  }
+
+  @Override
+  public boolean allows(User user) {
+    if(user == null) {
+      return false;
+    }
+    return (this.author.equals(user) || user.privilege.equals(PrivilegeLevel.ADMIN));
   }
 
   public static class NoteComparator implements Comparator<Note> {
