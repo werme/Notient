@@ -1,7 +1,6 @@
 @(title: String)(content: Html)
 
 <!DOCTYPE html>
-
 <html>
     <head>
         <title>@title</title>
@@ -16,13 +15,13 @@
                 <h1 class="logo"><a href="@controllers.routes.Notes.list">notient</a></h1>
                 <nav class="main-bar">
                     <ul>
-                        @if(User.currentUser == null) {
-                            <li><a href="@securesocial.controllers.routes.LoginPage.login"><i class="sign in icon"></i>Login</a></li>
-                            <li><a href="@securesocial.controllers.routes.Registration.startSignUp"><i class="user icon"></i>Register</a></li>
-                        } else { 
+                        @if(User.userSignedIn) {
                             <li><a href="@controllers.routes.Users.show(User.currentUser().id)"><i class="user icon"></i>Profile</a></li>
                             <li><a href="@securesocial.controllers.routes.LoginPage.logout"><i class="sign out icon"></i>Logout</a></li>
                             <li><a href="#" id="sub-nav-toggle" class="menu-link"><i class="add icon"></i></a></li>
+                        } else { 
+                            <li><a href="@securesocial.controllers.routes.LoginPage.login"><i class="sign in icon"></i>Login</a></li>
+                            <li><a href="@securesocial.controllers.routes.Registration.startSignUp"><i class="user icon"></i>Register</a></li>
                         }
                     </ul>
                 </nav>
