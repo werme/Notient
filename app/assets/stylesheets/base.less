@@ -1,0 +1,85 @@
+@import "config";
+
+* { box-sizing: border-box; }
+
+body {
+  font: 14px/1.5 'jaf-facitweb';
+  color: #333;
+  background: #f5f3f0; //#FAF2EC;
+}
+
+h1, h2, h3 {
+  font-weight: normal;
+}
+
+h1 {
+  font-size: 2rem;
+  border-bottom: 2px dotted darken(@light-yellow, 5%);
+  margin-bottom: 1rem;
+}
+h2 {
+  font-size: 1.6rem;
+}
+h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.2rem;
+}
+
+a {
+  color: @black;
+  background: lighten(@yellow, 20%);
+  border-bottom: 1px solid @yellow;
+  text-decoration: none;
+  transition: 0.3s all;
+  &:hover { background: lighten(@yellow, 10%); border-bottom: 1px solid darken(@yellow, 10%); }
+}
+
+em { font-style: italic; }
+strong { font-weight: bold; }
+hr { 
+  border: 0;
+  border-bottom: 2px dotted darken(@light-yellow, 5%);
+  margin: 1rem 0; 
+}
+
+code {
+  font-family: monaco, 'Courier new', monospace;
+  color: darken(@blue, 10%);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+blockquote {
+  font-size: 1.2rem;
+  font-style: italic;
+  background: @light-yellow;
+  padding: 1rem;
+  border-left: 5px solid darken(@yellow, 10%);
+  margin: 1rem;
+  p { margin: 0; }
+}
+
+p {
+  margin-bottom: 1em;
+}
+
+small {
+  font-size: 0.85em;
+}
+
+form {
+  label { line-height: 2em }
+
+  input, input[type=text], input[type=password], textarea {
+    border: 2px solid darken(@light-yellow, 5%);
+    margin-bottom: 1em;
+    font-size: 1em;
+    padding: 0.4em;
+
+    &:hover { background: lighten(@light-yellow, 2%); }
+    &::-webkit-input-placeholder { color: darken(@light-yellow, 30%); }
+    &:focus { outline: none; }
+  }
+}
+
+

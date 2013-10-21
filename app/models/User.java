@@ -1,18 +1,19 @@
 package models;
 
-import play.data.validation.Constraints.*;
+import java.util.*;
 
 import javax.persistence.*;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import play.data.validation.Constraints.*;
 import play.db.ebean.Model;
-import securesocial.core.java.SecureSocial;
-import securesocial.core.Identity;
 import play.Logger;
 
+import securesocial.core.java.SecureSocial;
+import securesocial.core.Identity;
 
+import com.avaje.ebean.Expr;
 
 @Table(
 	    uniqueConstraints=
@@ -20,7 +21,7 @@ import play.Logger;
 @Entity
 public class User extends Model {
 
-	    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
     @Id
     public String id;
@@ -45,6 +46,20 @@ public class User extends Model {
 
 	public static Finder<String, User> find = new Finder<String, User>(
 			String.class, User.class);
+
+    public String displayName() {
+        if(username != null) {
+            return username;
+        } else if (firstName != null && lastName != null) { 
+            return firstName + " " + lastName; 
+        } else if (email != null) {
+            return email;
+        } else if (provider != null) {
+            return "Unknown user via " + provider;
+        } else {
+            return "Unknown user";
+        }
+    }
 	
 	public static User findById(String id) {
 		return find.where().eq("id", id).findUnique();
@@ -60,11 +75,37 @@ public class User extends Model {
     public static User currentUser(){
         Identity identity = SecureSocial.currentUser();
         User localUser = null;
-        if (identity != null){
+        if (identity != null) {
            localUser = User.find.byId(identity.identityId().userId());
         }
         Logger.debug("identity: " + identity);
         return localUser;
+    }
+
+    public static boolean userSignedIn() {
+        return currentUser() == null ? false : true;
+    }
+
+    /**
+     * Returns a list of users related to the search query.
+     * Will look at names and usernames.
+     */
+    public static List<User> searchUsers(String query) {
+        List<User> result = new ArrayList<User>();
+        for (String word : query.split("\\s")) {
+            List<User> wordResult = find.where()
+                .or(Expr.or(Expr.like("firstName", "%"+word+"%"), Expr.ilike("lastName", "%"+word+"%")), Expr.ilike("userName", "%"+word+"%"))
+                .findList();
+            for (User user : wordResult) {
+                if (!result.contains(user))
+                    result.add(user);
+            }
+        }
+        return result;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl != null ? avatarUrl : "https://sigil.cupcake.io/" + displayName();
     }
 
 	@Override

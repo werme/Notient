@@ -6,7 +6,15 @@
   background: @dark;
   border-top: 1px solid darken(@blue, 20%);
   border-bottom: 1px solid white;
+  margin-bottom: 1rem;
   color: white;
+
+  input[type=text], textarea {
+    background: lighten(@dark, 5%);
+    border-color: lighten(@dark, 10%);
+    color: white;
+    &:hover { background: lighten(@dark, 7%); }
+  }
 
   .quick-create-form {
     display: none;
@@ -26,13 +34,6 @@
       height: 6.75rem;
     }
 
-    input[type=text], textarea {
-      background: lighten(@dark, 5%);
-      border-color: lighten(@dark, 10%);
-      color: white;
-      &:hover { background: lighten(@dark, 7%); }
-    }
-
     input[type=submit] {
       margin-top: 1rem;
     }
@@ -46,6 +47,7 @@
     z-index: 2;
 
     nav {
+      float: left;
       li {  display: inline-block; }
     }
     a {
@@ -55,18 +57,6 @@
       border: 0;
       color: lighten(@dark, 25%);
       &:hover { color: white; background: transparent; border: 0; }
-    }
-  }
-}
-
-@media (min-width: 42em) {
-  .module {
-    width: 50%;
-    float: left;
-
-    input[type=submit] {
-      width: 50%;
-      float: right;
     }
   }
 }

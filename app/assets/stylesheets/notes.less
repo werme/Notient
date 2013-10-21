@@ -1,4 +1,5 @@
 @import "config";
+@import "mixins";
 
 .see-full-note-link {
   display: block;
@@ -14,6 +15,30 @@
   }
 }
 
+.note-header {
+  background: lighten(@yellow, 20%);
+  border-bottom: 2px solid @yellow;
+  padding: 0.5rem 1rem;
+  .clearfix;
+
+  a {
+    color: @blue;
+    background: none;
+    border: none;
+
+    &:hover { color: lighten(@blue, 5%) }
+    
+    i {
+      margin-left: 0.2em !important;
+      font-size: 1rem;
+      opacity: 1;
+
+      &.up:hover { color: @green; }
+      &.down:hover { color: @red; }
+    }
+  }
+}
+
 .note-wrapper {
   padding: 1rem;
   background: white;
@@ -21,6 +46,33 @@
   border-bottom: 2px solid darken(@light-yellow, 5%);
   font-size: 1.05rem;
   line-height: 1.8;
+
+  .clearfix;
+
+  input[type="text"], textarea {
+    display: block;
+    width: 100%;
+  }
+
+  textarea {
+    height: 35rem;
+    border: 0;
+  }
+
+  input[type="submit"] {
+    margin: 0;
+    float: right;
+  }
+
+  .title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    
+    border: 0;
+    border-bottom: 2px dotted darken(@light-yellow, 5%);
+
+    &::-webkit-input-placeholder { color: @black; }
+  }
 
   ul {
     margin-bottom: 1rem;
@@ -37,6 +89,14 @@
     }
   }
 
+  .note-links {
+    text-align: right;
+    form, input {
+      margin: 0;
+      padding: 0;
+      display: inline-block;
+    }
+  }
 }
 
 .similar-notes {
@@ -63,10 +123,6 @@
   .label {
     margin: 0 0.8rem 0.8rem 0 !important;
   }
-}
-
-.tags {
-  margin-top: 1rem;
 }
 
 .notes-wrapper {
@@ -107,16 +163,35 @@
       &:hover { color: @blue; }
     }
 
-    .delete-button {
+    .quick-note-links-wrapper {
       display: inline-block;
-      position: absolute;
-      top: 0.7rem;
-      right: 0.7rem;
-      font-size: 1rem;
-      border: 0;
-      background: transparent;
-      color: #d33;
-      &:hover { color: red; }
+        position: absolute;
+        top: 0.7rem;
+        right: 0.7rem;
+        font-size: 1rem;
+
+      .quick-edit-note-button, .quick-delete-note-button {      
+        border: 0;
+        background: transparent;
+
+        i {
+          opacity: 1;
+          margin: 0;
+          padding: 0;
+        }
+      }
+
+      .quick-edit-note-button {
+        color: @blue;
+        &:hover { color: lighten(@blue, 5%); }
+      }
+
+      .quick-delete-note-button {
+        position: relative;
+        top: -1px;
+        color: @red;
+        &:hover { color: red; }
+      }
     }
 
     &:hover { -webkit-transform: rotatex(-180deg); }

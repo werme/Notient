@@ -1,60 +1,44 @@
-@(note: Note, noteForm: Form[Note], commentForm: Form[Comment])
+
+@(note: Note, noteForm: Form[Note], commentForm: Form[Comment], searchForm: Form[String])
+
 @implicitFieldConstructor = @{ FieldConstructor(plainFieldConstructor.render) }
 
 @import helper._
-@import securesocial.core.java.SecureSocial
 @import helpers.MarkdownHelper
 
-@main("Note list") {
-    <header class="main-header">
-        <div class="container">
-            <h1>notient</h1>
-            <nav class="main-bar">
-                <ul>
-                    <li><a href="@securesocial.controllers.routes.LoginPage.login"><i class="sign in icon"></i>Login</a></li>
-                    <li><a href="@securesocial.controllers.routes.LoginPage.logout"><i class="sign out icon"></i>Logout</a></li>
-                    <li><a href="@securesocial.controllers.routes.Registration.startSignUp"><i class="user icon"></i>Register</a></li>
-                    <li><a href="#" id="sub-nav-toggle" class="menu-link"><i class="add icon"></i></a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-    <div class="dark-wrapper">
-    <section id="quick-create-form" class="quick-create-form">
-        <div class="container">
-            @views.html.quickCreateForm(noteForm)
-        </div>
-    </section>
-    <header id="sub-nav" class="sub-nav">
-        <div class="container">
-            <nav>
-                <ul>
-                    <li><a href="#"><i class="list layout icon"></i>List</a></li>
-                    <li><a href="#"><i class="grid layout icon"></i>Thumbnails</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-    </div>
-
+@main(note.title, noteForm) {
+ 
     <div class="container main">
         <div class="tags">
             @for(tag <- note.tags) { <a href="#" class="tag">@tag.title @tag.notes.size</a> }
         </div>
+        <header class="note-header">
+            <div class="module">
+                Posted on @note.createdAt by 
+                <a href="@routes.Users.show(note.author.id)">@note.author.displayName</a>
+            </div>
+            <div class="module right">
+                <a href="@routes.Notes.toggleUpVote(note.id)"><i class="thumbs up icon"></i></a>
+                @note.getScore 
+                <a href="@routes.Notes.toggleDownVote(note.id)"><i class="thumbs down icon"></i></a>
+            </div>
+        </header>            
         <section class="note-wrapper">
-            <h1>@note.title</h1>
-            <p>@note.content</p>
-            <br>
-            <br>
-            @User.currentUser
-            Score:  <a href='@routes.Notes.toggleUpVote(note.id)'>+</a> @note.getScore <a href='@routes.Notes.toggleDownVote(note.id)'>-</a>            
-            <br>
             @for(image <- note.images) {
             <IMG SRC=@image.getUrl ALT="some text" WIDTH=500 HEIGHT=500> 
             }
-            <h2>Similar notes</h2>
-            <p>
             <p>@Html(MarkdownHelper.toHtml(note.content))</p>
+
+            <div><small>Last updated on @note.updatedAt</small></div>
+
+            @if(note.author.equals(User.currentUser)) {
+                <div class="note-links">
+                    <a href="@routes.Notes.edit(note.id)" class="flat-button icon"><i class="edit icon"></i>Edit</a>
+                    @form(routes.Notes.delete(note.id)) {
+                        <button class="flat-button icon delete"><i class="remove icon"></i>Delete</a></button>
+                    }
+                </div>
+            }
         </section>
         <aside class="similar-notes">
         <h2>Similar notes:</h2>
@@ -76,9 +60,10 @@
             </header>
             @for(comment <- note.comments) {
                 <div class="comment">
-                <div class="avatar"><!--<img src="#" />--></div>
+                <div class="avatar"><img src="@comment.author.getAvatarUrl" /></div>
                 <div class="content">
-                    <h2>@comment.author</h2><span class="date">@comment.createdAt</span>
+                    <h2><a href="@routes.Users.show(comment.author.id)">@comment.author.displayName</a></h2>
+                    <span class="date">@comment.createdAt</span>
                     <p>@comment</p>
                     @form(routes.Notes.deleteComment(note.id, comment.id)) {
                         <input class="flat-button delete-comment-button" type="submit" value="Delete">
@@ -96,9 +81,8 @@
                 </div>
             </div>
 
-            @if(SecureSocial.currentUser != null) {
+            @if(User.currentUser != null) {
                 @form(routes.Notes.newComment(note.id)) {
-                    
                     @textarea(commentForm("content"), '_label -> "Leave a comment:")
                     <input class="flat-button" type="submit" value="Post comment">
                 }

@@ -1,0 +1,21 @@
+@import "config";
+
+.search {
+	float: right;
+	margin: 0.5em 0;
+
+	form, input, input[type="text"] {
+		margin: 0;
+		float: left;
+	}
+
+	input[type="text"] {
+    	&::-webkit-input-placeholder {
+    		color: white;
+    	}
+	}
+
+	input[type="submit"] {
+		display: none;
+	}
+}

@@ -4,7 +4,7 @@
 
 @implicitFieldConstructor = @{ FieldConstructor(plainFieldConstructor.render) }
 
-@form(routes.Notes.newNote, 'enctype -> "multipart/form-data") {
+@form(routes.Notes.create, 'enctype -> "multipart/form-data") {
     <div class="module">
       @inputText(
           noteForm("title"),

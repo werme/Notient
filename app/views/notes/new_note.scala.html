@@ -1,0 +1,42 @@
+@(noteForm: Form[Note])
+
+@implicitFieldConstructor = @{ FieldConstructor(plainFieldConstructor.render) }
+
+@import helper._
+
+@main("New note", noteForm) {
+  <div class="container" role="main">
+    <div class="note-wrapper">
+      @form(routes.Notes.create) {
+        @inputText(noteForm("title"),'_showConstraints -> false, '_label -> "Title:", 'placeholder -> "Write your note title here...", 'class -> "title")
+        <textarea id="content" name="content">
+This is your note body. If you want, you could use markdown in here.
+
+# This is a header
+## This is a smaller header
+### This is an even smaller header
+
+Pretty neat isn't it?
+
+An unordered list looks like this:
+
+* List item 1
+* List item 2
+* List item 3
+
+This is how you make a link: [Click to go to google](https://www.google.com)
+
+*This* word in in italics.
+
+You can do all sort of cool stuff, make a search for markdown to learn more.
+
+        </textarea> 
+        <input type="file" name="upload">
+        <br>
+        <label>Tags:</label>
+        <input type="text" name="tagList" placeholder="rainbow unicorn-ponies">
+        <input class="flat-button" type="submit" value="Create note">
+      }
+    </div>
+  </div>
+}
