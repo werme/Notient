@@ -19,7 +19,7 @@
                 </ul>
             </nav>
             <div class="search">
-                @helper.form(action = routes.Notes.search) {
+                @helper.form(action = routes.Search.performSearch) {
                     <input type="text" name="query" placeholder="Search..."></input>
                     <input type="submit" class="flat-button" value="Search" />
                 }
