@@ -29,7 +29,7 @@ public class CommentsTest extends WithApplication {
 
 	@Test
 	public void createComment() {
-		Note.create(new Note("My note", testUser));
+		Note.create(new Note("My note"), null, testUser, null);
     	Note note = Note.find.where().eq("title", "My note").findUnique();
 
     	Comment.create(note.id, new Comment("Awesome post"), testUser);
@@ -40,7 +40,7 @@ public class CommentsTest extends WithApplication {
 
 	@Test
 	public void deleteComment() {
-		Note.create(new Note("Delete this", testUser));
+        Note.create(new Note("Delete this"), null, testUser, null);
     	Note note = Note.find.where().eq("title", "Delete this").findUnique();
 
     	Comment.create(note.id, new Comment("Will do"), testUser);

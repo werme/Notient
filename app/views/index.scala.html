@@ -19,13 +19,13 @@
                         </div>
                         <div class="side-base info back">
                             <header>
-                                @if(note.author.equals(User.currentUser)) {
+                                @if(note.allows(User.currentUser)) {
                                     <div class="quick-note-links-wrapper">
                                         <a href="@routes.Notes.edit(note.id)" class="quick-edit-note-button"><i class="edit icon"></i></a>
                                         <a href="#" class="quick-delete-note-button" data-url="@routes.Notes.delete(note.id)" ><i class="remove icon"></i></a>
                                     </div>
                                 }
-                                <date>@note.createdAt</date>
+                                <date>@note.getCreatedAt</date>
                                 <ul>
                                     <li><a href="@routes.Notes.show(note.id)" class="see-full-note-link">@note.title</a></li>
                                     <li>By <a href="@routes.Users.show(note.author.id)">@note.author.displayName</a></li>

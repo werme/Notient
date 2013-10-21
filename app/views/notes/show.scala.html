@@ -14,7 +14,7 @@
         </div>
         <header class="note-header">
             <div class="module">
-                Posted on @note.createdAt by 
+                Posted @note.getCreatedAt by 
                 <a href="@routes.Users.show(note.author.id)">@note.author.displayName</a>
             </div>
             <div class="module right">
@@ -24,12 +24,15 @@
             </div>
         </header>            
         <section class="note-wrapper">
-            @for(image <- note.images) {
-            <IMG SRC=@image.getUrl ALT="some text" WIDTH=500 HEIGHT=500> 
-            }
             <p>@Html(MarkdownHelper.toHtml(note.content))</p>
 
-            <div><small>Last updated on @note.updatedAt</small></div>
+            @for(image <- note.images) {
+                <img src="@image.getUrl"> 
+            }
+            
+            @if(note.updatedAt!=null) {
+                <div><small>Last updated @note.getUpdatedAt</small></div>
+            }
 
             @if(note.author.equals(User.currentUser)) {
                 <div class="note-links">
@@ -63,7 +66,7 @@
                 <div class="avatar"><img src="@comment.author.getAvatarUrl" /></div>
                 <div class="content">
                     <h2><a href="@routes.Users.show(comment.author.id)">@comment.author.displayName</a></h2>
-                    <span class="date">@comment.createdAt</span>
+                    <span class="date">@comment.getCreatedAt</span>
                     <p>@comment</p>
                     @form(routes.Notes.deleteComment(note.id, comment.id)) {
                         <input class="flat-button delete-comment-button" type="submit" value="Delete">

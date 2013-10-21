@@ -1,5 +1,7 @@
 package models;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
 import java.util.*;
 
 import javax.persistence.*;
@@ -16,7 +18,7 @@ import securesocial.core.java.SecureSocial;
 import helpers.UnauthorizedException;
 
 @Entity
-public class Note extends Model {
+public class Note extends Model implements Authorizable {
 
 	@Id
 	public Long id;
@@ -27,7 +29,7 @@ public class Note extends Model {
 	@MaxLength(30)
 	public String title;
 
-  	@Column(columnDefinition = "TEXT")
+  @Column(columnDefinition = "TEXT")
 	public String content;
 
 	@ManyToOne
@@ -45,8 +47,7 @@ public class Note extends Model {
 	@OneToMany(mappedBy="note", cascade=CascadeType.ALL)
 	public List<Comment> comments = new ArrayList<Comment>();
 
-
-  @ManyToMany(cascade=CascadeType.ALL)
+  @OneToMany(mappedBy="note", cascade=CascadeType.ALL)
   public List<S3File> images = new ArrayList<S3File>();
 
 	@ManyToMany(cascade=CascadeType.REMOVE)
@@ -60,6 +61,9 @@ public class Note extends Model {
 	@JoinTable(name="down_votes")
 	public List<User> downVotes = new ArrayList<User>();
 
+  public Note(String title){
+    this.title = title;
+  }
 	public Note(String title, User author) {
 		this.title = title;
 		this.author = author;
@@ -73,7 +77,6 @@ public class Note extends Model {
 
 	public static Finder<Long, Note> find = new Finder(Long.class, Note.class);
 
-
   public static List<Note> notesBy(User author) {
     return find.where()
         .eq("author", author)
@@ -84,37 +87,36 @@ public class Note extends Model {
 		return find.all();
 	}
 
-	public static Note create(Note note) {
-		note.save();
-		return note;
-	}
-
-	public static Note create(Note note, String tagsList, User author, S3File image) {
+	public static Note create(Note note, String tagList, User author, S3File image) {
     note.author = author;
     note.save();
-		if(tagsList != null && !tagsList.equals("") && !tagsList.equals(" ")) {
-      note.tags.clear();
-			note.tags.addAll(Tag.createOrFindAllFromString(tagsList));
-			note.saveManyToManyAssociations("tags");
-		}
-    if(image != null){
-      note.images.add(image);
-      note.saveManyToManyAssociations("images");
-    }
+    note.replaceTags(tagList);
+    note.addFile(image);
 		return note;
-	}
-
-	public static void addTag(Long id, Tag tag) {
-		Note note = find.ref(id);
-		note.tags.add(tag);
-		note.saveManyToManyAssociations("tags");
 	}
 
 	public static void delete(Long id) {
 		Note note = find.ref(id);
-	  note.delete();
-   	Tag.clean();
+    note.delete();
+	  Tag.clean();
 	}
+
+  public void replaceTags(String tagList) {
+    if(tagList != null && !tagList.equals("") && !tagList.equals(" ")) {
+      this.tags.clear();
+      this.tags.addAll(Tag.createOrFindAllFromString(tagList));
+      this.saveManyToManyAssociations("tags");
+    }
+  }
+
+  public void addFile(S3File image) {
+    if(image != null){
+      // TODO: Only add image files
+      image.note = this;
+      this.images.add(image);
+      this.save();
+    }
+  }
 
 	public Note addComment(String content, User author) {
     Comment comment = new Comment(id, content, author);
@@ -127,6 +129,7 @@ public class Note extends Model {
     Note existingNote = find.ref(note.id);
     existingNote.title = note.title;
     existingNote.content = note.content;
+    existingNote.update();
     existingNote.save();
     return note;
   }
@@ -250,12 +253,34 @@ public class Note extends Model {
  
   @PrePersist
   void createdAt() {
-    this.createdAt = this.updatedAt = new Date();
+    this.createdAt = new Date();
   }
  
   @PreUpdate
   void updatedAt() {
     this.updatedAt = new Date();
+  }
+
+  public String getCreatedAt() {
+    PrettyTime p = new PrettyTime(new Locale("en"));
+    if (this.createdAt != null)
+      return p.format(this.createdAt);
+    return "never and always ago";
+  }
+
+  public String getUpdatedAt() {
+    PrettyTime p = new PrettyTime(new Locale("en"));
+    if (this.updatedAt != null)
+      return p.format(this.updatedAt);
+    return null;
+  }
+
+  @Override
+  public boolean allows(User user) {
+    if(user == null) {
+      return false;
+    }
+    return (this.author.equals(user) || user.privilege.equals(PrivilegeLevel.ADMIN));
   }
 
   public static class NoteComparator implements Comparator<Note> {

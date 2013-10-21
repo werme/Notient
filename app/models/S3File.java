@@ -6,9 +6,7 @@ import play.Logger;
 import play.db.ebean.Model;
 import plugins.S3Plugin;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,6 +24,9 @@ public class S3File extends Model {
 
     @Transient
     public File file;
+
+    @ManyToOne
+    public Note note;
 
     public URL getUrl() throws MalformedURLException {
         return new URL("https://s3.amazonaws.com/" + bucket + "/" + getActualFileName());

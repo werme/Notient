@@ -48,50 +48,70 @@ public class Notes extends Controller {
 		if (filledForm.hasErrors()) {
 			return badRequest(new_note.render(filledForm));
 		} else {
-            //Temporary solution since i dont know how the form works with files.
             Http.MultipartFormData body = request().body().asMultipartFormData();
-            if(body != null){
-	            Http.MultipartFormData.FilePart uploadFilePart = body.getFile("upload");
-	            Logger.debug("uploadFilePart" + uploadFilePart);
-	            if (uploadFilePart != null) {
-	                S3File s3File = new S3File();
-	                s3File.name = uploadFilePart.getFilename();
-	                s3File.file = uploadFilePart.getFile();
-	                s3File.save();
-	                Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser(), s3File);
-	                return redirect(routes.Notes.list());
-	            }
+            Http.MultipartFormData.FilePart uploadFilePart = body.getFile("upload");
+
+            S3File s3File = null;
+            if (uploadFilePart != null) {
+                s3File = new S3File();
+                s3File.name = uploadFilePart.getFilename();
+                s3File.file = uploadFilePart.getFile();
+                s3File.save();
             }
-        Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser(), null);
-		return redirect(routes.Notes.list());
-   
+			
+			Note note = Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser(), s3File);
+            flash("info", "Successfully created note!");
+			return redirect(routes.Notes.show(note.id));
+		}
+	}
+
+	@SecureSocial.SecuredAction
+	public static Result edit(Long id) {
+		Form<Note> filledForm = noteForm.fill(Note.find.ref(id));
+		return ok(edit.render(Note.find.ref(id), filledForm));
+	}
+
+	@SecureSocial.SecuredAction
+	public static Result update(Long id) {
+		Form<Note> filledForm = noteForm.bindFromRequest();
+		if (filledForm.hasErrors()) {
+			return badRequest(index.render(Note.all(), filledForm, searchForm));
+		} else {
+			Note.update(filledForm.get(), Form.form().bindFromRequest().get("tagList"));
+			flash("info", "Successfully update note!");
+			return redirect(routes.Notes.show(id));
 		}
 	}
 
 	@SecureSocial.SecuredAction(authorization = WithPrivilegeLevel.class, params = {PrivilegeLevel.USER, PrivilegeLevel.ADMIN})
 	public static Result delete(Long id) {
 		Note note = Note.find.ref(id);
-		if(note.author.equals(User.currentUser())) {
+
+		if(note.allows(User.currentUser())) {
 			Note.delete(id);
-			return redirect(routes.Notes.list());
 		} else {
+			flash("error", "You are not authorized to delete this note!");
 			return badRequest(index.render(Note.all(), noteForm, searchForm));
 		}
+		flash("info", "Successfully deleted note!");
+		return redirect(routes.Notes.list());
 	}
 
 	@SecureSocial.SecuredAction
 	public static Result newComment(Long id) {
 		Form<Comment> filledForm = commentForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
-			//return badRequest(index.render(Note.all(), filledForm)); // should redirect to show note view later 
+			return badRequest(show.render(Note.find.ref(id), noteForm, commentForm, searchForm));
 		} else {
 			Comment.create(id, filledForm.get(), User.currentUser());
+			flash("info", "Successfully posted comment!");
+			return redirect(routes.Notes.show(id));
 		}
-		return redirect(routes.Notes.show(id));
 	}
 
 	//@SecureSocial.SecuredAction(authorization = WithPrivilegeLevel.class, params = {PrivilegeLevel.USER, PrivilegeLevel.ADMIN})
 	public static Result deleteComment(Long id, Long commentId) {
+		// TODO: try/catch and flash this
 		Comment.delete(commentId);
 		return redirect(routes.Notes.show(id));
 	}
@@ -106,21 +126,5 @@ public class Notes extends Controller {
 	public static Result toggleDownVote(Long id) {
 		Note.find.ref(id).toggleDownVote(User.currentUser());
 		return redirect(routes.Notes.show(id));
-	}
-	@SecureSocial.SecuredAction
-	public static Result edit(Long id) {
-		Form<Note> filledForm = noteForm.fill(Note.find.ref(id));
-		return ok(edit.render(Note.find.ref(id), filledForm));
-	}
-
-	@SecureSocial.SecuredAction
-	public static Result update(Long id) {
-		Form<Note> filledForm = noteForm.bindFromRequest();
-		if (filledForm.hasErrors()) {
-			return badRequest(index.render(Note.all(), filledForm, searchForm));
-		} else {
-			Note.update(filledForm.get(), Form.form().bindFromRequest().get("tagList"));
-		return redirect(routes.Notes.show(id));
-		}
 	}
 }

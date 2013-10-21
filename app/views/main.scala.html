@@ -12,6 +12,21 @@
         <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
     </head>
     <body>
+        <div id="message-wrapper">
+            @if(flash.contains("info")) {
+                <div class="container message info">
+                    @flash.get("info")
+                    <a href="#" class="dismiss-message-button"><i class="remove icon"></i></a>
+                </div>            
+            }
+            @if(flash.contains("error")) {
+                <div class="container message error">
+                    @flash.get("error")
+                    <a href="#" class="dismiss-message-button"><i class="remove icon"></i></a>
+                </div>
+            }
+        </div>
+        </div>
         <header class="main-header">
             <div class="container">
                 <h1 class="logo"><a href="@controllers.routes.Notes.list">notient</a></h1>
