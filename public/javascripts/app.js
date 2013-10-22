@@ -25,7 +25,7 @@
   });
 
   $('.quick-delete-note-button').click(function() {
-    // TODO: Make dialog and notification modules
+    // TODO: Make dialog modules
     confirm("Are you sure you want to delete this note?");
     $.post($(this).data("url"));
   });

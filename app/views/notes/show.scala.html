@@ -65,16 +65,18 @@
             }
             @for(comment <- note.comments) {
                 <div class="comment">
-                <div class="avatar"><img src="@comment.author.getAvatarUrl" /></div>
-                <div class="content">
-                    <h2><a href="@routes.Users.show(comment.author.email)">@comment.author.displayName</a></h2>
-                    <span class="date">@comment.getCreatedAt</span>
-                    <p>@comment</p>
-                    @form(routes.Notes.deleteComment(note.id, comment.id)) {
-                        <input class="flat-button delete-comment-button" type="submit" value="Delete">
-                    }
+                    <div class="avatar"><img src="@comment.author.getAvatarUrl"></div>
+                    <div class="content">
+                        @if(comment.author.equals(User.currentUser)) {
+                            @form(routes.Notes.deleteComment(note.id, comment.id)) {
+                                <button class="flat-button delete-comment-button" type="submit"><i class="remove icon"></i></button>
+                            }
+                        }
+                        <h2><a href="@routes.Users.show(comment.author.email)">@comment.author.displayName</a></h2>
+                        <span class="date">@comment.getCreatedAt</span>
+                        <p>@comment</p>
+                    </div>
                 </div>
-            </div>
             }
             @form(routes.Notes.newComment(note.id)) {
                 @textarea(commentForm("content"), '_label -> "Leave a comment:")

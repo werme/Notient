@@ -63,13 +63,29 @@
 
 		.content {
 			display: block;
+			position: relative;
 			width: 85%;
 			float: left;
 			margin-left: 5%;
 		}
 
 		.delete-comment-button {
-			display: none;
+			position: absolute;
+			top: 0;
+			right: 0;
+			visibility: hidden;
+			padding: 0.2rem;
+			color: @red;
+			font-size: 1rem;
+			background: none;
+			border: 0;
+
+			i { opacity: 1; }
+			&:hover { color: red; }
+		}
+
+		&:hover .delete-comment-button {
+			visibility: visible;
 		}
 	}
 
