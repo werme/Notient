@@ -27,7 +27,6 @@ public class IntegrationTest {
         browser.$("#title").text("IntegrationTest");
         browser.$("#content").text("testing testing");
         browser.$("#create-note-button").click();
-        //Logger.debug("##### SE HÄR MACKAN #####" + browser.url());
     }
     
     @Test
@@ -104,8 +103,20 @@ public class IntegrationTest {
                 browser.$("#edit-note-button").click();
                 browser.$("#content").text("123456789");
                 browser.$("#update-note-button").click();
-                //Logger.info("!!!!!!!!!!!!!!!!!!!!!!!" + browser.$("#message-wrapper").getText());
                 assertThat(browser.pageSource()).contains("123456789");
+            }
+        });  
+  }
+  @Test
+  public void testComment() {
+    running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                login(browser);
+                createNote(browser);
+                browser.$("#content").text("First comment");
+                browser.$("#post-comment-button").click();
+                assertThat(browser.$("#message-wrapper").getText()).isEqualTo("Successfully posted comment!");
+                assertThat(browser.$("#comment-body").getText()).isEqualTo("First comment");
             }
         });  
   }

@@ -81,13 +81,13 @@
                         }
                         <h2><a href="@routes.Users.show(comment.author.email)">@comment.author.displayName</a></h2>
                         <span class="date">@comment.getCreatedAt</span>
-                        <p>@comment</p>
+                        <p id="comment-body">@comment</p>
                     </div>
                 </div>
             }
             @form(routes.Notes.newComment(note.id)) {
                 @textarea(commentForm("content"), '_label -> "Leave a comment:")
-                <input class="flat-button" type="submit" value="Post comment">
+                <input id="post-comment-button" class="flat-button" type="submit" value="Post comment">
             }
         </div>
     </section>
