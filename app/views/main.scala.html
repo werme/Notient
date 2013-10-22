@@ -17,13 +17,11 @@
                 @if(flash.contains("info")) {
                     <div class="container message info">
                         @flash.get("info")
-                        <a href="#" class="dismiss-message-button"><i class="remove icon"></i></a>
                     </div>            
                 }
                 @if(flash.contains("error")) {
                     <div class="container message error">
                         @flash.get("error")
-                        <a href="#" class="dismiss-message-button"><i class="remove icon"></i></a>
                     </div>
                 }
             </div>

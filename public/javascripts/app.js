@@ -30,9 +30,5 @@
     $.post($(this).data("url"));
   });
 
-  $('.dismiss-message-button').click(function() {
-    $('#message-wrapper').slideUp();
-  });
-
-  $("#message-wrapper").delay(10000).slideUp();
+  $("#message-wrapper").delay(5000).slideUp();
 })();

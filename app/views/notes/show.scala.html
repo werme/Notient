@@ -76,10 +76,10 @@
                 </div>
             </div>
             }
-                @form(routes.Notes.newComment(note.id)) {
-                    @textarea(commentForm("content"), '_label -> "Leave a comment:")
-                    <input class="flat-button" type="submit" value="Post comment">
-                }
+            @form(routes.Notes.newComment(note.id)) {
+                @textarea(commentForm("content"), '_label -> "Leave a comment:")
+                <input class="flat-button" type="submit" value="Post comment">
+            }
         </div>
     </section>
 }

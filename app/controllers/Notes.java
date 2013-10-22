@@ -118,7 +118,7 @@ public class Notes extends Controller {
 		if(note.allows(User.currentUser())) {
 			Note.delete(id);
 			flash("info", "Successfully deleted note!");
-			return redirect(routes.Application.index());
+			return redirect(routes.Notes.list(1));
 		} else {
 			flash("error", "You are not authorized to delete this note!");
 			PagingList<Note> pagingList = Note.all(resultsPerPage);
