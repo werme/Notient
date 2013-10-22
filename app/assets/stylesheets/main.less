@@ -6,6 +6,14 @@
 
 @import "base";
 
+.wrapper {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -@footer-height;
+  padding-bottom: @footer-height;
+}
+
 .main { padding: 0 1rem; }
 
 .container {
@@ -28,9 +36,16 @@
 @import "elements/icon";
 
 footer {
+  background: darken(@dark, 5%);
+  border-top: 5px dotted lighten(@dark, 5%);
+  height: @footer-height;
   .container {
-    background: white;
-    padding: 1rem;
+    color: lighten(@dark, 30%);
+    text-align: center;
+    padding-top: 1rem;
+    span {
+      color: @red;
+    }
   }
 }
 

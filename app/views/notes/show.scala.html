@@ -10,15 +10,14 @@
  
     <div class="container main">
         <div class="tags">
-            @for(tag <- note.tags) { <a href="#" class="tag">@tag.title @tag.notes.size</a> }
+            @for(tag <- note.tags) { <a href="#" class="tag">@tag.title</a> }
         </div>
         <header class="note-header">
             <div class="module">
                 <em>@note.title</em> by 
-                <a href="@routes.Users.show(note.author.id)">@note.author.displayName</a> &hearts; Posted @note.getCreatedAt 
+                <a href="@routes.Users.show(note.author.id)">@note.author.displayName</a> <i class="time icon"></i>Posted @note.getCreatedAt 
             </div>
-            <div class="module right">
-                <a href="@routes.Notes.toggleUpVote(note.id)"><i class="thumbs up icon"></i></a>
+            <div class="module right">                <a href="@routes.Notes.toggleUpVote(note.id)"><i class="thumbs up icon"></i></a>
                 @note.getScore 
                 <a href="@routes.Notes.toggleDownVote(note.id)"><i class="thumbs down icon"></i></a>
             </div>
@@ -31,7 +30,7 @@
             }
             
             @if(note.updatedAt!=null) {
-                <div><small>Last updated @note.getUpdatedAt</small></div>
+                <div><small><i class="time icon"></i>Last updated @note.getUpdatedAt</small></div>
             }
 
             @if(note.author.equals(User.currentUser)) {
@@ -59,7 +58,7 @@
     <section class="comments">
         <div class="container">
             <header>
-                <h2>Discussion</h2>
+                <h2>Discussion<i class="chat outline icon"></i></h2>
             </header>
             @for(comment <- note.comments) {
                 <div class="comment">
@@ -77,7 +76,7 @@
             <div class="comment">
                 <div class="avatar"><img src="http://bdb3b8.medialib.glogster.com/thumbnails/2e671a43746cd980b0c5a7c51c1ebc21d3162464f97572b8b9b4d5787ceceed8/10-hour-pikachu-song-source.jpg" /></div>
                 <div class="content">
-                    <h2>Username</h2><span class="date">Thu Oct 17 2013</span>
+                    <h2>Username</h2><span class="date"><i class="time icon"></i>Thu Oct 17 2013</span>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                     tempor incididunt ut labore et dolore magna aliqua.
                     </p>
