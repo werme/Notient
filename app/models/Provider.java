@@ -8,14 +8,17 @@ public class Provider extends Model {
     @Id
     public String uniqueID;
 
+
     public String provider;
     public String id;
-    public String email;
+    
+    @ManyToOne(cascade=CascadeType.ALL)
+    public User user;
 
-    public Provider(String provider, String id, String email){
+    public Provider(String provider, String id, User user){
         this.provider = provider;
         this.id = id;
-        this.email = email;
+        this.user = user;
     }
 
     public String getProvider(){
@@ -30,6 +33,6 @@ public class Provider extends Model {
     }
     @Override
     public String toString() {
-        return "Id: " + this.id + " - provider: "+ this.provider + " - email: " + this.email;
+        return "Id: " + this.id + " - provider: "+ this.provider + " - user: " + this.user;
     }
 }

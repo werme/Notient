@@ -1,14 +1,17 @@
 # Users
 - &pingu !!models.User
-    id: notient1@gmail.com
     username: pingu1
     firstName: Pingu1
     lastName: Pingusson1
     email: notient1@gmail.com
-    provider: userpass
     privilege: ADMIN
     password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
 #password = $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+
+- &pinguProvider !!models.Provider
+    id: pingu1
+    user: *pingu
+    provider: userpass
 
 # Notes
 - &mynote !!models.Note

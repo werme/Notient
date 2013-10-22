@@ -28,7 +28,7 @@
                                 <date><i class="time icon"></i>@note.getCreatedAt</date>
                                 <ul>
                                     <li><a href="@routes.Notes.show(note.id)" class="see-full-note-link">@note.title</a></li>
-                                    <li>By <a href="@routes.Users.show(note.author.id)">@note.author.displayName</a></li>
+                                    <li>By <a href="@routes.Users.show(note.author.email)">@note.author.displayName</a></li>
                                 </ul>
                             </header>
                             <section>

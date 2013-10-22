@@ -72,7 +72,7 @@ public class UserService extends BaseUserService {
             Provider p = Provider.findById(identityId.userId());
             Logger.debug("found provider: " + p);
             if(p != null){
-                localUser = User.findByEmail(p.email);
+                localUser = User.findByEmail(p.user.email);
             }
         }
 
@@ -81,7 +81,7 @@ public class UserService extends BaseUserService {
 
         Logger.debug(String.format("localUser = " + localUser));
         if(localUser == null) return null;
-        SocialUser socialUser = new SocialUser(new IdentityId(localUser.id, identityId.providerId()),    
+        SocialUser socialUser = new SocialUser(new IdentityId(localUser.email, identityId.providerId()),    
             localUser.firstName, 
             localUser.lastName, 
             String.format("%s %s", localUser.firstName, localUser.lastName),
@@ -109,7 +109,7 @@ public class UserService extends BaseUserService {
         Logger.debug("doFindByEmailAndProvider WAS USED!!!");
         User localUser = list.get(0);
         SocialUser socialUser = 
-                new SocialUser(new IdentityId(localUser.id, localUser.provider),
+                new SocialUser(new IdentityId(localUser.email, localUser.provider),
                         localUser.firstName, 
                         localUser.lastName, 
                         String.format("%s %s", localUser.firstName, localUser.lastName),
@@ -190,9 +190,8 @@ public class UserService extends BaseUserService {
             //Provider should be added to provider list along with the id.
 
             //Genererate some username?
-            localUser.id = user.email().get().toLowerCase();
             localUser.email = user.email().get().toLowerCase();
-            Provider p = new Provider(user.identityId().providerId(), user.identityId().userId(), localUser.email);
+            Provider p = new Provider(user.identityId().providerId(), user.identityId().userId(), localUser);
             Logger.debug(p.toString());
             localUser.addProvider(p);
 
@@ -240,7 +239,7 @@ public class UserService extends BaseUserService {
                     Logger.debug("Already existing user logged in with new media!");
                     //User logged in with a new media, add it to the user.
                     //Provider should be added to provider list along with the id.            
-                    Provider p = new Provider(user.identityId().providerId(), user.identityId().userId(), localUser.email);
+                    Provider p = new Provider(user.identityId().providerId(), user.identityId().userId(), localUser);
                     Logger.debug(p.toString());
                     localUser.addProvider(p);
                     localUser.save();

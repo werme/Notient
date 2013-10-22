@@ -15,7 +15,7 @@
         <header class="note-header">
             <div class="module">
                 <em>@note.title</em> by 
-                <a href="@routes.Users.show(note.author.id)">@note.author.displayName</a> <i class="time icon"></i>Posted @note.getCreatedAt 
+                <a href="@routes.Users.show(note.author.email)">@note.author.displayName</a> <i class="time icon"></i>Posted @note.getCreatedAt 
             </div>
             <div class="module right">                <a href="@routes.Notes.toggleUpVote(note.id)"><i class="thumbs up icon"></i></a>
                 @note.getScore 
@@ -64,7 +64,7 @@
                 <div class="comment">
                 <div class="avatar"><img src="@comment.author.getAvatarUrl" /></div>
                 <div class="content">
-                    <h2><a href="@routes.Users.show(comment.author.id)">@comment.author.displayName</a></h2>
+                    <h2><a href="@routes.Users.show(comment.author.email)">@comment.author.displayName</a></h2>
                     <span class="date">@comment.getCreatedAt</span>
                     <p>@comment</p>
                     @form(routes.Notes.deleteComment(note.id, comment.id)) {

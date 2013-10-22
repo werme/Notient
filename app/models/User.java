@@ -26,7 +26,7 @@ public class User extends Model {
 	private static final long serialVersionUID = 1L;
 
     @Id
-    public String id;
+    public String email;
 
     public String provider;
 
@@ -36,8 +36,6 @@ public class User extends Model {
     public String firstName;
 
     public String lastName;
-
-    public String email;
 
     public String password;
 
@@ -79,9 +77,6 @@ public class User extends Model {
         return false;
     }
 
-	public static User findById(String id) {
-		return find.where().eq("id", id).findUnique();
-	}
     public static User findByEmail(String email) {
         return find.where().eq("email", email).findUnique();
     }
@@ -128,6 +123,6 @@ public class User extends Model {
 
 	@Override
     public String toString() {
-        return this.id + " - " + this.firstName;
+        return this.email + " - " + this.firstName;
     }
 }
