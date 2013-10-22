@@ -56,10 +56,11 @@ public class Notes extends Controller {
 			return badRequest(new_note.render(filledForm));
 		} else {
             Http.MultipartFormData body = request().body().asMultipartFormData();
+
+	        S3File s3File = null;
             if(body != null){
 	            Http.MultipartFormData.FilePart uploadFilePart = body.getFile("upload");
 
-	            S3File s3File = null;
 	            if (uploadFilePart != null) {
 	                s3File = new S3File();
 	                s3File.name = uploadFilePart.getFilename();
