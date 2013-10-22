@@ -66,7 +66,7 @@ public class IntegrationTest {
             public void invoke(TestBrowser browser) {
                 login(browser);
                 createNote(browser);
-                assertThat(browser.url()).isEqualTo(myUrl + "/note/5");
+                assertThat(browser.url()).isEqualTo(myUrl + "/note/11");
             }
         });     
   }
@@ -86,7 +86,6 @@ public class IntegrationTest {
   //           public void invoke(TestBrowser browser) {
   //               login(browser);
   //               createNote(browser);
-  //               Logger.info("!!!!!!!!!!!!!!!!!!!!!!!" + browser.$("#message-wrapper").getText());
   //               browser.$("#delete-note-button").click();
   //               Logger.info("!!!!!!!!!!!!!!!!!!!!!!!" + browser.$("#message-wrapper").getText());
   //               Logger.debug("##### SE HÄR MACKAN #####" + browser.url());
@@ -154,6 +153,27 @@ public class IntegrationTest {
                 browser.$("#upvote-button").click();
                 browser.$("#upvote-button").click();
                 assertThat(browser.$("#userscore").getText()).isEqualTo("0");
+            }
+        });  
+  }
+  @Test
+  public void testPaginationForward() {
+    running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                login(browser);
+                browser.$("#next-page-link").click();
+                assertThat(browser.url()).isEqualTo(myUrl + "/notes/2");
+            }
+        });  
+  }
+  @Test
+  public void testPaginationBackward() {
+    running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                login(browser);
+                browser.$("#next-page-link").click();
+                browser.$("#last-page-link").click();
+                assertThat(browser.url()).isEqualTo(myUrl + "/notes/1");
             }
         });  
   }
