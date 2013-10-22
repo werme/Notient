@@ -60,6 +60,9 @@
             <header>
                 <h2>Discussion<i class="chat outline icon"></i></h2>
             </header>
+            @if(note.comments.size == 0) {
+                <p>There are no comments for this note.</p>
+            }
             @for(comment <- note.comments) {
                 <div class="comment">
                 <div class="avatar"><img src="@comment.author.getAvatarUrl" /></div>
@@ -73,12 +76,10 @@
                 </div>
             </div>
             }
-            @if(User.currentUser != null) {
                 @form(routes.Notes.newComment(note.id)) {
                     @textarea(commentForm("content"), '_label -> "Leave a comment:")
                     <input class="flat-button" type="submit" value="Post comment">
                 }
-            }
         </div>
     </section>
 }
