@@ -2,7 +2,7 @@
 
 (function(){
 
-  e = $('#quick-create-form');
+  e = $('#quick-note-form');
   e.css({
     "top": -e.height(),
     "margin-bottom": -e.height()
