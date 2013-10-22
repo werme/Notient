@@ -101,15 +101,10 @@ public class UserService extends BaseUserService {
 
     @Override
     public Identity doFindByEmailAndProvider(String email, String providerId) {
-        List<User> list = User.find.where().eq("email", email).eq("provider", providerId).findList();
-        if(list.size() != 1){
-            Logger.debug("found a null in findByEmailAndProvider..." + "Provider: " + providerId + " Email: " + email + " #Results: " + list.size());
-            return null;
-        }
-        Logger.debug("doFindByEmailAndProvider WAS USED!!!");
-        User localUser = list.get(0);
-        //Look this over.
-        SocialUser socialUser = 
+        User localUser = User.findByEmail(email);
+        Logger.debug("This is: " + localUser.hasProvider("userpass"));
+        if(localUser.hasProvider("userpass")){
+            SocialUser socialUser = 
                 new SocialUser(new IdentityId(localUser.email, "userpass"),
                         localUser.firstName, 
                         localUser.lastName, 
@@ -121,7 +116,9 @@ public class UserService extends BaseUserService {
                         null, 
                         Some.apply(new PasswordInfo("bcrypt", localUser.password, null))
                    );  
-        return socialUser;
+            return socialUser;
+        }
+        return null;
     }
 
     @Override
@@ -218,6 +215,12 @@ public class UserService extends BaseUserService {
             //User have logged in before.
             if(localUser.hasProvider(user.identityId().providerId())){
                 Logger.debug("User already registered this medium, nothing to save!");
+                if(user.identityId().providerId().equals("userpass")){
+                    if(user.passwordInfo() instanceof scala.Some){
+                        localUser.password = user.passwordInfo().get().password();
+                    }
+                localUser.save();
+                }
                 //user is already registered or logged in with this medium. Nothing to do update or save.
             } else {
                 if(user.identityId().providerId().equals("userpass")){
@@ -226,6 +229,10 @@ public class UserService extends BaseUserService {
                     localUser.username = user.identityId().userId().toLowerCase();
                     localUser.firstName = user.firstName();
                     localUser.lastName = user.lastName();
+                    Provider p = new Provider(user.identityId().providerId(), user.identityId().userId(), localUser);
+                    Logger.debug(p.toString());
+                    localUser.addProvider(p);
+
                     
                     if(user.avatarUrl() instanceof scala.Some){
                         localUser.avatarUrl = user.avatarUrl().get();
