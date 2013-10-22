@@ -76,7 +76,7 @@ public class IntegrationTest {
                 login(browser);
                 browser.$("#profile-link").click();
                 Logger.debug(browser.url());
-                assertThat(browser.$("div h1").first().getText()).isEqualTo("pingu1");
+                assertThat(browser.url().contains("http://localhost:3333/user/123456789"));
             }
         });     
   }
