@@ -80,9 +80,7 @@ public class NotesFunctionalTest extends WithApplication {
 								"My note content", "tagList", "tag1 tag2")).withCookies(cookie));
 
 		// Should return redirect status if successful
-		Logger.debug("TEST1");
 		assertThat(status(result)).isEqualTo(SEE_OTHER);
-		Logger.debug("TEST2");
 		assertThat(redirectLocation(result)).isEqualTo("/notes");
 
 		Note newNote = Note.find.where().eq("title", "My note title")

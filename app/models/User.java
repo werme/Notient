@@ -15,9 +15,11 @@ import securesocial.core.Identity;
 
 import com.avaje.ebean.Expr;
 
+
+
 @Table(
 	    uniqueConstraints=
-	        @UniqueConstraint(columnNames={"username"}))
+	        @UniqueConstraint(columnNames={"username", "email"}))
 @Entity
 public class User extends Model {
 
@@ -27,6 +29,9 @@ public class User extends Model {
     public String id;
 
     public String provider;
+
+    @OneToMany(cascade=CascadeType.ALL)
+    public List<Provider> providers = new ArrayList<Provider>();
 
     public String firstName;
 
@@ -61,6 +66,19 @@ public class User extends Model {
         }
     }
 	
+    public void addProvider(Provider provider){
+        providers.add(provider);
+        this.save();
+    }
+
+    public boolean hasProvider(String provider){
+        for (Provider registeredProvider : providers) {
+            if(registeredProvider.getProvider().equals(provider))
+                return true;
+        }
+        return false;
+    }
+
 	public static User findById(String id) {
 		return find.where().eq("id", id).findUnique();
 	}

@@ -11,6 +11,7 @@ import org.joda.time.DateTime;
 
 import models.Token;
 import models.User;
+import models.Provider;
 import play.Application;
 import play.Logger;
 import scala.Option;
@@ -56,23 +57,31 @@ public class UserService extends BaseUserService {
     public Identity doFind(IdentityId identityId){
         if (Logger.isDebugEnabled()) {
             Logger.debug(String.format("finding by Id = %s", identityId.userId()));
+            Logger.debug("THIS IS IDENTITY: " + identityId);
 
         }
-
         //Might should be findByEmail
         User localUser;
 
-        localUser = User.findById(identityId.userId());
-        if(localUser == null){
-            localUser = User.findByEmail(identityId.userId().toLowerCase());
-        }
+        localUser = User.findByEmail(identityId.userId().toLowerCase());
         if(localUser == null){
             localUser = User.findByUsername(identityId.userId().toLowerCase());
         }
+        if(localUser == null){
+            Logger.debug("searching for provider data with id: " + identityId.userId());
+            Provider p = Provider.findById(identityId.userId());
+            Logger.debug("found provider: " + p);
+            if(p != null){
+                localUser = User.findByEmail(p.email);
+            }
+        }
+
+
+        //localUser = User.findByEmail("notient1@gmail.com");
 
         Logger.debug(String.format("localUser = " + localUser));
         if(localUser == null) return null;
-        SocialUser socialUser = new SocialUser(new IdentityId(localUser.id, localUser.provider),    
+        SocialUser socialUser = new SocialUser(new IdentityId(localUser.id, identityId.providerId()),    
             localUser.firstName, 
             localUser.lastName, 
             String.format("%s %s", localUser.firstName, localUser.lastName),
@@ -97,7 +106,7 @@ public class UserService extends BaseUserService {
             Logger.debug("found a null in findByEmailAndProvider..." + "Provider: " + providerId + " Email: " + email + " #Results: " + list.size());
             return null;
         }
-        //Logger.debug("Provider: "+ list.get(0).provider + " Password: " + list.get(0).password);
+        Logger.debug("doFindByEmailAndProvider WAS USED!!!");
         User localUser = list.get(0);
         SocialUser socialUser = 
                 new SocialUser(new IdentityId(localUser.id, localUser.provider),
@@ -140,11 +149,30 @@ public class UserService extends BaseUserService {
             Logger.debug("save...!_!");
             Logger.debug(String.format("user = %s", user));
         }
+
         User localUser = null;
-        localUser = User.find.byId(user.identityId().userId());
-        
+
+        localUser = User.findByEmail(user.email().get().toLowerCase());
+        Logger.debug("THIS LOCALUSER WAS FOUND ON DO SAVE: " + localUser);
         /*
-        Logger.debug("id = " + user.identityId().userId() + "  " + user.identityId().userId().toLowerCase());
+        if(localUser == null){
+            //user have never ever logged in, add him to the database. with provider info
+        } else {
+            //User have logged in before.
+            if(localUser.providers.contains("userpass") || localUser.providers.contains(user.identityId().providerId())){
+                //user is already registered. Nothing to do update or save.
+            } else {
+                if(user.identityId().providerId().equals("userpass")){
+                    //Update the old social media information, user have registered!
+                } else {
+                    //User logged in with a new media, add it to the user.
+
+                    //Provider should be added to provider list along with the id.
+                }
+            }
+        }*/
+
+                Logger.debug("id = " + user.identityId().userId() + "  " + user.identityId().userId().toLowerCase());
         Logger.debug("provider = " + user.identityId().providerId());
         Logger.debug("firstName = " + user.firstName());
         Logger.debug("lastName = " + user.lastName());
@@ -152,52 +180,79 @@ public class UserService extends BaseUserService {
         Logger.debug("email = " + user.email());
         Logger.debug(user.email().getClass() + "");
         Logger.debug(user.avatarUrl() + "");
-        */
+        
 
-        if (localUser == null) {
-            Logger.debug("adding new...");
+        if(localUser == null){
+            //user have never ever logged in, add him to the database. with provider info
+            Logger.debug("adding new..." + user.identityId().providerId());
             localUser = new User();
-            localUser.id = user.identityId().userId().toLowerCase();
-            localUser.provider = user.identityId().providerId();
+
+            //Provider should be added to provider list along with the id.
+
+            //Genererate some username?
+            localUser.id = user.email().get().toLowerCase();
+            localUser.email = user.email().get().toLowerCase();
+            Provider p = new Provider(user.identityId().providerId(), user.identityId().userId(), localUser.email);
+            Logger.debug(p.toString());
+            localUser.addProvider(p);
+
+            if(user.identityId().providerId().equals("userpass")){
+                localUser.username = user.identityId().userId().toLowerCase();
+            }
+            //localUser.provider = user.identityId().providerId();
+
             localUser.firstName = user.firstName();
             localUser.lastName = user.lastName();
+            
 
             if(user.avatarUrl() instanceof scala.Some){
                 localUser.avatarUrl = user.avatarUrl().get();
             }
-            //Temporary solution for twitter which does not have email in OAuth answer
-            if(user.email() instanceof scala.Some){
-                localUser.email = user.email().get().toLowerCase();
-            }
+
+            //If user registered add the password
             if(user.passwordInfo() instanceof scala.Some){
                 localUser.password = user.passwordInfo().get().password();
             }
             localUser.save();
         } else {
-            Logger.debug("existing one...");
-            localUser.id = user.identityId().userId().toLowerCase();
-            localUser.provider = user.identityId().providerId();
-            localUser.firstName = user.firstName();
-            localUser.lastName = user.lastName();
-            
-            if(user.avatarUrl() instanceof scala.Some){
-                localUser.avatarUrl = user.avatarUrl().get();
-            }
+            //User have logged in before.
+            if(localUser.hasProvider(user.identityId().providerId())){
+                Logger.debug("User already registered this medium, nothing to save!");
+                //user is already registered or logged in with this medium. Nothing to do update or save.
+            } else {
+                if(user.identityId().providerId().equals("userpass")){
+                    //Update the old social media information, user have registered!
+                    Logger.debug("Already existing user registered! Logging in via form");
+                    localUser.username = user.identityId().userId().toLowerCase();
+                    localUser.firstName = user.firstName();
+                    localUser.lastName = user.lastName();
+                    
+                    if(user.avatarUrl() instanceof scala.Some){
+                        localUser.avatarUrl = user.avatarUrl().get();
+                    }
 
-            //Temporary solution for twitter which does not have email in OAuth answer
-            if(user.email() instanceof scala.Some){
-                localUser.email = user.email().get().toLowerCase();
+                    if(user.passwordInfo() instanceof scala.Some){
+                        localUser.password = user.passwordInfo().get().password();
+                    }
+                    localUser.update();
+
+                } else {
+                    Logger.debug("Already existing user logged in with new media!");
+                    //User logged in with a new media, add it to the user.
+                    //Provider should be added to provider list along with the id.            
+                    Provider p = new Provider(user.identityId().providerId(), user.identityId().userId(), localUser.email);
+                    Logger.debug(p.toString());
+                    localUser.addProvider(p);
+                    localUser.save();
+                }
             }
-            if(user.passwordInfo() instanceof scala.Some){
-                localUser.password = user.passwordInfo().get().password();
-            }
-            localUser.update();
-        }
+        } 
         return user;
     }
 
     @Override
     public void doSave(securesocial.core.java.Token token) {
+        Logger.debug("doSave TOKEN WAS CALLED!!!");
         Token localToken = new Token();
         localToken.uuid = token.uuid;
         localToken.email = token.email;

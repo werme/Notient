@@ -1,6 +1,6 @@
 # Users
 - &pingu !!models.User
-    id: 123456789
+    id: notient1@gmail.com
     username: pingu1
     firstName: Pingu1
     lastName: Pingusson1
