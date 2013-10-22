@@ -22,6 +22,13 @@ public class IntegrationTest {
         browser.$("#password").text("password");
         browser.$("button", withText("Login")).click();
     }
+    public void createNote(TestBrowser browser) {
+        browser.$("#new-note-link").click();
+        browser.$("#title").text("IntegrationTest");
+        browser.$("#content").text("testing testing");
+        browser.$("#create-note-button").click();
+        //Logger.debug("##### SE HÄR MACKAN #####" + browser.url());
+    }
     
     @Test
     public void testLogin() {
@@ -54,41 +61,35 @@ public class IntegrationTest {
             }
         });   
   }
-  // @Test
-  // public void testCreateNote() {
-  //   running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
-  //           public void invoke(TestBrowser browser) {
-  //               login(browser);
-  //               browser.$("#newnote-button").click();
-  //               browser.fill("#title").with("IntegrationTest");
-  //               browser.fill("#tags").with("tests");
-  //               browser.fill("#content").with("This text is for testing the note creation");
-  //               browser.$("#createnote-button").click();
-
-  //               assertThat(browser.$("new note is found").first().getText()).isEqualTo("IntegratonTest");
-  //           }
-  //       });     
-  // }
+  @Test
+  public void testNoteCreator() {
+    running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                login(browser);
+                createNote(browser);
+                assertThat(browser.url()).isEqualTo(myUrl + "/note/5");
+            }
+        });     
+  }
   @Test
   public void testProfile() {
     running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
             public void invoke(TestBrowser browser) {
                 login(browser);
                 browser.$("#profile-link").click();
-                Logger.debug(browser.url());
-                assertThat(browser.url().contains("http://localhost:3333/user/123456789"));
+                assertThat(browser.url()).isEqualTo(myUrl + "/user/notient1@gmail.com");
             }
         });     
   }
-  // @Test
-  // public void testSearch() {
-  //   running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
-  //           public void invoke(TestBrowser browser) {
-  //               login(browser);
-                
-  //               browser.$("#profile-link").click();
-  //               assertThat(browser.$("header h1").first().getText()).isEqualTo("pingu1");
-  //           }
-  //       });     
-  // }
+  @Test
+  public void testDeleteNote() {
+    running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                login(browser);
+                createNote(browser);
+                browser.$("button", withText("Delete")).click();
+                assertThat(browser.url()).isEqualTo(myUrl + "/notes");
+            }
+        });  
+  }
 }

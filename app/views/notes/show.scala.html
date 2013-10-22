@@ -42,9 +42,9 @@
 
             @if(note.author.equals(User.currentUser)) {
                 <div class="note-links">
-                    <a href="@routes.Notes.edit(note.id)" class="flat-button icon"><i class="edit icon"></i>Edit</a>
+                    <a id="edit-note-button" href="@routes.Notes.edit(note.id)" class="flat-button icon"><i class="edit icon"></i>Edit</a>
                     @form(routes.Notes.delete(note.id)) {
-                        <button class="flat-button icon delete"><i class="remove icon"></i>Delete</a></button>
+                        <button id="delete-note-button" class="flat-button icon delete"><i class="remove icon"></i>Delete</a></button>
                     }
                 </div>
             }
