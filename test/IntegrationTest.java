@@ -120,4 +120,41 @@ public class IntegrationTest {
             }
         });  
   }
+  @Test
+  public void testUpVote() {
+    running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                login(browser);
+                createNote(browser);
+                browser.$("#upvote-button").click();
+                assertThat(browser.$("#userscore").getText()).isEqualTo("1");
+            }
+        });  
+  }
+  @Test
+  public void testDownVote() {
+    running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                login(browser);
+                createNote(browser);
+                browser.$("#downvote-button").click();
+                assertThat(browser.$("#userscore").getText()).isEqualTo("-1");
+            }
+        });  
+  }
+  /**
+  *Should only be able to vote a specific note once per user
+  */
+  @Test
+  public void testVoteToggle() {
+    running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                login(browser);
+                createNote(browser);
+                browser.$("#upvote-button").click();
+                browser.$("#upvote-button").click();
+                assertThat(browser.$("#userscore").getText()).isEqualTo("0");
+            }
+        });  
+  }
 }
