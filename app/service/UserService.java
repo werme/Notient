@@ -22,6 +22,7 @@ import securesocial.core.PasswordInfo;
 import securesocial.core.SocialUser;
 import securesocial.core.IdentityId;
 import securesocial.core.java.BaseUserService;
+import securesocial.core.providers.utils.GravatarHelper;
 
 public class UserService extends BaseUserService {
 
@@ -56,8 +57,8 @@ public class UserService extends BaseUserService {
     //public Identity doFind(UserId userId) {
     public Identity doFind(IdentityId identityId){
         if (Logger.isDebugEnabled()) {
-            Logger.debug(String.format("finding by Id = %s", identityId.userId()));
-            Logger.debug("THIS IS IDENTITY: " + identityId);
+            //Logger.debug(String.format("finding by Id = %s", identityId.userId()));
+            //ogger.debug("THIS IS IDENTITY: " + identityId);
 
         }
         //Might should be findByEmail
@@ -103,6 +104,8 @@ public class UserService extends BaseUserService {
     public Identity doFindByEmailAndProvider(String email, String providerId) {
         email = email.toLowerCase();
         User localUser = User.findByEmail(email);
+        if(localUser == null)
+            return null;
         Logger.debug("This is: " + localUser.hasProvider("userpass"));
         if(localUser.hasProvider("userpass")){
             SocialUser socialUser = 
@@ -144,55 +147,19 @@ public class UserService extends BaseUserService {
 
     @Override
     public Identity doSave(Identity user) {
-        if (Logger.isDebugEnabled()) {
-            Logger.debug("save...!_!");
-            Logger.debug(String.format("user = %s", user));
-        }
 
         User localUser = null;
-
         localUser = User.findByEmail(user.email().get().toLowerCase());
-        Logger.debug("THIS LOCALUSER WAS FOUND ON DO SAVE: " + localUser);
-        /*
-        if(localUser == null){
-            //user have never ever logged in, add him to the database. with provider info
-        } else {
-            //User have logged in before.
-            if(localUser.providers.contains("userpass") || localUser.providers.contains(user.identityId().providerId())){
-                //user is already registered. Nothing to do update or save.
-            } else {
-                if(user.identityId().providerId().equals("userpass")){
-                    //Update the old social media information, user have registered!
-                } else {
-                    //User logged in with a new media, add it to the user.
 
-                    //Provider should be added to provider list along with the id.
-                }
-            }
-        }*/
-
-                Logger.debug("id = " + user.identityId().userId() + "  " + user.identityId().userId().toLowerCase());
-        Logger.debug("provider = " + user.identityId().providerId());
-        Logger.debug("firstName = " + user.firstName());
-        Logger.debug("lastName = " + user.lastName());
-        Logger.debug(user.fullName() + "");
-        Logger.debug("email = " + user.email());
-        Logger.debug(user.email().getClass() + "");
-        Logger.debug(user.avatarUrl() + "");
-        
 
         if(localUser == null){
             //user have never ever logged in, add him to the database. with provider info
             Logger.debug("adding new..." + user.identityId().providerId());
             localUser = new User();
 
-            //Provider should be added to provider list along with the id.
 
-            //Genererate some username?
             localUser.email = user.email().get().toLowerCase();
-            Provider p = new Provider(user.identityId().providerId(), user.identityId().userId(), localUser);
-            Logger.debug(p.toString());
-            localUser.addProvider(p);
+            localUser.addProvider(new Provider(user.identityId().providerId(), user.identityId().userId(), localUser));
 
             if(user.identityId().providerId().equals("userpass")){
                 localUser.username = user.identityId().userId().toLowerCase();
@@ -203,10 +170,13 @@ public class UserService extends BaseUserService {
             localUser.lastName = user.lastName();
             
 
-            if(user.avatarUrl() instanceof scala.Some){
-                localUser.avatarUrl = user.avatarUrl().get();
-            }
+            
+            //User have logged in before.
 
+            
+            if(GravatarHelper.avatarFor(localUser.email) instanceof scala.Some){
+                localUser.avatarUrl = GravatarHelper.avatarFor(localUser.email).get();
+            }
             //If user registered add the password
             if(user.passwordInfo() instanceof scala.Some){
                 localUser.password = user.passwordInfo().get().password();
@@ -214,6 +184,12 @@ public class UserService extends BaseUserService {
             localUser.save();
         } else {
             //User have logged in before.
+            //Update the gravatar
+            if(localUser.avatarUrl == null && GravatarHelper.avatarFor(localUser.email) instanceof scala.Some){
+                localUser.avatarUrl = GravatarHelper.avatarFor(localUser.email).get();
+                localUser.save();
+            }
+
             if(localUser.hasProvider(user.identityId().providerId())){
                 Logger.debug("User already registered this medium, nothing to save!");
                 if(user.identityId().providerId().equals("userpass")){
@@ -230,14 +206,7 @@ public class UserService extends BaseUserService {
                     localUser.username = user.identityId().userId().toLowerCase();
                     localUser.firstName = user.firstName();
                     localUser.lastName = user.lastName();
-                    Provider p = new Provider(user.identityId().providerId(), user.identityId().userId(), localUser);
-                    Logger.debug(p.toString());
-                    localUser.addProvider(p);
-
-                    
-                    if(user.avatarUrl() instanceof scala.Some){
-                        localUser.avatarUrl = user.avatarUrl().get();
-                    }
+                    localUser.addProvider(new Provider(user.identityId().providerId(), user.identityId().userId(), localUser));
 
                     if(user.passwordInfo() instanceof scala.Some){
                         localUser.password = user.passwordInfo().get().password();
