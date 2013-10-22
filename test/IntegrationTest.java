@@ -180,4 +180,14 @@ public class IntegrationTest {
             }
         });  
   }
+  @Test
+  public void testInspectUser() {
+    running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                login(browser);
+                browser.$("#note-author-link").click();
+                assertThat(browser.pageSource()).contains("123456789");
+            }
+        });  
+  }
 }
