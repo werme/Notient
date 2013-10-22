@@ -23,7 +23,7 @@ import models.*;
 
 public class Notes extends Controller {
 
-	private static final int resultsPerPage = 2;
+	private static final int resultsPerPage = 9;
 
 	static Form<Note> noteForm = Form.form(Note.class);
 	static Form<Comment> commentForm = Form.form(Comment.class);
