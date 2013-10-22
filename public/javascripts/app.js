@@ -34,4 +34,5 @@
     $('#message-wrapper').slideUp();
   });
 
+  $("#message-wrapper").delay(10000).slideUp();
 })();
