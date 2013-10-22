@@ -73,16 +73,6 @@
                 </div>
             </div>
             }
-            <div class="comment">
-                <div class="avatar"><img src="http://bdb3b8.medialib.glogster.com/thumbnails/2e671a43746cd980b0c5a7c51c1ebc21d3162464f97572b8b9b4d5787ceceed8/10-hour-pikachu-song-source.jpg" /></div>
-                <div class="content">
-                    <h2>Username</h2><span class="date"><i class="time icon"></i>Thu Oct 17 2013</span>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                    tempor incididunt ut labore et dolore magna aliqua.
-                    </p>
-                </div>
-            </div>
-
             @if(User.currentUser != null) {
                 @form(routes.Notes.newComment(note.id)) {
                     @textarea(commentForm("content"), '_label -> "Leave a comment:")
