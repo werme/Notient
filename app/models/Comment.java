@@ -94,7 +94,7 @@ public class Comment extends Model implements Authorizable {
     PrettyTime p = new PrettyTime(new Locale("en"));
     if (this.createdAt != null)
       return p.format(this.createdAt);
-    return "never and always ago";
+    return "Yesterday, 4pm";
   }
   
   @Override
