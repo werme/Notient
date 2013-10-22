@@ -108,8 +108,9 @@ public class UserService extends BaseUserService {
         }
         Logger.debug("doFindByEmailAndProvider WAS USED!!!");
         User localUser = list.get(0);
+        //Look this over.
         SocialUser socialUser = 
-                new SocialUser(new IdentityId(localUser.email, localUser.provider),
+                new SocialUser(new IdentityId(localUser.email, "userpass"),
                         localUser.firstName, 
                         localUser.lastName, 
                         String.format("%s %s", localUser.firstName, localUser.lastName),

@@ -54,7 +54,7 @@ public class UsersTest extends WithApplication {
 
 	@Test
 	public void deleteUser() {
-		User user = User.findById("1234567890");
+    	User user = User.findByEmail("pingu@notient.com");
 		String userEmail = user.email;
 		user.delete();
 		User myDeletedUser = User.find.where().eq("email", userEmail)

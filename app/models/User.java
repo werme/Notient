@@ -28,8 +28,6 @@ public class User extends Model {
     @Id
     public String email;
 
-    public String provider;
-
     @OneToMany(cascade=CascadeType.ALL)
     public List<Provider> providers = new ArrayList<Provider>();
 
@@ -57,8 +55,6 @@ public class User extends Model {
             return firstName + " " + lastName; 
         } else if (email != null) {
             return email;
-        } else if (provider != null) {
-            return "Unknown user via " + provider;
         } else {
             return "Unknown user";
         }

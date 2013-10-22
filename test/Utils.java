@@ -16,9 +16,9 @@ public class Utils {
     public static Cookie fakeCookie(String user){
 
         User localUser = User.findByEmail(user);
-        Logger.debug("Username: " + localUser.username +" - ID: " + localUser.id);
+        Logger.debug("Username: " + localUser.username +" - Email: " + localUser.email);
         
-        SocialUser socialUser = new SocialUser(new IdentityId(localUser.id, localUser.provider),    
+        SocialUser socialUser = new SocialUser(new IdentityId(localUser.email, "userpass"),    
             localUser.firstName, 
             localUser.lastName, 
             String.format("%s %s", localUser.firstName, localUser.lastName),

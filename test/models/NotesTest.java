@@ -25,9 +25,9 @@ public class NotesTest extends WithApplication {
   public void setUp() {
     start(fakeApplication(inMemoryDatabase()));
     Ebean.save((List) Yaml.load("test-data.yml"));
-    testUser = User.findById("1234567890");
-    testUser1 = User.findById("1234567891");
-    testUser2 = User.findById("1234567892");
+    testUser = User.findByEmail("pingu@notient.com");
+    testUser1 = User.findByEmail("test1@notient.com");
+    testUser2 = User.findByEmail("test2@notient.com");
   }
 
   @Test

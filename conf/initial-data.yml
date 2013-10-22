@@ -1,5 +1,5 @@
 # Users
-- &pingu !!models.User
+- &pingu1 !!models.User
     username: pingu1
     firstName: Pingu1
     lastName: Pingusson1
@@ -10,28 +10,28 @@
 
 - &pinguProvider !!models.Provider
     id: pingu1
-    user: *pingu
+    user: *pingu1
     provider: userpass
 
 # Notes
 - &mynote !!models.Note
     title: Note title 1
     content: The first note
-    author: *pingu
+    author: *pingu1
 - !!models.Note
     title: Note title 2
     content: Lorem ipsum Incididunt culpa ullamco voluptate quis eiusmod culpa dolor laboris occaecat.
-    author: *pingu
+    author: *pingu1
 - !!models.Note
     title: Note title 3
     content: Lorem ipsum Ut aliquip aliqua adipisicing exercitation ut est voluptate consectetur deserunt ullamco Duis.
-    author: *pingu
+    author: *pingu1
 - !!models.Note
     title: Note title 4
     content:
-    author: *pingu
+    author: *pingu1
 
 - !!models.Comment
     content: Tjabayo
     note: *mynote
-    author: *pingu
+    author: *pingu1

@@ -24,7 +24,7 @@ public class CommentsTest extends WithApplication {
 	public void setUp() {
 		start(fakeApplication(inMemoryDatabase()));
 		Ebean.save((List) Yaml.load("test-data.yml"));
-		testUser = User.findById("1234567890");
+		testUser = User.findByEmail("pingu@notient.com");
 	}
 
 	@Test
