@@ -81,14 +81,31 @@ public class IntegrationTest {
             }
         });     
   }
+  // @Test
+  // public void testDeleteNote() {
+  //   running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+  //           public void invoke(TestBrowser browser) {
+  //               login(browser);
+  //               createNote(browser);
+  //               Logger.info("!!!!!!!!!!!!!!!!!!!!!!!" + browser.$("#message-wrapper").getText());
+  //               browser.$("#delete-note-button").click();
+  //               Logger.info("!!!!!!!!!!!!!!!!!!!!!!!" + browser.$("#message-wrapper").getText());
+  //               Logger.debug("##### SE HÄR MACKAN #####" + browser.url());
+  //               assertThat(browser.url()).isEqualTo(myUrl + "/notes");
+  //           }
+  //       });  
+  // }
   @Test
-  public void testDeleteNote() {
+  public void testEditNote() {
     running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
             public void invoke(TestBrowser browser) {
                 login(browser);
                 createNote(browser);
-                browser.$("button", withText("Delete")).click();
-                assertThat(browser.url()).isEqualTo(myUrl + "/notes");
+                browser.$("#edit-note-button").click();
+                browser.$("#content").text("123456789");
+                browser.$("#update-note-button").click();
+                //Logger.info("!!!!!!!!!!!!!!!!!!!!!!!" + browser.$("#message-wrapper").getText());
+                assertThat(browser.pageSource()).contains("123456789");
             }
         });  
   }
