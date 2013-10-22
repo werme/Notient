@@ -112,6 +112,15 @@ public class User extends Model {
         return result;
     }
 
+    public int getScore(){
+        List<Note> allNotes = Note.notesBy(this);
+        int totalScore = 0;
+        for(Note note : allNotes){
+            totalScore += note.getScore();
+        }
+        return totalScore;
+    }
+
     public String getAvatarUrl() {
         return avatarUrl != null ? avatarUrl : "https://sigil.cupcake.io/" + displayName();
     }
