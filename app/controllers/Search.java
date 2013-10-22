@@ -22,6 +22,6 @@ public class Search extends Controller {
   public static Result show(String query) {
     List<Note> notes = Note.searchNotes(query);
     List<User> users = User.searchUsers(query); // Bapl
-    return ok(index.render(notes, noteForm, searchForm));
+    return ok(index.render(notes, noteForm, searchForm, 0, 1));
   }
 }

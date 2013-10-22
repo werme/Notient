@@ -7,12 +7,13 @@ import java.util.*;
 import javax.persistence.*;
 
 import com.avaje.ebean.Expr;
+import com.avaje.ebean.*;
 
 import play.db.ebean.*;
 import play.data.validation.Constraints.*;
 import play.data.format.Formats.*;
 import play.Logger;
-import javax.persistence.*;
+
 import securesocial.core.java.SecureSocial;
 
 import helpers.UnauthorizedException;
@@ -83,8 +84,8 @@ public class Note extends Model implements Authorizable {
         .findList();
   }
     
-	public static List<Note> all() {
-		return find.all();
+	public static PagingList<Note> all(int resultsPerPage) {
+    return find.findPagingList(resultsPerPage);
 	}
 
 	public static Note create(Note note, String tagList, User author, S3File image) {
@@ -211,7 +212,7 @@ public class Note extends Model implements Authorizable {
 	}
 
   public static List<Note> similarNotes(Note note) {
-    List<Note> allNotes = Note.all();   
+    List<Note> allNotes = find.all();   
 
     // Do not compare with self 
     allNotes.remove(note);

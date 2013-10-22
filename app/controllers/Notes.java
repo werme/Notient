@@ -3,6 +3,8 @@ package controllers;
 import java.util.*;
 import java.io.File;
 
+import com.avaje.ebean.*;
+
 import play.mvc.*;
 import play.mvc.Http.MultipartFormData;
 import play.mvc.Http.MultipartFormData.FilePart;
@@ -21,16 +23,24 @@ import models.*;
 
 public class Notes extends Controller {
 
+	private static final int resultsPerPage = 2;
+
 	static Form<Note> noteForm = Form.form(Note.class);
 	static Form<Comment> commentForm = Form.form(Comment.class);
 	static Form<String> searchForm = Form.form(String.class);
 
-	public static Result index() {
-		return ok(index.render(Note.all(), noteForm, searchForm));
-	}
-
-	public static Result list() {
-		return ok(index.render(Note.all(), noteForm, searchForm));
+	public static Result list(int rawPageNr) {
+		PagingList<Note> pagingList = Note.all(resultsPerPage);
+		
+		// Page number show in url starts from 1 for usability
+		int pageNr = rawPageNr-1;
+		
+		// Send invalid page numbers to application index
+		if(pageNr < 0 || pageNr >= pagingList.getTotalPageCount()) {
+			return redirect(routes.Application.index());
+		} else {
+			return ok(index.render(pagingList.getPage(pageNr).getList(), noteForm, searchForm, pageNr, pagingList.getTotalPageCount()));
+		}
 	}
 
 	public static Result show(Long id) {
@@ -49,7 +59,7 @@ public class Notes extends Controller {
 		if(filledForm.hasErrors()) {
 			for(String key : filledForm.errors().keySet()){
 				List<ValidationError> currentError = filledForm.errors().get(key);
-				for(ValidationError error : currentError){
+				for(ValidationError error : currentError) {
 					flash("error", key + ": " + error.message());
 				}
 			}     
@@ -70,7 +80,7 @@ public class Notes extends Controller {
             }
 			
 			Note note = Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser(), s3File);
-            flash("info", "Successfully created note!");
+      flash("info", "Successfully created note!");
 			return redirect(routes.Notes.show(note.id));
 		}
 	}
@@ -83,7 +93,8 @@ public class Notes extends Controller {
 			return ok(edit.render(note, filledForm));
 		} else {
 			flash("error", "You are not authorized to edit this note!");
-			return badRequest(index.render(Note.all(), noteForm, searchForm));
+			PagingList<Note> pagingList = Note.all(resultsPerPage);
+			return badRequest(index.render(pagingList.getPage(0).getList(), noteForm, searchForm, 0, pagingList.getTotalPageCount()));
 		}
 	}
 
@@ -91,7 +102,8 @@ public class Notes extends Controller {
 	public static Result update(Long id) {
 		Form<Note> filledForm = noteForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
-			return badRequest(index.render(Note.all(), filledForm, searchForm));
+			PagingList<Note> pagingList = Note.all(resultsPerPage);
+			return badRequest(index.render(pagingList.getPage(0).getList(), noteForm, searchForm, 0, pagingList.getTotalPageCount()));
 		} else {
 			Note.update(id, filledForm.get(), Form.form().bindFromRequest().get("tagList"));
 			flash("info", "Successfully update note!");
@@ -106,10 +118,11 @@ public class Notes extends Controller {
 		if(note.allows(User.currentUser())) {
 			Note.delete(id);
 			flash("info", "Successfully deleted note!");
-			return redirect(routes.Notes.list());
+			return redirect(routes.Application.index());
 		} else {
 			flash("error", "You are not authorized to delete this note!");
-			return badRequest(index.render(Note.all(), noteForm, searchForm));
+			PagingList<Note> pagingList = Note.all(resultsPerPage);
+			return badRequest(index.render(pagingList.getPage(0).getList(), noteForm, searchForm, 0, pagingList.getTotalPageCount()));
 		}
 	}
 
