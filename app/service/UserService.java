@@ -101,6 +101,7 @@ public class UserService extends BaseUserService {
 
     @Override
     public Identity doFindByEmailAndProvider(String email, String providerId) {
+        email = email.toLowerCase();
         User localUser = User.findByEmail(email);
         Logger.debug("This is: " + localUser.hasProvider("userpass"));
         if(localUser.hasProvider("userpass")){
