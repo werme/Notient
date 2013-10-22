@@ -8,30 +8,68 @@
     password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
 #password = $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
 
+# Users
+- &admin !!models.User
+    username: admin
+    firstName: Neo
+    lastName: Andersson
+    email: notient2@gmail.com
+    privilege: ADMIN
+    password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+#password = $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+
+# Users
+- &joakim !!models.User
+    username:
+    firstName: Joakim
+    lastName: Von Hacht
+    email: notient3@gmail.com
+    privilege: ADMIN
+    password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+#password = $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+
 - &pinguProvider !!models.Provider
     id: pingu1
     user: *pingu1
     provider: userpass
 
 # Notes
+- !!models.Note
+    title: Web info part1
+    content: This is the first part of two  lorem ipsum notes.
+    author: *pingu1
+- !!models.Note
+    title: Web info part2
+    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce placerat nulla non libero convallis, non convallis neque cursus. Aenean eget nisi eu libero viverra pharetra quis sit amet dolor. Cras vitae tellus id lectus volutpat consequat. Nulla commodo a felis sit amet dictum. Praesent et ante et mi dignissim ullamcorper. Sed condimentum risus sem, ut vestibulum purus vehicula et. Nullam pharetra nisi est, eu congue massa lobortis ut. Integer interdum ligula eros, vitae interdum enim elementum ac. Sed cursus eget est ut volutpat. Donec dictum odio a est rhoncus suscipit.."
+    author: *pingu1
 - &mynote !!models.Note
-    title: Note title 1
-    content: The first note
+    title: Web Lecture
+    content: "In Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce placerat nulla non libero convallis, non convallis neque cursus. Aenean eget nisi eu libero viverra pharetra quis sit amet dolor. Cras vitae tellus id lectus volutpat consequat. Nulla commodo a felis sit amet dictum. Praesent et ante et mi dignissim ullamcorper. Sed condimentum risus sem, ut vestibulum purus vehicula et. Nullam pharetra nisi est, eu congue massa lobortis ut. Integer interdum ligula eros, vitae interdum enim elementum ac. Sed cursus eget est ut volutpat. Donec dictum odio a est rhoncus suscipit.."
     author: *pingu1
 - !!models.Note
-    title: Note title 2
-    content: Lorem ipsum Incididunt culpa ullamco voluptate quis eiusmod culpa dolor laboris occaecat.
+    title: About web
+    content: The web is deep and facinating place. There are many possiblities. The internet was born when some ancient members of 
     author: *pingu1
 - !!models.Note
-    title: Note title 3
-    content: Lorem ipsum Ut aliquip aliqua adipisicing exercitation ut est voluptate consectetur deserunt ullamco Duis.
+    title: About web2
+    content: "The endless data of the web is created by users across the globe. Fiber, copper, radiowaves and lasers are beeing used to send data"
     author: *pingu1
 - !!models.Note
-    title: Note title 4
-    content:
+    title: About web3
+    content: When many hosts are communicating with eachother a network is created. Severel networks interconnected then result in a internet
     author: *pingu1
 
 - !!models.Comment
-    content: Tjabayo
+    content: "Plub, blub, blub!"
     note: *mynote
     author: *pingu1
+
+- !!models.Comment
+    content: "Pingu, shut up or ban"
+    note: *mynote
+    author: *admin
+
+- !!models.Comment
+    content: "Nu tycker ni att ni är bra roliga, va?"
+    note: *mynote
+    author: *joakim
