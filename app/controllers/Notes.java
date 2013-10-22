@@ -56,14 +56,16 @@ public class Notes extends Controller {
 			return badRequest(new_note.render(filledForm));
 		} else {
             Http.MultipartFormData body = request().body().asMultipartFormData();
-            Http.MultipartFormData.FilePart uploadFilePart = body.getFile("upload");
+            if(body != null){
+	            Http.MultipartFormData.FilePart uploadFilePart = body.getFile("upload");
 
-            S3File s3File = null;
-            if (uploadFilePart != null) {
-                s3File = new S3File();
-                s3File.name = uploadFilePart.getFilename();
-                s3File.file = uploadFilePart.getFile();
-                s3File.save();
+	            S3File s3File = null;
+	            if (uploadFilePart != null) {
+	                s3File = new S3File();
+	                s3File.name = uploadFilePart.getFilename();
+	                s3File.file = uploadFilePart.getFile();
+	                s3File.save();
+	            }
             }
 			
 			Note note = Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser(), s3File);
