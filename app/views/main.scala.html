@@ -33,13 +33,13 @@
                     <nav class="main-bar">
                         <ul>
                             @if(User.userSignedIn) {
-                                <li><a href="@controllers.routes.Users.show(User.currentUser().id)"><i class="user icon"></i>Profile</a></li>
-                                <li><a href="@securesocial.controllers.routes.LoginPage.logout"><i class="sign out icon"></i>Logout</a></li>
-                                <li><a href="@controllers.routes.Notes.newNote"><i class="file icon"></i>Note creator</a></li>
-                                <li><a href="#" id="sub-nav-toggle"><i class="rocket icon"></i>Quick scribble</a></li>
+                                <li><a id="profile-link" href="@controllers.routes.Users.show(User.currentUser().id)"><i class="user icon"></i>Profile</a></li>
+                                <li><a id="logout-link" href="@securesocial.controllers.routes.LoginPage.logout"><i class="sign out icon"></i>Logout</a></li>
+                                <li><a id="new-note-link" href="@controllers.routes.Notes.newNote"><i class="file icon"></i>Note creator</a></li>
+                                <li><a id="quick-new-note-link" href="#" id="sub-nav-toggle"><i class="rocket icon"></i>Quick scribble</a></li>
                             } else { 
-                                <li><a href="@securesocial.controllers.routes.LoginPage.login"><i class="sign in icon"></i>Login</a></li>
-                                <li><a href="@securesocial.controllers.routes.Registration.startSignUp"><i class="user icon"></i>Register</a></li>
+                                <li><a id="login-link" href="@securesocial.controllers.routes.LoginPage.login"><i class="sign in icon"></i>Login</a></li>
+                                <li><a id="register-link" href="@securesocial.controllers.routes.Registration.startSignUp"><i class="user icon"></i>Register</a></li>
                             }
                         </ul>
                     </nav>

@@ -14,7 +14,7 @@
         <label>Tags:</label>
         <input type="text" name="tagList" placeholder="rainbow unicorn-ponies" value="@if(note.tags != null) { @for(tag <- note.tags ) {@tag.title } }">
         <input type="file" name="upload">
-        <input class="flat-button" type="submit" value="Create note">
+        <input id="update-note-button" class="flat-button" type="submit" value="Update note">
       }
     </div>
   </div>
