@@ -217,7 +217,10 @@ public class Note extends Model implements Authorizable {
     allNotes.remove(note);
     Collections.sort(allNotes, new NoteComparator(note));
     Collections.reverse(allNotes);
-    return allNotes;
+    int numberOfNotes = allNotes.size();
+    if (numberOfNotes > 6)
+      numberOfNotes = 6;
+    return allNotes.subList(0, numberOfNotes);
   }
 
   /**
