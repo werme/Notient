@@ -80,19 +80,22 @@ public class IntegrationTest {
             }
         });     
   }
-  // @Test
-  // public void testDeleteNote() {
-  //   running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
-  //           public void invoke(TestBrowser browser) {
-  //               login(browser);
-  //               createNote(browser);
-  //               browser.$("#delete-note-button").click();
-  //               Logger.info("!!!!!!!!!!!!!!!!!!!!!!!" + browser.$("#message-wrapper").getText());
-  //               Logger.debug("##### SE HÄR MACKAN #####" + browser.url());
-  //               assertThat(browser.url()).isEqualTo(myUrl + "/notes");
-  //           }
-  //       });  
-  // }
+  /**
+  * testDeleteNote not yet working
+  */
+  //@Test
+  public void testDeleteNote() {
+    running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
+            public void invoke(TestBrowser browser) {
+                login(browser);
+                createNote(browser);
+                browser.$("#delete-note-button").click();
+                Logger.info("!!!!!!!!!!!!!!!!!!!!!!!" + browser.$("#message-wrapper").getText());
+                Logger.debug("##### SE HÄR MACKAN #####" + browser.url());
+                assertThat(browser.url()).isEqualTo(myUrl + "/notes");
+            }
+        });  
+  }
   @Test
   public void testEditNote() {
     running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
