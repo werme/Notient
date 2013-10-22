@@ -87,7 +87,6 @@ public class User extends Model {
         if (identity != null) {
            localUser = User.find.byId(identity.identityId().userId());
         }
-        Logger.debug("identity: " + identity);
         return localUser;
     }
 
