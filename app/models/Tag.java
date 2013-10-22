@@ -22,7 +22,8 @@ public class Tag extends Model {
   @MaxLength(40)
   public String title;
 
-  @ManyToMany(cascade = CascadeType.REMOVE)
+  @ManyToMany(cascade ={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+  @JoinTable(name="note_tags", joinColumns=@JoinColumn(name="tag_id"), inverseJoinColumns=@JoinColumn(name="note_id"))
   public List<Note> notes = new ArrayList<Note>();
 
   public Tag(String title) {
@@ -40,7 +41,7 @@ public class Tag extends Model {
     return tag;
   }
 
-  public static List<Tag> createOrFindAllFromString(String dirtyList) {
+  public static List<Tag> createOrFindAllFromString(Note note, String dirtyList) {
     String list = dirtyList.trim().replaceAll(" +", " ");
     List<Tag> tags = new ArrayList<Tag>();
     String[] tagArray = new String[]{list};
@@ -54,6 +55,10 @@ public class Tag extends Model {
 
     for(String title : tagArray) {
       Tag tag = findByTitle(title) == null ? create(new Tag(title)) : findByTitle(title);
+      if(!tag.notes.contains(note)) {
+        tag.notes.add(note);
+        tag.saveManyToManyAssociations("notes");
+      }
       if(!tags.contains(findByTitle(title))) {
         tags.add(findByTitle(title));
       }

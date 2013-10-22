@@ -36,7 +36,8 @@ public class Note extends Model implements Authorizable {
 	@ManyToOne
   public User author;
 
-	@ManyToMany(cascade = CascadeType.REMOVE)
+  @ManyToMany(cascade=CascadeType.ALL)
+  @JoinTable(name="note_tags", joinColumns=@JoinColumn(name="note_id"), inverseJoinColumns=@JoinColumn(name="tag_id"))
 	public List<Tag> tags = new ArrayList<Tag>();
 
   @Column(name = "created_at")
@@ -110,12 +111,12 @@ public class Note extends Model implements Authorizable {
 	public static void delete(Long id) {
 		Note note = find.ref(id);
     note.delete();
-	  Tag.clean();
+	  //Tag.clean();
 	}
 
   public void updateTags(String tagList) {
     if(tagList != null && !tagList.equals("") && !tagList.equals(" ")) {
-      this.tags = Tag.createOrFindAllFromString(tagList);
+      this.tags = Tag.createOrFindAllFromString(this, tagList);
     }
   }
 
