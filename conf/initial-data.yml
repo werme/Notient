@@ -56,14 +56,14 @@
     title: Web info part2
     content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce placerat nulla non libero convallis, non convallis neque cursus. Aenean eget nisi eu libero viverra pharetra quis sit amet dolor. Cras vitae tellus id lectus volutpat consequat. Nulla commodo a felis sit amet dictum. Praesent et ante et mi dignissim ullamcorper. Sed condimentum risus sem, ut vestibulum purus vehicula et. Nullam pharetra nisi est, eu congue massa lobortis ut. Integer interdum ligula eros, vitae interdum enim elementum ac. Sed cursus eget est ut volutpat. Donec dictum odio a est rhoncus suscipit.."
     author: *pingu1
-- &mynote !!models.Note
-    title: Web Lecture
-    content: "In Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce placerat nulla non libero convallis, non convallis neque cursus. Aenean eget nisi eu libero viverra pharetra quis sit amet dolor. Cras vitae tellus id lectus volutpat consequat. Nulla commodo a felis sit amet dictum. Praesent et ante et mi dignissim ullamcorper. Sed condimentum risus sem, ut vestibulum purus vehicula et. Nullam pharetra nisi est, eu congue massa lobortis ut. Integer interdum ligula eros, vitae interdum enim elementum ac. Sed cursus eget est ut volutpat. Donec dictum odio a est rhoncus suscipit.."
-    author: *pingu1
 - !!models.Note
     title: Do more with Less!
     content: "LESS extends CSS with dynamic behavior such as variables, mixins, operations and functions. LESS runs on both the server-side (with Node.js and Rhino) or client-side (modern browsers only)."
     author: *joakim
+- &mynote !!models.Note
+    title: Web Lecture
+    content: "In Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce placerat nulla non libero convallis, non convallis neque cursus. Aenean eget nisi eu libero viverra pharetra quis sit amet dolor. Cras vitae tellus id lectus volutpat consequat. Nulla commodo a felis sit amet dictum. Praesent et ante et mi dignissim ullamcorper. Sed condimentum risus sem, ut vestibulum purus vehicula et. Nullam pharetra nisi est, eu congue massa lobortis ut. Integer interdum ligula eros, vitae interdum enim elementum ac. Sed cursus eget est ut volutpat. Donec dictum odio a est rhoncus suscipit.."
+    author: *pingu1
 - !!models.Note
     title: About web
     content: The web is deep and facinating place. There are many possiblities. The internet was born when some ancient members of 
