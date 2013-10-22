@@ -17,10 +17,17 @@
                 <em>@note.title</em> by 
                 <a href="@routes.Users.show(note.author.email)">@note.author.displayName</a> <i class="time icon"></i>Posted @note.getCreatedAt 
             </div>
-            <div class="module right">                <a href="@routes.Notes.toggleUpVote(note.id)"><i class="thumbs up icon"></i></a>
-                @note.getScore 
-                <a href="@routes.Notes.toggleDownVote(note.id)"><i class="thumbs down icon"></i></a>
-            </div>
+            @if(!note.author.equals(User.currentUser)) {
+                <div class="module right"><a href="@routes.Notes.toggleUpVote(note.id)"><i class="thumbs up icon"></i></a>
+                    @note.getScore
+                    <a href="@routes.Notes.toggleDownVote(note.id)"><i class="thumbs down icon"></i></a>
+                </div>
+            } else {
+                <div class="module right"><i class="thumbs up icon"></i>
+                    @note.getScore
+                    <i class="thumbs down icon"></i>
+                </div>
+            }
         </header>            
         <section class="note-wrapper">
             <p>@Html(MarkdownHelper.toHtml(note.content))</p>
