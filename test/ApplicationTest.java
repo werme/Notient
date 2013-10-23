@@ -31,12 +31,8 @@ public class ApplicationTest {
     @Test
     public void testInitialData() {
 
-        // Should be 4 notes in DB
+        // Should be 10 notes in DB
         assertEquals(10, Note.find.findRowCount());
-
-        // Should have note with text "The first note"
-        Note myNote = Note.find.where().eq("title", "Note title 1").findUnique();
-        assertNotNull(myNote);
     }
 
     // @Test
