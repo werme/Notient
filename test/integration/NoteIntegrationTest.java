@@ -48,9 +48,9 @@ public class NoteIntegrationTest extends IntegrationTest {
                 login(browser);
                 createNote(browser);
                 browser.$("#edit-note-button").click();
-                browser.$("#content").text("123456789");
+                browser.$("#content").text("This is an edit");
                 browser.$("#update-note-button").click();
-                assertThat(browser.pageSource()).contains("123456789");
+                assertThat(browser.pageSource()).contains("This is an edit");
             }
         });  
   }
@@ -74,7 +74,7 @@ public class NoteIntegrationTest extends IntegrationTest {
     running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
             public void invoke(TestBrowser browser) {
                 login(browser);
-                createNote(browser);
+                browser.$("a", withText("Being awesome")).click();
                 browser.$("#upvote-button").click();
                 assertThat(browser.$("#userscore").getText()).isEqualTo("1");
             }
@@ -86,7 +86,7 @@ public class NoteIntegrationTest extends IntegrationTest {
     running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
             public void invoke(TestBrowser browser) {
                 login(browser);
-                createNote(browser);
+                browser.$("a", withText("Being awesome")).click();
                 browser.$("#downvote-button").click();
                 assertThat(browser.$("#userscore").getText()).isEqualTo("-1");
             }
@@ -101,7 +101,7 @@ public class NoteIntegrationTest extends IntegrationTest {
     running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
             public void invoke(TestBrowser browser) {
                 login(browser);
-                createNote(browser);
+                browser.$("a", withText("Being awesome")).click();
                 browser.$("#upvote-button").click();
                 browser.$("#upvote-button").click();
                 assertThat(browser.$("#userscore").getText()).isEqualTo("0");
