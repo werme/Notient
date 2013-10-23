@@ -1,8 +1,8 @@
 # Users
 - &pingu1 !!models.User
-    username: pingu1
-    firstName: Pingu1
-    lastName: Pingusson1
+    username: pingu
+    firstName: Pingu
+    lastName: Pingusson
     email: notient1@gmail.com
     privilege: ADMIN
     password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
