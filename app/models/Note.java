@@ -28,6 +28,10 @@ public class Note extends Model implements Authorizable {
 	@MaxLength(30)
 	public String title;
 
+  @Required
+  @NonEmpty
+  @MinLength(10)
+  @MaxLength(50000)
   @Column(columnDefinition = "TEXT")
 	public String content;
 
@@ -54,20 +58,13 @@ public class Note extends Model implements Authorizable {
 	@JoinTable(name="up_votes")
 	public List<User> upVotes = new ArrayList<User>();
 
-  // Needed for ebean finder to be able to order notes by rating. Should not be needed since upVotes and downVotes exist
+  // Needed for ebean finder to be able to order notes by rating.
+  // Slightly redundant since upVotes and downVotes already exist.
   public int rating;
 
 	@ManyToMany(cascade=CascadeType.REMOVE)
 	@JoinTable(name="down_votes")
 	public List<User> downVotes = new ArrayList<User>();
-
-  public Note(String title){
-    this.title = title;
-  }
-	public Note(String title, User author) {
-		this.title = title;
-		this.author = author;
-	}
 
 	public Note(String title, String content, User author) {
 		this.title = title;
@@ -77,32 +74,59 @@ public class Note extends Model implements Authorizable {
 
 	public static Finder<Long, Note> find = new Finder(Long.class, Note.class);
 
-  public static List<Note> notesBy(User author) {
-    return find.where()
-        .eq("author", author)
-        .findList();
-  }
-    
 	public static PagingList<Note> all(int resultsPerPage) {
     return find.where().orderBy("created_at desc").findPagingList(resultsPerPage);
 	}
 
-	public static Note create(Note note, String tagList, User author, S3File image) {
+  public static List<Note> notesBy(User author) {
+    // TODO: return PagingList and paginate view
+    return find.where().eq("author", author).findList();
+  }
+
+  /**
+   * Returns a list of notes related to the search query. 
+   * Considers both content and titles and orders them by rating. 
+   * Splits the query sentence into words and performs a search for each word,
+   * and returns the result of all of the searches.
+   */ 
+  public static List<Note> searchNotes(String query) {
+    List<Note> result = new ArrayList<Note>();
+    for (String word : query.split("\\s")) {
+      List<Note> wordResult = find.where()
+        .or(Expr.ilike("title", "%"+word+"%"), Expr.ilike("content", "%"+word+"%")).orderBy("rating")
+        .findList();
+        for (Note note : wordResult) {
+          if (!result.contains(note))
+            result.add(note);
+        }
+    }
+    Collections.reverse(result);
+    return result;
+  }
+
+  /**
+   * Returns a list of the notes that are the most similar to the one the method is called on.
+   * Similarity is calculated by number of equal tags in each note. Will return a maximum of 6 notes.
+   */
+  public static List<Note> similarNotes(Note note) {
+    List<Note> allNotes = find.all();
+    // Do not compare with self 
+    allNotes.remove(note);   
+    Collections.sort(allNotes, new NoteComparator(note));
+    return allNotes.subList(0, allNotes.size() > 6 ? 6 : allNotes.size());
+  }
+
+	public static Note create(Note note, User author) {
     note.author = author;
     note.save();
-    note.updateTags(tagList);
-    note.saveManyToManyAssociations("tags");
-    note.addFile(image);
 		return note;
 	}
 
-  public static Note update(Long id, Note noteUpdates, String tagList) {
+  public static Note update(Long id, Note noteUpdates) {
     Note note = find.ref(id);
     note.title = noteUpdates.title;
     note.content = noteUpdates.content;
     note.update();
-    note.updateTags(tagList);
-    note.saveManyToManyAssociations("tags");
     return note;
   }
 
@@ -115,6 +139,7 @@ public class Note extends Model implements Authorizable {
   public void updateTags(String tagList) {
     if(tagList != null && !tagList.equals("") && !tagList.equals(" ")) {
       this.tags = Tag.createOrFindAllFromString(this, tagList);
+      this.saveManyToManyAssociations("tags");
     }
   }
 
@@ -123,15 +148,14 @@ public class Note extends Model implements Authorizable {
       // TODO: Only add image files
       image.note = this;
       this.images.add(image);
-      this.save();
+      this.update();
     }
   }
 
-	public Note addComment(String content, User author) {
+	public void addComment(String content, User author) {
     Comment comment = new Comment(id, content, author);
     this.comments.add(comment);
-    this.save();
-    return this;
+    this.update();
   }
 
   public void toggleUpVote(User user){
@@ -196,45 +220,6 @@ public class Note extends Model implements Authorizable {
 		}
 		return null;
 	}
-
-  /**
-   * Returns a list of the notes that are the most similar to the one the method is called on.
-   * Similarity is calculated by number of equal tags in each note. Will return a maximum of 6 notes.
-   */
-
-  public static List<Note> similarNotes(Note note) {
-    List<Note> allNotes = find.all();   
-
-    // Do not compare with self 
-    allNotes.remove(note);
-    Collections.sort(allNotes, new NoteComparator(note));
-    Collections.reverse(allNotes);
-    int numberOfNotes = allNotes.size();
-    if (numberOfNotes > 6)
-      numberOfNotes = 6;
-    return allNotes.subList(0, numberOfNotes);
-  }
-
-  /**
-   * Returns a list of notes related to the search query. 
-   * Considers both content and titles and orders them by rating. 
-   * Splits the query sentence into words and performs a search for each word,
-   * and returns the result of all of the searches.
-   */ 
-  public static List<Note> searchNotes(String query) {
-    List<Note> result = new ArrayList<Note>();
-    for (String word : query.split("\\s")) {
-      List<Note> wordResult = find.where()
-        .or(Expr.ilike("title", "%"+word+"%"), Expr.ilike("content", "%"+word+"%")).orderBy("rating")
-        .findList();
-        for (Note note : wordResult) {
-          if (!result.contains(note))
-            result.add(note);
-        }
-    }
-    Collections.reverse(result);
-    return result;
-  }
 
   @Override
   public void save() {
@@ -304,7 +289,7 @@ public class Note extends Model implements Authorizable {
         if (note.tags.contains(tag))
           matchingTagsO2++;
       }
-      return matchingTagsO1 - matchingTagsO2;
+      return matchingTagsO2 - matchingTagsO1;
     }
   }
 }

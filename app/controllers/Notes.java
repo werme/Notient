@@ -74,6 +74,7 @@ public class Notes extends Controller {
 
 	@SecureSocial.SecuredAction
 	public static Result create() {
+		Note note;
 		Form<Note> filledForm = noteForm.bindFromRequest();
 		
 		if(filledForm.hasErrors()) {
@@ -85,18 +86,17 @@ public class Notes extends Controller {
 			}     
 			return badRequest(new_note.render(filledForm));
 		} else {
+			// Create base note
+			note = Note.create(filledForm.get(), User.currentUser());
+			
+			// Add tags
+			note.updateTags(Form.form().bindFromRequest().get("tagList"));
 
 			// Handle file upload
-      S3File s3File = null;
-      if(request().body().asMultipartFormData() != null) {
-      	try {
-      		s3File = S3File.create(request().body().asMultipartFormData().getFile("upload"));
-      	} catch(IllegalArgumentException e) {
-      		flash("error", "Uploaded file invalid!");
-      	}
+      if(request().body() != null) {
+    		note.addFile(S3File.create(request().body().asMultipartFormData().getFile("upload")));
       }
 			
-			Note note = Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser(), s3File);
       flash("info", "Successfully created note!");
 			return redirect(routes.Notes.show(note.id));
 		}
@@ -117,12 +117,15 @@ public class Notes extends Controller {
 
 	@SecureSocial.SecuredAction
 	public static Result update(Long id) {
+		Note note = Note.find.ref(id);
 		Form<Note> filledForm = noteForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
 			PagingList<Note> pagingList = Note.all(resultsPerThumbnailPage);
 			return badRequest(thumbnails.render(pagingList.getPage(0).getList(), noteForm, searchForm, 0, pagingList.getTotalPageCount()));
 		} else {
-			Note.update(id, filledForm.get(), Form.form().bindFromRequest().get("tagList"));
+			Note.update(id, filledForm.get());
+			note.updateTags(Form.form().bindFromRequest().get("tagList"));
+		
 			flash("info", "Successfully update note!");
 			return redirect(routes.Notes.show(id));
 		}
