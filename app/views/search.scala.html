@@ -1,0 +1,45 @@
+@(notes: List[Note], users: List[User], noteForm: Form[Note], searchForm: Form[String])
+
+@import securesocial.core.java.SecureSocial;
+@import helper._
+
+@main("Search result", noteForm) {
+    <div class="container main">
+        <section class="notes-wrapper">
+            @for(note <- notes) {
+                <div class="small-note-wrapper">
+                    <div class="small-note">
+                        <div class="side-base front">
+                            <header>
+                                <a href='@routes.Notes.show(note.id)'><h2>@note.title</h2></a>
+                            </header>
+                            <section class="note-content">
+                                <p>@note.extract(150)</p>
+                            </section>
+                        </div>
+                        <div class="side-base info back">
+                            <header>
+                                <a href="#" class="delete-button"><i class="remove icon"></i></a>
+                                <date>Posted 1th Oct 2013</date>
+                                <ul>
+                                    <li><a href="@routes.Notes.show(note.id)" class="see-full-note-link">@note.title</a></li>
+                                    <li>By <a href="@routes.Users.show(note.author.email)">@note.author.displayName</a></li>
+                                </ul>
+                            </header>
+                            <section>
+                                @for(tag <- note.tags) { <span><a href="#" class="tag">@tag.title</a></span> }
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            }
+        </section>
+    </div>
+    <div>
+        @for(user <- users) {
+            <div>
+                <p>Found user @user.displayName</p>
+            </div>
+        }
+    </div>
+}

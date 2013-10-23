@@ -6,7 +6,7 @@
 
 # Users
 
-- !!models.LocalUser
+- !!models.User
     email: test@notes.com
     username: teststudent
     password: mysecretpassword
@@ -15,12 +15,41 @@
 - !!models.Tag
     title: Test tag title
 
-- !!models.LocalUser
-    id: 1234567890
+- &pingu !!models.User
     username: pingu
-    provider: userpass
     firstName: Pingu
     lastName: Pingusson
     email: pingu@notient.com
     password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
 #password = $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+
+- &pinguProvider !!models.Provider
+    id: pingu
+    user: *pingu
+    provider: userpass
+
+- &testUser1 !!models.User
+    username: test1
+    firstName: First1
+    lastName: Last1
+    email: test1@notient.com
+    password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+#password = $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+
+- &testUser1Provider !!models.Provider
+    id: test1
+    user: *testUser1
+    provider: userpass
+
+- &testUser2 !!models.User
+    username: test2
+    firstName: First2
+    lastName: Last2
+    email: test2@notient.com
+    password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+#password = $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+
+- &testUser2Provider !!models.Provider
+    id: test2
+    user: *testUser2
+    provider: userpass
