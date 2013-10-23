@@ -16,8 +16,6 @@ import play.Logger;
 
 import securesocial.core.java.SecureSocial;
 
-import helpers.UnauthorizedException;
-
 @Entity
 public class Note extends Model implements Authorizable {
 
@@ -86,7 +84,7 @@ public class Note extends Model implements Authorizable {
   }
     
 	public static PagingList<Note> all(int resultsPerPage) {
-    return find.findPagingList(resultsPerPage);
+    return find.where().orderBy("updated_at desc").findPagingList(resultsPerPage);
 	}
 
 	public static Note create(Note note, String tagList, User author, S3File image) {
