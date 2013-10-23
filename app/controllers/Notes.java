@@ -93,7 +93,7 @@ public class Notes extends Controller {
 			note.replaceTags(Form.form().bindFromRequest().get("tagList"));
 
 			// Handle file upload
-      if(request().body() != null) {
+      if(request().body().asMultipartFormData() != null) {
     		note.addFile(S3File.create(request().body().asMultipartFormData().getFile("upload")));
       }
 			
