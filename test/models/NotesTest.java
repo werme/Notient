@@ -34,11 +34,11 @@ public class NotesTest extends WithApplication {
   public void createAndRetrieveNote() {
     String title = "My test note title";
     String content = "My test note content";
-    Long id = Note.create(new Note(title, content), testUser).id;
+    Note.create(new Note(title, content), testUser);
 
-    Note note = Note.find.ref(id);
-    assertNotNull(note);
-    assertEquals(title, note.title);
+    Note noteFromDB = Note.find.where().eq("title", title).findUnique();
+    assertNotNull(noteFromDB);
+    assertEquals(title, noteFromDB.title);
   }
 
   @Test
