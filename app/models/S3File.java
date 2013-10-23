@@ -1,20 +1,31 @@
 /**
- * Class is used wrap files that should be uploaded to amazon
+ * This class is used to wrap files uploaded to amazon.
+ *
+ * We used the example on heroku dev center. Only the
+ * create method was written by us.
+ *
+ * @author heroku
+ * @author Olle Werme
  */
 
 package models;
 
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import play.Logger;
-import play.db.ebean.Model;
-import plugins.S3Plugin;
-
-import javax.persistence.*;
 import java.io.File;
 import java.net.MalformedURLException;
+import java.lang.IllegalArgumentException;
 import java.net.URL;
 import java.util.UUID;
+
+import javax.persistence.*;
+
+import play.Logger;
+import play.db.ebean.Model;
+import play.mvc.Http.MultipartFormData.FilePart;
+
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+
+import plugins.S3Plugin;
 
 @Entity
 public class S3File extends Model {
@@ -31,6 +42,24 @@ public class S3File extends Model {
 
     @ManyToOne
     public Note note;
+
+    public S3File (String name, File file) {
+        super();
+        this.name = name;
+        this.file = file;
+    }
+
+    public static S3File create(FilePart file) throws IllegalArgumentException {
+        if (file != null) {
+            S3File s3File = new S3File(file.getFilename(), file.getFile());
+            s3File.save();
+            return s3File;
+        } else {
+            throw new IllegalArgumentException("File is null!");
+        }
+    }
+
+    // All methods below are from takes from heroku
 
     public URL getUrl() throws MalformedURLException {
         return new URL("https://s3.amazonaws.com/" + bucket + "/" + getActualFileName());
