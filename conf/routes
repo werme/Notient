@@ -1,22 +1,25 @@
 
 # Home
-GET     /                       			controllers.Application.index()
+GET     /                       		controllers.Application.index()
 
 # Search
 POST    /search                       controllers.Search.performSearch()
 GET     /search/:query                controllers.Search.show(query: String)
 
 # Notes
-GET     /notes                  			controllers.Application.index()
-POST    /notes                  			controllers.Notes.create()
-GET		  /notes/new 							      controllers.Notes.newNote()
-GET     /notes/:page                  controllers.Notes.list(page: Int)
-GET     /note/:id               			controllers.Notes.show(id: Long)
-POST    /note/:id                     controllers.Notes.update(id: Long)
-GET     /note/:id/edit                controllers.Notes.edit(id: Long)
-POST    /note/:id/delete              controllers.Notes.delete(id: Long)
-GET    	/note/:id/upvote              controllers.Notes.toggleUpVote(id: Long)
-GET    	/note/:id/downvote            controllers.Notes.toggleDownVote(id: Long)
+
+GET		/notes/new 						controllers.Notes.newNote()
+POST    /notes                  		controllers.Notes.create()
+GET     /notes 			               	controllers.Notes.listAll()
+GET     /notes/:page                	controllers.Notes.list(page: Int)
+GET     /thumbnails      		        controllers.Notes.thumbnailsAll()
+GET     /thumbnails/:page      		    controllers.Notes.thumbnails(page: Int)
+GET     /note/:id               		controllers.Notes.show(id: Long)
+POST    /note/:id                     	controllers.Notes.update(id: Long)
+GET     /note/:id/edit                	controllers.Notes.edit(id: Long)
+POST    /note/:id/delete              	controllers.Notes.delete(id: Long)
+GET    	/note/:id/upvote              	controllers.Notes.toggleUpVote(id: Long)
+GET    	/note/:id/downvote            	controllers.Notes.toggleDownVote(id: Long)
 
 # Comments
 POST    /note/:id/comments      			controllers.Notes.newComment(id: Long)

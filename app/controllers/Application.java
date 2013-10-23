@@ -9,6 +9,6 @@ import views.html.*;
 public class Application extends Controller {
 
 	public static Result index() {
-		return redirect(routes.Notes.list(1));
+		return redirect(routes.Notes.thumbnailsAll());
 	}
 }

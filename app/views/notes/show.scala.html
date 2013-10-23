@@ -15,7 +15,7 @@
         <header class="note-header">
             <div class="module">
                 <em>@note.title</em> by 
-                <a href="@routes.Users.show(note.author.email)">@note.author.displayName</a> <i class="time icon"></i>Posted @note.getCreatedAt 
+                <a href="@routes.Users.show(note.author.email)">@note.author.displayName</a><br><i class="time icon"></i>Posted @note.getCreatedAt 
             </div>
             @if(!note.author.equals(User.currentUser)) {
                 <div class="module right"><a href="@routes.Notes.toggleUpVote(note.id)"><i class="thumbs up icon"></i></a>

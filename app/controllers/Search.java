@@ -6,6 +6,7 @@ import play.data.*;
 import play.Logger;
 import models.*;
 import views.html.*;
+import views.html.notes.*;
 
 public class Search extends Controller {
 
@@ -22,6 +23,6 @@ public class Search extends Controller {
   public static Result show(String query) {
     List<Note> notes = Note.searchNotes(query);
     List<User> users = User.searchUsers(query); // Bapl
-    return ok(index.render(notes, noteForm, searchForm, 0, 1));
+    return ok(list.render(notes, noteForm, searchForm, 1, 1));
   }
 }

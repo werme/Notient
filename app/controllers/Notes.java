@@ -23,23 +23,44 @@ import models.*;
 
 public class Notes extends Controller {
 
-	private static final int resultsPerPage = 6;
+	private static final int resultsPerThumbnailPage = 6;
+	private static final int resultsPerListPage = 16;
 
-	static Form<Note> noteForm = Form.form(Note.class);
-	static Form<Comment> commentForm = Form.form(Comment.class);
-	static Form<String> searchForm = Form.form(String.class);
+	private static Form<Note> noteForm = Form.form(Note.class);
+	private static Form<Comment> commentForm = Form.form(Comment.class);
+	private static Form<String> searchForm = Form.form(String.class);
+
+	public static Result listAll() {
+		PagingList<Note> pagingList = Note.all(resultsPerListPage);
+		return ok(list.render(pagingList.getPage(0).getList(), noteForm, searchForm, 0, pagingList.getTotalPageCount()));
+	}
+
+	public static Result thumbnailsAll() {
+		PagingList<Note> pagingList = Note.all(resultsPerThumbnailPage);
+		return ok(thumbnails.render(pagingList.getPage(0).getList(), noteForm, searchForm, 0, pagingList.getTotalPageCount()));
+	}
 
 	public static Result list(int rawPageNr) {
-		PagingList<Note> pagingList = Note.all(resultsPerPage);
+		PagingList<Note> pagingList = Note.all(resultsPerListPage);
 		
 		// Page number show in url starts from 1 for usability
 		int pageNr = rawPageNr-1;
 		
-		// Send invalid page numbers to application index
+		// Send invalid page numbers shouldn't render
 		if(pageNr < 0 || pageNr >= pagingList.getTotalPageCount()) {
-			return redirect(routes.Application.index());
+			return redirect(routes.Notes.thumbnailsAll());
 		} else {
-			return ok(index.render(pagingList.getPage(pageNr).getList(), noteForm, searchForm, pageNr, pagingList.getTotalPageCount()));
+			return ok(list.render(pagingList.getPage(pageNr).getList(), noteForm, searchForm, pageNr, pagingList.getTotalPageCount()));
+		}
+	}
+
+	public static Result thumbnails(int rawPageNr) {
+		PagingList<Note> pagingList = Note.all(resultsPerThumbnailPage);
+		int pageNr = rawPageNr-1;
+		if(pageNr < 0 || pageNr >= pagingList.getTotalPageCount()) {
+			return redirect(routes.Notes.thumbnailsAll());
+		} else {
+			return ok(thumbnails.render(pagingList.getPage(pageNr).getList(), noteForm, searchForm, pageNr, pagingList.getTotalPageCount()));
 		}
 	}
 
@@ -80,7 +101,7 @@ public class Notes extends Controller {
             }
 			
 			Note note = Note.create(filledForm.get(), Form.form().bindFromRequest().get("tagList"), User.currentUser(), s3File);
-      flash("info", "Successfully created note!");
+      		flash("info", "Successfully created note!");
 			return redirect(routes.Notes.show(note.id));
 		}
 	}
@@ -93,8 +114,8 @@ public class Notes extends Controller {
 			return ok(edit.render(note, filledForm));
 		} else {
 			flash("error", "You are not authorized to edit this note!");
-			PagingList<Note> pagingList = Note.all(resultsPerPage);
-			return badRequest(index.render(pagingList.getPage(0).getList(), noteForm, searchForm, 0, pagingList.getTotalPageCount()));
+			PagingList<Note> pagingList = Note.all(resultsPerThumbnailPage);
+			return badRequest(thumbnails.render(pagingList.getPage(0).getList(), noteForm, searchForm, 0, pagingList.getTotalPageCount()));
 		}
 	}
 
@@ -102,8 +123,8 @@ public class Notes extends Controller {
 	public static Result update(Long id) {
 		Form<Note> filledForm = noteForm.bindFromRequest();
 		if (filledForm.hasErrors()) {
-			PagingList<Note> pagingList = Note.all(resultsPerPage);
-			return badRequest(index.render(pagingList.getPage(0).getList(), noteForm, searchForm, 0, pagingList.getTotalPageCount()));
+			PagingList<Note> pagingList = Note.all(resultsPerThumbnailPage);
+			return badRequest(thumbnails.render(pagingList.getPage(0).getList(), noteForm, searchForm, 0, pagingList.getTotalPageCount()));
 		} else {
 			Note.update(id, filledForm.get(), Form.form().bindFromRequest().get("tagList"));
 			flash("info", "Successfully update note!");
@@ -121,8 +142,8 @@ public class Notes extends Controller {
 			return redirect(routes.Notes.list(1));
 		} else {
 			flash("error", "You are not authorized to delete this note!");
-			PagingList<Note> pagingList = Note.all(resultsPerPage);
-			return badRequest(index.render(pagingList.getPage(0).getList(), noteForm, searchForm, 0, pagingList.getTotalPageCount()));
+			PagingList<Note> pagingList = Note.all(resultsPerThumbnailPage);
+			return badRequest(thumbnails.render(pagingList.getPage(0).getList(), noteForm, searchForm, 0, pagingList.getTotalPageCount()));
 		}
 	}
 
