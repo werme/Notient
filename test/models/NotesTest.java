@@ -32,10 +32,13 @@ public class NotesTest extends WithApplication {
 
   @Test
   public void createAndRetrieveNote() {
-    Note.create(new Note("My note"), null, testUser, null);
-    Note myNote = Note.find.where().eq("title", "My note").findUnique();
-    assertNotNull(myNote);
-    assertEquals("My note", myNote.title);
+    String title = "My test note title";
+    String content = "My test note content";
+    Long id = Note.create(new Note(title, content), testUser).id;
+
+    Note note = Note.find.ref(id);
+    assertNotNull(note);
+    assertEquals(title, note.title);
   }
 
   @Test
@@ -55,19 +58,19 @@ public class NotesTest extends WithApplication {
     Note myDeletedNote = Note.find.where().eq("title", "Test note title").findUnique();
     assertNull(myDeletedNote);
   }
+
   @Test
-  public void notesBy() {
-    Note.create(new Note("My first note"), null, testUser, null);
-    Note.create(new Note("My second note"), null, testUser, null);
-    Logger.debug(testUser + "");
-    List<Note> results = Note.notesBy(testUser);
-    assertEquals(2, results.size());
-    assertEquals("My first note", results.get(0).title);
+  public void byAuthor() {
+    assertEquals(0, Note.byAuthor(testUser).size());
+    Note.create(new Note("My first note", "My test content"), testUser);
+    Note.create(new Note("My second note", "My test content"), testUser);
+    assertEquals(2, Note.byAuthor(testUser).size());
   }
+
   @Test
   public void vote(){
-    Note.create(new Note("Note with votes"), null, testUser, null);
-    Note voteNote = Note.find.where().eq("title", "Note with votes").findUnique();
+    Long id = Note.create(new Note("Note with votes", "Vote note content"), testUser).id;
+    Note voteNote = Note.find.ref(id);
 
     //Check if user can toggle up vote correctly;
     voteNote.toggleUpVote(testUser);
@@ -89,10 +92,9 @@ public class NotesTest extends WithApplication {
     assertEquals(voteNote.getVoteStatus(testUser), -1);
     assertEquals(voteNote.getScore(),-1);
 
+    Long id2 = Note.create(new Note("Second voteNote", "My test content"), testUser).id;
 
-    Note.create(new Note("Second voteNote"), null, testUser, null);
-
-    Note voteNote2 = Note.find.where().eq("title", "Second voteNote").findUnique();
+    Note voteNote2 = Note.find.ref(id2);
 
     assertEquals(voteNote2.getScore(), 0);
   }

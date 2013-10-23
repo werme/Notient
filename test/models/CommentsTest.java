@@ -18,7 +18,7 @@ import static play.test.Helpers.inMemoryDatabase;
 
 public class CommentsTest extends WithApplication {
 
-	User testUser;
+	private User testUser;
 	
 	@Before
 	public void setUp() {
@@ -29,25 +29,29 @@ public class CommentsTest extends WithApplication {
 
 	@Test
 	public void createComment() {
-		Note.create(new Note("My note"), null, testUser, null);
-    	Note note = Note.find.where().eq("title", "My note").findUnique();
+    String title = "My test note";
+    String content = "My test content";
+		Note note = Note.create(new Note(title, content), testUser);
 
-    	Comment.create(note.id, new Comment("Awesome post"), testUser);
-    	Comment myComment = Comment.find.where().eq("content", "Awesome post").findUnique();
-    	assertNotNull(myComment);
-    	assertEquals("Awesome post", myComment.content);
+    String commentContent = "My test comment";
+  	Long commentId = Comment.create(note.id, new Comment(commentContent), testUser).id;
+
+    Comment commentFromDB = Comment.find.ref(commentId);
+  	assertNotNull(commentFromDB);
+  	assertEquals(commentContent, commentFromDB.content);
 	}
 
 	@Test
 	public void deleteComment() {
-        Note.create(new Note("Delete this"), null, testUser, null);
-    	Note note = Note.find.where().eq("title", "Delete this").findUnique();
+    String title = "My test note";
+    String content = "My test content";
+    Note note = Note.create(new Note(title, content), testUser);
 
-    	Comment.create(note.id, new Comment("Will do"), testUser);
-    	Comment myComment = Comment.find.where().eq("content", "Will do").findUnique();
+  	String commentContent = "My test comment";
+    Long commentId = Comment.create(note.id, new Comment(commentContent), testUser).id;
 
-    	Comment.delete(myComment.id);
-    	Comment myDeletedComment = Comment.find.where().eq("content", "Will do").findUnique();
-    	assertNull(myDeletedComment);
+  	Comment.delete(commentId);
+  	Comment deletedComment = Comment.find.ref(commentId);
+  	assertNull(deletedComment);
 	}
 }

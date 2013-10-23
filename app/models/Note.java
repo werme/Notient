@@ -66,6 +66,12 @@ public class Note extends Model implements Authorizable {
 	@JoinTable(name="down_votes")
 	public List<User> downVotes = new ArrayList<User>();
 
+
+  public Note(String title, String content) {
+    this.title = title;
+    this.content = content;
+  }
+
 	public Note(String title, String content, User author) {
 		this.title = title;
 		this.content = content;
