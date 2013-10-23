@@ -43,6 +43,14 @@ public class NotesTest extends WithApplication {
 
   @Test
   public void addTagToNote() {
+    Note note = Note.find.where().eq("title", "Test note title").findUnique();
+    note.replaceTags("tag1 tag2");
+
+    Tag tag1 = Tag.find.where().eq("title", "tag1").findUnique();
+    Tag tag2 = Tag.find.where().eq("title", "tag2").findUnique();
+
+    Note noteWithTags = Note.find.where().eq("title", "Test note title").findUnique();
+    assertEquals(noteWithTags.tags.get(0), tag1);
   }
 
   @Test
