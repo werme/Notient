@@ -49,13 +49,13 @@ public class S3File extends Model {
         this.file = file;
     }
 
-    public static S3File create(FilePart file) throws IllegalArgumentException {
+    public static S3File create(FilePart file) {
         if (file != null) {
             S3File s3File = new S3File(file.getFilename(), file.getFile());
             s3File.save();
             return s3File;
         } else {
-            throw new IllegalArgumentException("File is null!");
+            return null;
         }
     }
 
