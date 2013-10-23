@@ -1,0 +1,20 @@
+@(note: Note, noteForm: Form[Note])
+
+@implicitFieldConstructor = @{ FieldConstructor(plainFieldConstructor.render) }
+
+@import helper._
+
+@main("Edit note: " + note.title, noteForm) {
+  <div class="container" role="main">
+    <div class="note-wrapper">
+      @form(routes.Notes.update(note.id), 'enctype -> "multipart/form-data") {
+        <input type="hidden" name="id" value="@note.id">
+        @inputText(noteForm("title"),'_showConstraints -> false, '_label -> "Title:", 'placeholder -> "Write your note title here...", 'class -> "title")
+        <textarea id="content" name="content">@noteForm("content").value</textarea> 
+        <label>Tags:</label>
+        <input type="text" name="tagList" placeholder="rainbow unicorn-ponies" value="@if(note.tags != null) { @for(tag <- note.tags ) {@tag.title } }">
+        <input id="update-note-button" class="flat-button" type="submit" value="Update note">
+      }
+    </div>
+  </div>
+}

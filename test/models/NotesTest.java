@@ -10,35 +10,47 @@ import play.test.WithApplication;
 
 import java.util.*;
 
+import play.Logger;
 import static org.junit.Assert.*;
 import static play.test.Helpers.fakeApplication;
 import static play.test.Helpers.inMemoryDatabase;
 
 public class NotesTest extends WithApplication {
 
-  LocalUser testUser;
+  User testUser;
+  User testUser1;
+  User testUser2;
 
   @Before
   public void setUp() {
     start(fakeApplication(inMemoryDatabase()));
     Ebean.save((List) Yaml.load("test-data.yml"));
-    testUser = LocalUser.findById("1234567890");
+    testUser = User.findByEmail("pingu@notient.com");
+    testUser1 = User.findByEmail("test1@notient.com");
+    testUser2 = User.findByEmail("test2@notient.com");
   }
 
   @Test
   public void createAndRetrieveNote() {
-    Note.create(new Note("My note", testUser));
-    Note myNote = Note.find.where().eq("title", "My note").findUnique();
-    assertNotNull(myNote);
-    assertEquals("My note", myNote.title);
+    String title = "My test note title";
+    String content = "My test note content";
+    Note.create(new Note(title, content), testUser);
+
+    Note noteFromDB = Note.find.where().eq("title", title).findUnique();
+    assertNotNull(noteFromDB);
+    assertEquals(title, noteFromDB.title);
   }
 
   @Test
   public void addTagToNote() {
-    Note myNote = Note.find.where().eq("title", "Test note title").findUnique();
-    Note.addTag(myNote.id, Tag.findByTitle("Test tag title"));
+    Note note = Note.find.where().eq("title", "Test note title").findUnique();
+    note.replaceTags("tag1 tag2");
 
-    assertEquals("Test tag title", myNote.tags.get(0).title);
+    Tag tag1 = Tag.find.where().eq("title", "tag1").findUnique();
+    Tag tag2 = Tag.find.where().eq("title", "tag2").findUnique();
+
+    Note noteWithTags = Note.find.where().eq("title", "Test note title").findUnique();
+    assertEquals(noteWithTags.tags.get(0), tag1);
   }
 
   @Test
@@ -54,13 +66,44 @@ public class NotesTest extends WithApplication {
     Note myDeletedNote = Note.find.where().eq("title", "Test note title").findUnique();
     assertNull(myDeletedNote);
   }
-  @Test
-  public void notesBy() {
-      Note.create(new Note("My first note", testUser));
-      Note.create(new Note("My second note", testUser));
 
-      List<Note> results = Note.notesBy(testUser);
-      assertEquals(2, results.size());
-      assertEquals("My first note", results.get(0).title);
+  @Test
+  public void byAuthor() {
+    assertEquals(0, Note.byAuthor(testUser).size());
+    Note.create(new Note("My first note", "My test content"), testUser);
+    Note.create(new Note("My second note", "My test content"), testUser);
+    assertEquals(2, Note.byAuthor(testUser).size());
+  }
+
+  @Test
+  public void vote(){
+    Long id = Note.create(new Note("Note with votes", "Vote note content"), testUser).id;
+    Note voteNote = Note.find.ref(id);
+
+    //Check if user can toggle up vote correctly;
+    voteNote.toggleUpVote(testUser);
+    assertEquals(voteNote.getVoteStatus(testUser), 1);
+    voteNote.toggleUpVote(testUser);
+    assertEquals(voteNote.getVoteStatus(testUser), 0);
+
+    //Total score of vote should be equals to 2.
+    voteNote.toggleUpVote(testUser);
+    voteNote.toggleUpVote(testUser1);
+    assertEquals(voteNote.getScore(),2);
+
+    //With one a down vote we should have a score of 1
+    voteNote.toggleDownVote(testUser2);
+    assertEquals(voteNote.getScore(),1);
+
+    //Switch toggle testUsers vote and we should have a score of -1.
+    voteNote.toggleDownVote(testUser);
+    assertEquals(voteNote.getVoteStatus(testUser), -1);
+    assertEquals(voteNote.getScore(),-1);
+
+    Long id2 = Note.create(new Note("Second voteNote", "My test content"), testUser).id;
+
+    Note voteNote2 = Note.find.ref(id2);
+
+    assertEquals(voteNote2.getScore(), 0);
   }
 }

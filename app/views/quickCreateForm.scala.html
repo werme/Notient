@@ -4,15 +4,17 @@
 
 @implicitFieldConstructor = @{ FieldConstructor(plainFieldConstructor.render) }
 
-@form(routes.Notes.newNote) {
-    @inputText(
-        noteForm("title"),
-        '_showConstraints -> false
-    )
-    @textarea(noteForm("text"))
-
-    <label>tags</label>
-    <input type="text" name="tagList" />
-
-    <input class="flat-button" type="submit" value="Create Note">
+@form(routes.Notes.create, 'enctype -> "multipart/form-data") {
+    <div class="module">
+      @inputText(
+          noteForm("title"),
+          '_showConstraints -> false
+      )
+      <label>tags</label>
+      <input type="text" name="tagList" />
+    </div>
+    <div class="module">
+      @textarea(noteForm("content"))
+      <input id="quick-create-note-button" class="flat-button" type="submit" value="Create Note">
+    </div>
 }

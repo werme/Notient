@@ -1,0 +1,30 @@
+@(user: User, noteForm: Form[Note])
+
+@import helper._
+
+@main("User: " + user.displayName, noteForm) {
+    <div class="container main">
+        <section class="user-wrapper">
+            <div class="avatar"><img src="@user.getAvatarUrl" /></div>
+            <h1>@user.displayName</h1>
+            <p>User class: @user.privilege</p>
+            <p>First name: @user.firstName</p>
+            <p>Last name: @user.lastName</p>
+            <p>Score: @user.getScore</p>
+        </section>
+
+        <aside class="similar-notes">
+        @if(Note.byAuthor(user).size != 0) {
+	        <h2>Notes written</h2>
+            <ul>
+                @for(note <- Note.byAuthor(user)) {
+                    <li class="note">
+                        <a href="@routes.Notes.show(note.id)"><h3>@note.title</h3></a>
+                        <p>@note.extract(25)</p>
+                    </li>
+                }
+            </ul>
+        }
+        </aside>
+    </div>
+}

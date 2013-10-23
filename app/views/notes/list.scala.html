@@ -1,0 +1,42 @@
+@(notes: List[Note], noteForm: Form[Note], searchForm: Form[String], page: Int, pages: Int)
+
+@import helper._
+
+@main("Notient", noteForm) {
+    <div class="container main">
+        <section class="note-list-wrapper">
+            <h1>Recent notes</h1>
+            <ul>
+            @for(note <- notes) {
+                <li>
+                    <a href="@routes.Notes.show(note.id)" class="note-link">@note.title</a>
+                    &mdash; <a href="@routes.Users.show(note.author.email)" class="author-link">@note.author.displayName</a>
+
+                    @if(note.allows(User.currentUser)) {
+                        <div class="quick-note-links-wrapper">
+                            <a href="@routes.Notes.edit(note.id)" class="quick-edit-note-button"><i class="edit icon"></i></a>
+                            <a href="#" class="quick-delete-note-button" data-url="@routes.Notes.delete(note.id)" ><i class="remove icon"></i></a>
+                        </div>
+                    }
+                    <date><i class="time icon"></i>@note.getCreatedAt</date>
+                </li>
+            }
+            <ul>
+        </section>
+        <section class="pagination">
+            @if(page+1 > 1) {
+                <a href="@routes.Notes.list(page)"><i class="long arrow left icon"></i>prev page</a>
+            } else {
+                <span><i class="long arrow left icon"></i>prev page</span>
+            }
+
+            browsing page @(page+1) of @(pages)
+
+            @if(page+1 < pages) {
+                <a href="@routes.Notes.list(page+2)">next page<i class="long arrow right icon"></i></a>
+            } else {
+                <span>next page<i class="long arrow right icon"></i></span>
+            }
+        </section>
+    </div>
+}

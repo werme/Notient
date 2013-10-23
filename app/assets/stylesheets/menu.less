@@ -1,0 +1,62 @@
+@import "config";
+
+.dark-wrapper {
+  position: relative;
+  // box-shadow: 0 -10px 15px -10px darken(@dark, 5%) inset, 0 10px 15px -10px darken(@dark, 5%) inset;
+  background: @dark;
+  border-top: 1px solid darken(@blue, 20%);
+  border-bottom: 1px solid white;
+  margin-bottom: 1rem;
+  color: white;
+
+  input[type=text], textarea {
+    background: lighten(@dark, 5%);
+    border-color: lighten(@dark, 10%);
+    color: white;
+    &:hover { background: lighten(@dark, 7%); }
+  }
+
+  .quick-create-form {
+    display: none;
+    position: relative;
+    z-index: 1;
+    transition: all 0.4s;
+
+    .module {
+      padding: 1rem;
+    }
+
+    input, textarea {
+      width: 100%;
+    }
+
+    textarea {
+      height: 6.75rem;
+    }
+
+    input[type=submit] {
+      margin-top: 1rem;
+    }
+  }
+
+  .sub-nav {
+    position: relative;
+
+    font-size: 0.8rem;
+    transition: all 0.3s;
+    z-index: 2;
+
+    nav {
+      float: left;
+      li {  display: inline-block; }
+    }
+    a {
+      display: block;
+      padding: 0.8rem;
+      background: transparent;
+      border: 0;
+      color: lighten(@dark, 25%);
+      &:hover { color: white; background: transparent; border: 0; }
+    }
+  }
+}

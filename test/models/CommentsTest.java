@@ -8,6 +8,8 @@ import org.junit.Test;
 import play.libs.Yaml;
 import play.test.WithApplication;
 
+import play.Logger;
+
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -16,55 +18,40 @@ import static play.test.Helpers.inMemoryDatabase;
 
 public class CommentsTest extends WithApplication {
 
-	LocalUser testUser;
+	private User testUser;
 	
 	@Before
 	public void setUp() {
 		start(fakeApplication(inMemoryDatabase()));
 		Ebean.save((List) Yaml.load("test-data.yml"));
-		testUser = LocalUser.findById("1234567890");
-	}
-
-	@Test
-	public void useTheCommentsRelation() {
-		Note.create(new Note("My note", testUser));
-		Note note = Note.find.where().eq("title", "My note").findUnique();
-
-		note.addComment("Jeff", "Nice post");
-		note.addComment("Tom", "Awesome");
-
-		// assertEquals(2, Comment.count());
-
-		assertEquals(2, note.comments.size());
-		assertEquals("Jeff", note.comments.get(0).author);
-
-		note.delete();
-
-		// assertEquals(0, Comment.count());
+		testUser = User.findByEmail("pingu@notient.com");
 	}
 
 	@Test
 	public void createComment() {
-		Note.create(new Note("My note", testUser));
-    	Note note = Note.find.where().eq("title", "My note").findUnique();
+    String title = "My test note";
+    String content = "My test content";
+		Note note = Note.create(new Note(title, content), testUser);
 
-		new Comment(note, "Jeff", "Nice post").save();
-		new Comment(note, "Tom", "Awesome").save();
+    String commentContent = "My test comment";
+  	Comment.create(note.id, new Comment(commentContent), testUser);
 
-		List<Comment> commentsOnNote = note.comments;
+    Comment commentFromDB = Comment.find.where().eq("content", commentContent).findUnique();
+  	assertNotNull(commentFromDB);
+  	assertEquals(commentContent, commentFromDB.content);
+	}
 
-		assertEquals(2, commentsOnNote.size());
+	@Test
+	public void deleteComment() {
+    String title = "My test note";
+    String content = "My test content";
+    Note note = Note.create(new Note(title, content), testUser);
 
-		Comment firstComment = commentsOnNote.get(0);
-		assertNotNull(firstComment);
-		assertEquals("Jeff", firstComment.author);
-		assertEquals("Nice post", firstComment.content);
-		assertNotNull(firstComment.postedAt);
+  	String commentContent = "My test comment";
+    Long commentId = Comment.create(note.id, new Comment(commentContent), testUser).id;
 
-		Comment secondComment = commentsOnNote.get(1);
-		assertNotNull(secondComment);
-		assertEquals("Tom", secondComment.author);
-		assertEquals("Awesome", secondComment.content);
-		assertNotNull(secondComment.postedAt);
+  	Comment.delete(commentId);
+    Comment deletedComment = Comment.find.where().eq("content", commentContent).findUnique();
+  	assertNull(deletedComment);
 	}
 }

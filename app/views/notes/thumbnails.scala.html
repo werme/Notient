@@ -40,7 +40,7 @@
         </section>
         <section class="pagination">
             @if(page+1 > 1) {
-                <a id="last-page-link" href="@routes.Notes.list(page)"><i class="long arrow left icon"></i>prev page</a>
+                <a id="last-page-link" href="@routes.Notes.thumbnails(page)"><i class="long arrow left icon"></i>prev page</a>
             } else {
                 <span><i class="long arrow left icon"></i>prev page</span>
             }
@@ -48,7 +48,7 @@
             browsing page @(page+1) of @(pages)
 
             @if(page+1 < pages) {
-                <a id="next-page-link" href="@routes.Notes.list(page+2)">next page<i class="long arrow right icon"></i></a>
+                <a id="next-page-link" href="@routes.Notes.thumbnails(page+2)">next page<i class="long arrow right icon"></i></a>
             } else {
                 <span>next page<i class="long arrow right icon"></i></span>
             }

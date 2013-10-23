@@ -1,5 +1,14 @@
-package service;
+/**
+ * Our connection to securesocial, this is where we save the users locally when the users
+ * and retrieve information from the different login processes, google, facebook and
+ * registering. 
+ *
+ * This class also handles the tokens for userspecific pages (such as registration 
+ * and reset password link)
+ *
+ */
 
+package service;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -9,8 +18,9 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
-import models.LocalToken;
-import models.LocalUser;
+import models.Token;
+import models.User;
+import models.Provider;
 import play.Application;
 import play.Logger;
 import scala.Option;
@@ -21,11 +31,9 @@ import securesocial.core.PasswordInfo;
 import securesocial.core.SocialUser;
 import securesocial.core.IdentityId;
 import securesocial.core.java.BaseUserService;
-import securesocial.core.java.Token;
+import securesocial.core.providers.utils.GravatarHelper;
 
 public class UserService extends BaseUserService {
-
-    final static String defaultAvatarUrl = "defaultAvatarUrl";
 
     public UserService(Application application) {
         super(application);
@@ -33,49 +41,37 @@ public class UserService extends BaseUserService {
 
     @Override
     public void doDeleteExpiredTokens() {
-        if (Logger.isDebugEnabled()) {
-            Logger.debug("deleteExpiredTokens...");
-        }
-        List<LocalToken> list = LocalToken.find.where().lt("expireAt", new DateTime().toString()).findList();
-        for(LocalToken localToken : list) {
+        List<Token> list = Token.find.where().lt("expireAt", new DateTime().toString()).findList();
+        for(Token localToken : list) {
             localToken.delete();
         }
     }
 
     @Override
     public void doDeleteToken(String uuid) {
-        if (Logger.isDebugEnabled()) {
-            Logger.debug("deleteToken...");
-            Logger.debug(String.format("uuid = %s", uuid));
-        }
-        LocalToken localToken = LocalToken.find.byId(uuid);
+        Token localToken = Token.find.byId(uuid);
         if(localToken != null) {
             localToken.delete();
         }
     }
 
     @Override
-    //public Identity doFind(UserId userId) {
     public Identity doFind(IdentityId identityId){
-        if (Logger.isDebugEnabled()) {
-            Logger.debug(String.format("finding by Id = %s", identityId.userId()));
+        User localUser;
 
-        }
-
-        //Might should be findByEmail
-        LocalUser localUser;
-
-        localUser = LocalUser.findById(identityId.userId());
+        localUser = User.findByEmail(identityId.userId().toLowerCase());
         if(localUser == null){
-            localUser = LocalUser.findByEmail(identityId.userId().toLowerCase());
+            localUser = User.findByUsername(identityId.userId().toLowerCase());
         }
         if(localUser == null){
-            localUser = LocalUser.findByUsername(identityId.userId().toLowerCase());
+            Provider p = Provider.findById(identityId.userId());
+            if(p != null){
+                localUser = User.findByEmail(p.user.email);
+            }
         }
 
-        Logger.debug(String.format("localUser = " + localUser));
         if(localUser == null) return null;
-        SocialUser socialUser = new SocialUser(new IdentityId(localUser.id, localUser.provider),    
+        SocialUser socialUser = new SocialUser(new IdentityId(localUser.email, identityId.providerId()),    
             localUser.firstName, 
             localUser.lastName, 
             String.format("%s %s", localUser.firstName, localUser.lastName),
@@ -85,25 +81,19 @@ public class UserService extends BaseUserService {
             null, 
             null, 
             Some.apply(new PasswordInfo("bcrypt", localUser.password, null))
-        );  
-        if (Logger.isDebugEnabled()) {
-            Logger.debug(String.format("socialUser = %s", socialUser));
-        }
+        );
         return socialUser;
     }
 
-
     @Override
     public Identity doFindByEmailAndProvider(String email, String providerId) {
-        List<LocalUser> list = LocalUser.find.where().eq("email", email).eq("provider", providerId).findList();
-        if(list.size() != 1){
-            Logger.debug("found a null in findByEmailAndProvider..." + "Provider: " + providerId + " Email: " + email + " #Results: " + list.size());
+        email = email.toLowerCase();
+        User localUser = User.findByEmail(email);
+        if(localUser == null)
             return null;
-        }
-        //Logger.debug("Provider: "+ list.get(0).provider + " Password: " + list.get(0).password);
-        LocalUser localUser = list.get(0);
-        SocialUser socialUser = 
-                new SocialUser(new IdentityId(localUser.id, localUser.provider),
+        if(localUser.hasProvider("userpass")){
+            SocialUser socialUser = 
+                new SocialUser(new IdentityId(localUser.email, "userpass"),
                         localUser.firstName, 
                         localUser.lastName, 
                         String.format("%s %s", localUser.firstName, localUser.lastName),
@@ -114,98 +104,98 @@ public class UserService extends BaseUserService {
                         null, 
                         Some.apply(new PasswordInfo("bcrypt", localUser.password, null))
                    );  
-        return socialUser;
+            return socialUser;
+        }
+        return null;
     }
 
     @Override
-    public Token doFindToken(String token) {
-        if (Logger.isDebugEnabled()) {
-            Logger.debug("findToken...");
-            Logger.debug(String.format("token = %s", token));
-        }
-        LocalToken localToken = LocalToken.find.byId(token);
+    public securesocial.core.java.Token doFindToken(String token) {
+        Token localToken = Token.find.byId(token);
         if(localToken == null) return null;
-        Token result = new Token();
+        securesocial.core.java.Token result = new securesocial.core.java.Token();
         result.uuid = localToken.uuid;
         result.creationTime = new DateTime(localToken.createdAt);
         result.email = localToken.email;
         result.expirationTime = new DateTime(localToken.expireAt);
         result.isSignUp = localToken.isSignUp;
-        if (Logger.isDebugEnabled()) {
-            Logger.debug(String.format("foundToken = %s", result));
-        }
         return result;
     }
 
+
+    /**
+     * This method saves and updates the user each time you login.
+     */
     @Override
     public Identity doSave(Identity user) {
-        if (Logger.isDebugEnabled()) {
-            Logger.debug("save...!_!");
-            Logger.debug(String.format("user = %s", user));
-        }
-        LocalUser localUser = null;
-        localUser = LocalUser.find.byId(user.identityId().userId());
-        
-        Logger.debug("id = " + user.identityId().userId() + "  " + user.identityId().userId().toLowerCase());
-        Logger.debug("provider = " + user.identityId().providerId());
-        Logger.debug("firstName = " + user.firstName());
-        Logger.debug("lastName = " + user.lastName());
-        Logger.debug(user.fullName() + "");
-        Logger.debug("email = " + user.email());
-        Logger.debug(user.email().getClass() + "");
-        Logger.debug(user.avatarUrl());
-        
-        if (localUser == null) {
-            Logger.debug("adding new...");
-            localUser = new LocalUser();
-            localUser.id = user.identityId().userId().toLowerCase();
-            localUser.provider = user.identityId().providerId();
+
+        User localUser = null;
+        localUser = User.findByEmail(user.email().get().toLowerCase());
+
+
+        if(localUser == null){
+            //user have never ever logged in, add him to the database. with provider info
+            localUser = new User();
+            localUser.email = user.email().get().toLowerCase();
+            localUser.addProvider(new Provider(user.identityId().providerId(), user.identityId().userId(), localUser));
+            if(user.identityId().providerId().equals("userpass")){
+                localUser.username = user.identityId().userId().toLowerCase();
+            }
             localUser.firstName = user.firstName();
             localUser.lastName = user.lastName();
-
-            //If the user doesnt have an gravatar or his social account doesnt return a avatar then set the avatar to our default avatar.
-            if(user.avatarUrl() instanceof scala.Some){
-                localUser.avatarUrl = user.avatarUrl().get();
-            } else{
-                localUser.avatarUrl = defaultAvatarUrl;
+            if(GravatarHelper.avatarFor(localUser.email) instanceof scala.Some){
+                localUser.avatarUrl = GravatarHelper.avatarFor(localUser.email).get();
             }
-            //Temporary solution for twitter which does not have email in OAuth answer
-            if(user.email() instanceof scala.Some){
-                localUser.email = user.email().get().toLowerCase();
-            }
+            //If user registered add the password
             if(user.passwordInfo() instanceof scala.Some){
                 localUser.password = user.passwordInfo().get().password();
             }
             localUser.save();
         } else {
-            Logger.debug("existing one...");
-            localUser.id = user.identityId().userId().toLowerCase();
-            localUser.provider = user.identityId().providerId();
-            localUser.firstName = user.firstName();
-            localUser.lastName = user.lastName();
-            
-            //If the user doesnt have an gravatar or his social account doesnt return a avatar then set the avatar to our default avatar.
-            if(user.avatarUrl() instanceof scala.Some){
-                localUser.avatarUrl = user.avatarUrl().get();
-            } else{
-                localUser.avatarUrl = defaultAvatarUrl;
+            //User have logged in before.
+            //Update the gravatar
+            if(localUser.avatarUrl == null && GravatarHelper.avatarFor(localUser.email) instanceof scala.Some){
+                localUser.avatarUrl = GravatarHelper.avatarFor(localUser.email).get();
+                localUser.save();
             }
-            
-            //Temporary solution for twitter which does not have email in OAuth answer
-            if(user.email() instanceof scala.Some){
-                localUser.email = user.email().get().toLowerCase();
+
+            if(localUser.hasProvider(user.identityId().providerId())){
+                //User has already registered with this medium
+                if(user.identityId().providerId().equals("userpass")){
+                    //If password have been update
+                    if(user.passwordInfo() instanceof scala.Some){
+                        localUser.password = user.passwordInfo().get().password();
+                    }
+                localUser.save();
+                }
+                //user is already registered or logged in with this medium. Nothing to do update or save.
+            } else {
+                if(user.identityId().providerId().equals("userpass")){
+                    //Update the old social media information, user have registered!
+                    localUser.username = user.identityId().userId().toLowerCase();
+                    localUser.firstName = user.firstName();
+                    localUser.lastName = user.lastName();
+                    localUser.addProvider(new Provider(user.identityId().providerId(), user.identityId().userId(), localUser));
+
+                    if(user.passwordInfo() instanceof scala.Some){
+                        localUser.password = user.passwordInfo().get().password();
+                    }
+                    localUser.update();
+
+                } else {
+                    //User logged in with a new media, add it to the user.
+                    //Provider should be added to provider list along with the id.            
+                    localUser.addProvider(new Provider(user.identityId().providerId(), user.identityId().userId(), localUser));
+                    localUser.save();
+                }
             }
-            if(user.passwordInfo() instanceof scala.Some){
-                localUser.password = user.passwordInfo().get().password();
-            }
-            localUser.update();
-        }
+        } 
         return user;
     }
 
     @Override
-    public void doSave(Token token) {
-        LocalToken localToken = new LocalToken();
+    public void doSave(securesocial.core.java.Token token) {
+        Token localToken = new Token();
         localToken.uuid = token.uuid;
         localToken.email = token.email;
         try {

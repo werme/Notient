@@ -1,26 +1,97 @@
-@(note: Note)
+
+@(note: Note, noteForm: Form[Note], commentForm: Form[Comment], searchForm: Form[String])
+
+@implicitFieldConstructor = @{ FieldConstructor(plainFieldConstructor.render) }
 
 @import helper._
+@import helpers.MarkdownHelper
 
-@main("Note list") {
-    <header class="main-header">
-        <div class="container">
-            <h1>Notient</h1>
-            <nav>
-                <ul>
-                    <li><a href="@securesocial.controllers.routes.LoginPage.login()">Login</a></li>
-                    <li><a href="@securesocial.controllers.routes.LoginPage.logout()">Logout</a></li>
-                    <li><a href="@securesocial.controllers.routes.Registration.startSignUp">Register</a></li>
-                </ul>
-            </nav>
-        </div>
-
-    </header>
-
+@main(note.title, noteForm) {
+ 
     <div class="container main">
+        <div class="tags">
+            @for(tag <- note.tags) { <a href="#" class="tag">@tag.title</a> }
+        </div>
+        <header class="note-header">
+            <div class="module">
+                <em>@note.title</em> by 
+                <a href="@routes.Users.show(note.author.email)">@note.author.displayName</a>
+                <date><i class="time icon"></i>Posted @note.getCreatedAt</date>
+            </div>
+            @if(!note.author.equals(User.currentUser)) {
+                <div class="module right">
+                    <a id="upvote-button" href="@routes.Notes.toggleUpVote(note.id)"><i class="thumbs up icon"></i></a>
+                    <span id="userscore">@note.getScore</span>
+                    <a id="downvote-button" href="@routes.Notes.toggleDownVote(note.id)"><i class="thumbs down icon"></i></a>
+                </div>
+            } else {
+                <div class="module right">
+                    <i class="thumbs up icon"></i>
+                    <span id="userscore">@note.getScore</span>
+                    <i class="thumbs down icon"></i>
+                </div>
+            }
+        </header>            
         <section class="note-wrapper">
-            <h1>@note.title</h1>
-            <p>@note.content</p>
+            <p>@Html(MarkdownHelper.toHtml(note.content))</p>
+
+            @for(image <- note.images) {
+                <img src="@image.getUrl"> 
+            }
+            
+            @if(note.updatedAt!=null) {
+                <div><small><i class="time icon"></i>Last updated @note.getUpdatedAt</small></div>
+            }
+
+            @if(note.author.equals(User.currentUser)) {
+                <div class="note-links">
+                    <a id="edit-note-button" href="@routes.Notes.edit(note.id)" class="flat-button icon"><i class="edit icon"></i>Edit</a>
+                    @form(routes.Notes.delete(note.id)) {
+                        <button id="delete-note-button" class="flat-button icon delete"><i class="remove icon"></i>Delete</a></button>
+                    }
+                </div>
+            }
         </section>
+        <aside class="similar-notes">
+        <h2>Similar notes:</h2>
+            <ul>
+                @for(note <- Note.similar(note)) {
+                    <li class="note">
+                        <a href="@routes.Notes.show(note.id)"><h3>@note.title</h3></a>
+                        <p>@note.extract(25)</p>
+                    </li>
+                }
+            </ul>
+        </aside>
     </div>
+
+    <section class="comments">
+        <div class="container">
+            <header>
+                <h2>Discussion<i class="chat outline icon"></i></h2>
+            </header>
+            @if(note.comments.size == 0) {
+                <p>There are no comments for this note.</p>
+            }
+            @for(comment <- note.comments) {
+                <div class="comment">
+                    <div class="avatar"><img src="@comment.author.getAvatarUrl"></div>
+                    <div class="content">
+                        @if(comment.author.equals(User.currentUser)) {
+                            @form(routes.Notes.deleteComment(note.id, comment.id)) {
+                                <button id="delete-comment-button" class="flat-button delete-comment-button" type="submit"><i class="remove icon"></i></button>
+                            }
+                        }
+                        <h2><a href="@routes.Users.show(comment.author.email)">@comment.author.displayName</a></h2>
+                        <span class="date">@comment.getCreatedAt</span>
+                        <p id="comment-body">@comment</p>
+                    </div>
+                </div>
+            }
+            @form(routes.Notes.newComment(note.id)) {
+                @textarea(commentForm("content"), '_label -> "Leave a comment:")
+                <input id="post-comment-button" class="flat-button" type="submit" value="Post comment">
+            }
+        </div>
+    </section>
 }

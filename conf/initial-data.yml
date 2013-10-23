@@ -1,29 +1,101 @@
-# Notes
-
-- !!models.Note
-    title: Note title 1
-    content: The first note
-
-- !!models.Note
-    title: Note title 2
-    content: Lorem ipsum Incididunt culpa ullamco voluptate quis eiusmod culpa dolor laboris occaecat.
-
-- !!models.Note
-    title: Note title 3
-    content: Lorem ipsum Ut aliquip aliqua adipisicing exercitation ut est voluptate consectetur deserunt ullamco Duis.
-
-- !!models.Note
-    title: Note title 4
-    content:
-
 # Users
-- !!models.LocalUser
-    id: 123456789
-    username: pingu1
-    firstName: Pingu1
-    lastName: Pingusson1
+- &pingu1 !!models.User
+    username: pingu
+    firstName: Pingu
+    lastName: Pingusson
     email: notient1@gmail.com
-    provider: userpass
     privilege: ADMIN
     password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
 #password = $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+
+# Users
+- &admin !!models.User
+    username: admin
+    firstName: Neo
+    lastName: Andersson
+    email: notient2@gmail.com
+    privilege: ADMIN
+    password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+#password = $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+
+# Users
+- &joakim !!models.User
+    username:
+    firstName: Joakim
+    lastName: Von Hacht
+    email: notient3@gmail.com
+    privilege: ADMIN
+    password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+#password = $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+
+# Users
+- &barney !!models.User
+    username:
+    firstName: Barney
+    lastName: Stinson
+    email: notient4@gmail.com
+    privilege: ADMIN
+    password: $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+#password = $2a$10$.VE.rwJFMblRv2HIqhZM5.CiqzYOhhJyLYrKpMmwXar6Vp58U7flW
+
+- &pinguProvider !!models.Provider
+    id: pingu1
+    user: *pingu1
+    provider: userpass
+
+# Notes
+- !!models.Note
+    title: Web info part1
+    content: This is the first part of two  lorem ipsum notes.
+    author: *pingu1
+- !!models.Note
+    title: Being awesome
+    content: "This is the extended version of Barney Stinson's guide to being the most awesome guy alive. Enjoy."
+    author: *barney
+- !!models.Note
+    title: Web info part2
+    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce placerat nulla non libero convallis, non convallis neque cursus. Aenean eget nisi eu libero viverra pharetra quis sit amet dolor. Cras vitae tellus id lectus volutpat consequat. Nulla commodo a felis sit amet dictum. Praesent et ante et mi dignissim ullamcorper. Sed condimentum risus sem, ut vestibulum purus vehicula et. Nullam pharetra nisi est, eu congue massa lobortis ut. Integer interdum ligula eros, vitae interdum enim elementum ac. Sed cursus eget est ut volutpat. Donec dictum odio a est rhoncus suscipit.."
+    author: *pingu1
+- !!models.Note
+    title: Do more with Less!
+    content: "LESS extends CSS with dynamic behavior such as variables, mixins, operations and functions. LESS runs on both the server-side (with Node.js and Rhino) or client-side (modern browsers only)."
+    author: *joakim
+- &mynote !!models.Note
+    title: Web Lecture
+    content: "In Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce placerat nulla non libero convallis, non convallis neque cursus. Aenean eget nisi eu libero viverra pharetra quis sit amet dolor. Cras vitae tellus id lectus volutpat consequat. Nulla commodo a felis sit amet dictum. Praesent et ante et mi dignissim ullamcorper. Sed condimentum risus sem, ut vestibulum purus vehicula et. Nullam pharetra nisi est, eu congue massa lobortis ut. Integer interdum ligula eros, vitae interdum enim elementum ac. Sed cursus eget est ut volutpat. Donec dictum odio a est rhoncus suscipit.."
+    author: *pingu1
+- !!models.Note
+    title: About web
+    content: The web is deep and facinating place. There are many possiblities. The internet was born when some ancient members of 
+    author: *pingu1
+- !!models.Note
+    title: About web2
+    content: "The endless data of the web is created by users across the globe. Fiber, copper, radiowaves and lasers are beeing used to send data"
+    author: *pingu1
+- !!models.Note
+    title: Web scraping 101
+    content: "Web scraping (web harvesting or web data extraction) is a computer software technique of extracting information from websites."
+    author: *joakim
+- !!models.Note
+    title: About notient
+    content: "Notient is the future of the web according to many celebrity web developers! This is how it all works:"
+    author: *admin
+- !!models.Note
+    title: About web3
+    content: When many hosts are communicating with eachother a network is created. Severel networks interconnected then result in a internet
+    author: *pingu1
+
+- !!models.Comment
+    content: "Plub, blub, blub!"
+    note: *mynote
+    author: *pingu1
+
+- !!models.Comment
+    content: "Pingu, shut up or ban"
+    note: *mynote
+    author: *admin
+
+- !!models.Comment
+    content: "Nu tycker ni att ni är bra roliga, va?"
+    note: *mynote
+    author: *joakim
