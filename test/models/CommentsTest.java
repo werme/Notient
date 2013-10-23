@@ -34,9 +34,9 @@ public class CommentsTest extends WithApplication {
 		Note note = Note.create(new Note(title, content), testUser);
 
     String commentContent = "My test comment";
-  	Long commentId = Comment.create(note.id, new Comment(commentContent), testUser).id;
+  	Comment.create(note.id, new Comment(commentContent), testUser);
 
-    Comment commentFromDB = Comment.find.ref(commentId);
+    Comment commentFromDB = Comment.find.where().eq("content", commentContent).findUnique();
   	assertNotNull(commentFromDB);
   	assertEquals(commentContent, commentFromDB.content);
 	}
@@ -51,7 +51,7 @@ public class CommentsTest extends WithApplication {
     Long commentId = Comment.create(note.id, new Comment(commentContent), testUser).id;
 
   	Comment.delete(commentId);
-  	Comment deletedComment = Comment.find.ref(commentId);
+    Comment deletedComment = Comment.find.where().eq("content", commentContent).findUnique();
   	assertNull(deletedComment);
 	}
 }
