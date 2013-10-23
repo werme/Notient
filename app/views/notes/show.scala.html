@@ -79,7 +79,7 @@
                     <div class="content">
                         @if(comment.author.equals(User.currentUser)) {
                             @form(routes.Notes.deleteComment(note.id, comment.id)) {
-                                <button class="flat-button delete-comment-button" type="submit"><i class="remove icon"></i></button>
+                                <button id="delete-comment-button" class="flat-button delete-comment-button" type="submit"><i class="remove icon"></i></button>
                             }
                         }
                         <h2><a href="@routes.Users.show(comment.author.email)">@comment.author.displayName</a></h2>
