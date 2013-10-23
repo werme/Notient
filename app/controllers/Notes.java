@@ -16,7 +16,6 @@ import play.Logger;
 import securesocial.core.java.SecureSocial;
 import securesocial.core.Identity;
 
-import helpers.UnauthorizedException;
 import views.html.*;
 import views.html.notes.*;
 import models.*;
@@ -175,12 +174,14 @@ public class Notes extends Controller {
 	@SecureSocial.SecuredAction
 	public static Result toggleUpVote(Long id) {
 		Note.find.ref(id).toggleUpVote(User.currentUser());
+		flash("info", "Successfully up voted note!");
 		return redirect(routes.Notes.show(id));
 	}
 	
 	@SecureSocial.SecuredAction
 	public static Result toggleDownVote(Long id) {
 		Note.find.ref(id).toggleDownVote(User.currentUser());
+		flash("info", "Successfully down voted note!");
 		return redirect(routes.Notes.show(id));
 	}
 }
