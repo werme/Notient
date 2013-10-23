@@ -21,7 +21,10 @@ public class Search extends Controller {
   public static Result performSearch() {
     Form<String> filledForm = searchForm.bindFromRequest();
     String query = filledForm.field("query").value();
-    return redirect(routes.Search.show(query));
+    if (query == "")
+      return redirect(routes.Notes.thumbnailsAll());
+    else
+      return redirect(routes.Search.show(query));
   }
 
   public static Result show(String query) {
@@ -33,6 +36,6 @@ public class Search extends Controller {
   }
 
   public static Result blankSearch() {
-    return redirect(routes.Application.index());
+    return redirect(routes.Notes.thumbnailsAll());
   }
 }
