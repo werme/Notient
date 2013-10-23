@@ -1,5 +1,14 @@
-package service;
+/**
+ * Our connection to securesocial, this is where we save the users locally when the users
+ * and retrieve information from the different login processes, google, facebook and
+ * registering. 
+ *
+ * This class also handles the tokens for userspecific pages (such as registration 
+ * and reset password link)
+ *
+ */
 
+package service;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -47,7 +56,6 @@ public class UserService extends BaseUserService {
     }
 
     @Override
-    //public Identity doFind(UserId userId) {
     public Identity doFind(IdentityId identityId){
         User localUser;
 
@@ -76,7 +84,6 @@ public class UserService extends BaseUserService {
         );
         return socialUser;
     }
-
 
     @Override
     public Identity doFindByEmailAndProvider(String email, String providerId) {
@@ -115,6 +122,10 @@ public class UserService extends BaseUserService {
         return result;
     }
 
+
+    /**
+     * This method saves and updates the user each time you login.
+     */
     @Override
     public Identity doSave(Identity user) {
 

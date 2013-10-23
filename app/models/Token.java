@@ -1,3 +1,8 @@
+/**
+ * Token class is used to verify that the links sent to the user is only accessible by that user. After a
+ * set amount of time the token is automatically removed so other can not reach the userspecific pages.
+ */
+
 package models;
 
 

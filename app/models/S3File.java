@@ -1,3 +1,7 @@
+/**
+ * Class is used wrap files that should be uploaded to amazon
+ */
+
 package models;
 
 import com.amazonaws.services.s3.model.CannedAccessControlList;

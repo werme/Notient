@@ -1,3 +1,7 @@
+/**
+ * A user is created when logging in via a socialmedia or registering process from securesocial.
+ */
+
 package models;
 
 import java.util.*;
@@ -14,8 +18,6 @@ import securesocial.core.java.SecureSocial;
 import securesocial.core.Identity;
 
 import com.avaje.ebean.Expr;
-
-
 
 @Table(
 	    uniqueConstraints=
@@ -81,6 +83,10 @@ public class User extends Model {
         return find.where().eq("username", username).findUnique();
     }
 
+    /**
+     * Returns the currentUser in a static sense. Used by the views
+     * to get which user is currently logged in.
+     */
     public static User currentUser(){
         Identity identity = SecureSocial.currentUser();
         User localUser = null;
@@ -112,6 +118,9 @@ public class User extends Model {
         return result;
     }
 
+    /**
+     * Return total upVotes of all users posts.
+     */ 
     public int getScore(){
         List<Note> allNotes = Note.notesBy(this);
         int totalScore = 0;

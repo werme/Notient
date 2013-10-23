@@ -1,3 +1,9 @@
+/**
+ * Plugin used to connected to Amazon S3.
+ * This plugin makes it possible for us to upload the files
+ * 
+ */
+
 package plugins;
 
 import com.amazonaws.auth.AWSCredentials;
