@@ -197,6 +197,13 @@ public class Note extends Model implements Authorizable {
 		return null;
 	}
 
+  Alla notes ska ha en uptadetAt
+
+  /**
+   * Returns a list of the notes that are the most similar to the one the method is called on.
+   * Similarity is calculated by number of equal tags in each note. Will return a maximum of 6 notes.
+   */
+
   public static List<Note> similarNotes(Note note) {
     List<Note> allNotes = find.all();   
 
@@ -212,7 +219,9 @@ public class Note extends Model implements Authorizable {
 
   /**
    * Returns a list of notes related to the search query. 
-   * Will look at both content and titles and order them by rating. 
+   * Considers both content and titles and orders them by rating. 
+   * Splits the query sentence into words and performs a search for each word,
+   * and returns the result of all of the searches.
    */ 
   public static List<Note> searchNotes(String query) {
     List<Note> result = new ArrayList<Note>();
@@ -273,6 +282,10 @@ public class Note extends Model implements Authorizable {
     return (this.author.equals(user) || user.privilege.equals(PrivilegeLevel.ADMIN));
   }
 
+  /**
+   * This class is used for comparing notes in regards to the number of equal tags
+   * they have with the note passed in to the constructor.
+   */
   public static class NoteComparator implements Comparator<Note> {
 
     Note note;
