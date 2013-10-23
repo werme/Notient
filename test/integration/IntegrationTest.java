@@ -24,4 +24,11 @@ public class IntegrationTest {
         browser.$("#password").text("password");
         browser.$("button", withText("Login")).click();
     }
+
+    public void createNote(TestBrowser browser) {
+      browser.$("#new-note-link").click();
+      browser.$("#title").text("IntegrationTest");
+      browser.$("#content").text("testing testing");
+      browser.$("#create-note-button").click();
+    }
 }
