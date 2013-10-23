@@ -197,8 +197,6 @@ public class Note extends Model implements Authorizable {
 		return null;
 	}
 
-  Alla notes ska ha en uptadetAt
-
   /**
    * Returns a list of the notes that are the most similar to the one the method is called on.
    * Similarity is calculated by number of equal tags in each note. Will return a maximum of 6 notes.
