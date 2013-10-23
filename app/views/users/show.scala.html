@@ -4,7 +4,7 @@
 
 @main("User: " + user.displayName, noteForm) {
     <div class="container main">
-        <section class="note-wrapper">
+        <section class="user-wrapper">
             <div class="avatar"><img src="@user.getAvatarUrl" /></div>
             <h1>@user.displayName</h1>
             <p>User class: @user.privilege</p>
@@ -14,7 +14,8 @@
         </section>
 
         <aside class="similar-notes">
-        <h2>Notes written</h2>
+        @if(Note.notesBy(user).size != 0) {
+	        <h2>Notes written</h2>
             <ul>
                 @for(note <- Note.notesBy(user)) {
                     <li class="note">
@@ -23,6 +24,7 @@
                     </li>
                 }
             </ul>
+        }
         </aside>
     </div>
 }
