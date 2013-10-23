@@ -1,3 +1,7 @@
+/**
+ *  This is the controller that handles search queries.
+ */
+
 package controllers;
 
 import java.util.*;
@@ -22,7 +26,9 @@ public class Search extends Controller {
 
   public static Result show(String query) {
     List<Note> notes = Note.searchNotes(query);
-    List<User> users = User.searchUsers(query); // Bapl
+
+    // Searching for users is not implemented in the GUI yet.
+    // List<User> users = User.searchUsers(query);
     return ok(list.render(notes, noteForm, searchForm, 1, 1));
   }
 }
