@@ -31,4 +31,8 @@ public class Search extends Controller {
     // List<User> users = User.searchUsers(query);
     return ok(list.render(notes, noteForm, searchForm, 1, 1));
   }
+
+  public static Result blankSearch() {
+    return redirect(routes.Application.index());
+  }
 }
