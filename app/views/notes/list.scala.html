@@ -11,7 +11,6 @@
                 <li>
                     <a href="@routes.Notes.show(note.id)" class="note-link">@note.title</a>
                     &mdash; <a href="@routes.Users.show(note.author.email)" class="author-link">@note.author.displayName</a>
-                    <date><i class="time icon"></i>@note.getCreatedAt</date>
 
                     @if(note.allows(User.currentUser)) {
                         <div class="quick-note-links-wrapper">
@@ -19,6 +18,7 @@
                             <a href="#" class="quick-delete-note-button" data-url="@routes.Notes.delete(note.id)" ><i class="remove icon"></i></a>
                         </div>
                     }
+                    <date><i class="time icon"></i>@note.getCreatedAt</date>
                 </li>
             }
             <ul>

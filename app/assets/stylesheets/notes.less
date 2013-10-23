@@ -270,6 +270,30 @@
   date {
     float: right;
   }
+
+  .quick-note-links-wrapper {
+    float: right;
+    margin-left: 1rem;
+    a {
+      background: none;
+      border: 0;
+    }
+
+    .quick-edit-note-button {
+      position: relative;
+      top: 1px;
+      color: @blue;
+      &:hover {
+        color: lighten(@blue, 10%);
+      }
+    }
+    .quick-delete-note-button {
+      color: @red;
+      &:hover {
+        color: red;
+      }
+    }
+  }
 }
 
 @media (min-width: 50em) {
