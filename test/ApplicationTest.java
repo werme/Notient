@@ -32,7 +32,7 @@ public class ApplicationTest {
     public void testInitialData() {
 
         // Should be 4 notes in DB
-        assertEquals(4, Note.find.findRowCount());
+        assertEquals(10, Note.find.findRowCount());
 
         // Should have note with text "The first note"
         Note myNote = Note.find.where().eq("title", "Note title 1").findUnique();
