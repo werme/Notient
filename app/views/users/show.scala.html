@@ -14,10 +14,10 @@
         </section>
 
         <aside class="similar-notes">
-        @if(Note.notesBy(user).size != 0) {
+        @if(Note.byAuthor(user).size != 0) {
 	        <h2>Notes written</h2>
             <ul>
-                @for(note <- Note.notesBy(user)) {
+                @for(note <- Note.byAuthor(user)) {
                     <li class="note">
                         <a href="@routes.Notes.show(note.id)"><h3>@note.title</h3></a>
                         <p>@note.extract(25)</p>

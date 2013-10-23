@@ -78,7 +78,7 @@ public class Note extends Model implements Authorizable {
     return find.where().orderBy("created_at desc").findPagingList(resultsPerPage);
 	}
 
-  public static List<Note> notesBy(User author) {
+  public static List<Note> byAuthor(User author) {
     // TODO: return PagingList and paginate view
     return find.where().eq("author", author).findList();
   }
@@ -89,7 +89,7 @@ public class Note extends Model implements Authorizable {
    * Splits the query sentence into words and performs a search for each word,
    * and returns the result of all of the searches.
    */ 
-  public static List<Note> searchNotes(String query) {
+  public static List<Note> search(String query) {
     List<Note> result = new ArrayList<Note>();
     for (String word : query.split("\\s")) {
       List<Note> wordResult = find.where()
@@ -108,7 +108,7 @@ public class Note extends Model implements Authorizable {
    * Returns a list of the notes that are the most similar to the one the method is called on.
    * Similarity is calculated by number of equal tags in each note. Will return a maximum of 6 notes.
    */
-  public static List<Note> similarNotes(Note note) {
+  public static List<Note> similar(Note note) {
     List<Note> allNotes = find.all();
     // Do not compare with self 
     allNotes.remove(note);   
@@ -136,7 +136,7 @@ public class Note extends Model implements Authorizable {
 	  //Tag.clean();
 	}
 
-  public void updateTags(String tagList) {
+  public void replaceTags(String tagList) {
     if(tagList != null && !tagList.equals("") && !tagList.equals(" ")) {
       this.tags = Tag.createOrFindAllFromString(this, tagList);
       this.saveManyToManyAssociations("tags");

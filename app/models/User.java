@@ -122,7 +122,7 @@ public class User extends Model {
      * Return total upVotes of all users posts.
      */ 
     public int getScore(){
-        List<Note> allNotes = Note.notesBy(this);
+        List<Note> allNotes = Note.byAuthor(this);
         int totalScore = 0;
         for(Note note : allNotes){
             totalScore += note.getScore();

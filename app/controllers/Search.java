@@ -25,7 +25,7 @@ public class Search extends Controller {
   }
 
   public static Result show(String query) {
-    List<Note> notes = Note.searchNotes(query);
+    List<Note> notes = Note.search(query);
 
     // Searching for users is not implemented in the GUI yet.
     // List<User> users = User.searchUsers(query);

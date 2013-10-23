@@ -90,7 +90,7 @@ public class Notes extends Controller {
 			note = Note.create(filledForm.get(), User.currentUser());
 			
 			// Add tags
-			note.updateTags(Form.form().bindFromRequest().get("tagList"));
+			note.replaceTags(Form.form().bindFromRequest().get("tagList"));
 
 			// Handle file upload
       if(request().body() != null) {
@@ -124,7 +124,7 @@ public class Notes extends Controller {
 			return badRequest(thumbnails.render(pagingList.getPage(0).getList(), noteForm, searchForm, 0, pagingList.getTotalPageCount()));
 		} else {
 			Note.update(id, filledForm.get());
-			note.updateTags(Form.form().bindFromRequest().get("tagList"));
+			note.replaceTags(Form.form().bindFromRequest().get("tagList"));
 		
 			flash("info", "Successfully update note!");
 			return redirect(routes.Notes.show(id));

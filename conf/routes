@@ -4,7 +4,7 @@ GET     /                       		controllers.Application.index()
 
 # Search
 POST    /search                       controllers.Search.performSearch()
-GET     /search/                      controllers.Search.blankSearch()
+GET     /search                      controllers.Search.blankSearch()
 GET     /search/:query                controllers.Search.show(query: String)
 
 # Notes

@@ -55,7 +55,7 @@
         <aside class="similar-notes">
         <h2>Similar notes:</h2>
             <ul>
-                @for(note <- Note.similarNotes(note)) {
+                @for(note <- Note.similar(note)) {
                     <li class="note">
                         <a href="@routes.Notes.show(note.id)"><h3>@note.title</h3></a>
                         <p>@note.extract(25)</p>
