@@ -38,12 +38,11 @@ public class SearchFunctionalTest extends WithApplication {
   }
 
   @Test
-  public void searchNotes() {
+  public void searchNote() {
     Result result;
 
     Cookie cookie = Utils.fakeCookie("pingu@notient.com");
 
-    // Should return redirect status if successful
     result = callAction(
         controllers.routes.ref.Search.performSearch(),
         fakeRequest().withFormUrlEncodedBody(
@@ -51,12 +50,19 @@ public class SearchFunctionalTest extends WithApplication {
 
     assertThat(status(result)).isEqualTo(SEE_OTHER);
     assertThat(redirectLocation(result)).isEqualTo("/search/lorem");
+  }
 
-    // Should return bad request if no data is given
+  @Test
+  public void searchNoteWithoutQuery() {
+    Result result;
+
+    Cookie cookie = Utils.fakeCookie("pingu@notient.com");
+
     result = callAction(
         controllers.routes.ref.Search.performSearch(),
         fakeRequest().withFormUrlEncodedBody(
-            ImmutableMap.of("title", "")).withCookies(cookie));
-    //assertThat(status(result)).isEqualTo(BAD_REQUEST);
+            ImmutableMap.of("query", "")).withCookies(cookie));
+    assertThat(status(result)).isEqualTo(SEE_OTHER);
+    assertThat(redirectLocation(result)).isEqualTo("/thumbnails"); 
   }
 }
