@@ -1,0 +1,57 @@
+@(notes: List[Note], noteForm: Form[Note], searchForm: Form[String], page: Int, pages: Int)
+
+@import helper._
+
+@main("Notient", noteForm) {
+    <div class="container main">
+        <section class="notes-wrapper">
+            @for(note <- notes) {
+                <div class="small-note-wrapper">
+                    <div class="small-note">
+                        <div class="side-base front">
+                            <header>
+                                <h2>@note.title</h2>
+                            </header>
+                            <section class="note-content">
+                                <p>@note.extract(100)</p>
+                            </section>
+                        </div>
+                        <div class="side-base info back">
+                            <header>
+                                @if(note.allows(User.currentUser)) {
+                                    <div class="quick-note-links-wrapper">
+                                        <a href="@routes.Notes.edit(note.id)" class="quick-edit-note-button"><i class="edit icon"></i></a>
+                                        <a href="#" class="quick-delete-note-button" data-url="@routes.Notes.delete(note.id)" ><i class="remove icon"></i></a>
+                                    </div>
+                                }
+                                <date><i class="time icon"></i>@note.getCreatedAt</date>
+                                <ul>
+                                    <li><a href="@routes.Notes.show(note.id)" class="see-full-note-link">@note.title</a></li>
+                                    <li>By <a href="@routes.Users.show(note.author.email)">@note.author.displayName</a></li>
+                                </ul>
+                            </header>
+                            <section>
+                                @for(tag <- note.tags) { <span><a href="#" class="tag">@tag.title</a></span> }
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            }
+        </section>
+        <section class="pagination">
+            @if(page+1 > 1) {
+                <a id="last-page-link" href="@routes.Notes.list(page)"><i class="long arrow left icon"></i>prev page</a>
+            } else {
+                <span><i class="long arrow left icon"></i>prev page</span>
+            }
+
+            browsing page @(page+1) of @(pages)
+
+            @if(page+1 < pages) {
+                <a id="next-page-link" href="@routes.Notes.list(page+2)">next page<i class="long arrow right icon"></i></a>
+            } else {
+                <span>next page<i class="long arrow right icon"></i></span>
+            }
+        </section>
+    </div>
+}

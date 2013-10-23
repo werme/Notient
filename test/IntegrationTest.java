@@ -18,7 +18,7 @@ public class IntegrationTest {
     public void login(TestBrowser browser) {
         browser.goTo(myUrl);
         browser.$("#login-link").click();
-        browser.$("#username").text("pingu1");
+        browser.$("#username").text("pingu");
         browser.$("#password").text("password");
         browser.$("button", withText("Login")).click();
     }
@@ -92,7 +92,7 @@ public class IntegrationTest {
                 browser.$("#delete-note-button").click();
                 Logger.info("!!!!!!!!!!!!!!!!!!!!!!!" + browser.$("#message-wrapper").getText());
                 Logger.debug("##### SE HÄR MACKAN #####" + browser.url());
-                assertThat(browser.url()).isEqualTo(myUrl + "/notes");
+                assertThat(browser.url()).isEqualTo(myUrl + "/notes/1");
             }
         });  
   }
@@ -165,7 +165,7 @@ public class IntegrationTest {
             public void invoke(TestBrowser browser) {
                 login(browser);
                 browser.$("#next-page-link").click();
-                assertThat(browser.url()).isEqualTo(myUrl + "/notes/2");
+                assertThat(browser.url()).isEqualTo(myUrl + "/thumbnails/2");
             }
         });  
   }
@@ -176,17 +176,20 @@ public class IntegrationTest {
                 login(browser);
                 browser.$("#next-page-link").click();
                 browser.$("#last-page-link").click();
-                assertThat(browser.url()).isEqualTo(myUrl + "/notes/1");
+                assertThat(browser.url()).isEqualTo(myUrl + "/thumbnails/1");
             }
         });  
   }
   @Test
-  public void testInspectUser() {
+  public void testQuickScribble() {
     running(testServer(3333, fakeApplication(inMemoryDatabase())), HTMLUNIT, new Callback<TestBrowser>() {
             public void invoke(TestBrowser browser) {
                 login(browser);
-                browser.$("#note-author-link").click();
-                assertThat(browser.pageSource()).contains("123456789");
+                browser.$("#sub-nav-toggle").click();
+                browser.$("#title").text("This is testQuickScribble");
+                browser.$("#content").text("testing testing");
+                browser.$("#quick-create-note-button").click();
+                assertThat(browser.url()).isEqualTo(myUrl + "/note/11");
             }
         });  
   }
