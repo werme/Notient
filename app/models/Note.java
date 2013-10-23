@@ -84,7 +84,7 @@ public class Note extends Model implements Authorizable {
   }
     
 	public static PagingList<Note> all(int resultsPerPage) {
-    return find.where().orderBy("updated_at desc").findPagingList(resultsPerPage);
+    return find.where().orderBy("created_at desc").findPagingList(resultsPerPage);
 	}
 
 	public static Note create(Note note, String tagList, User author, S3File image) {
