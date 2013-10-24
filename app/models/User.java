@@ -17,17 +17,22 @@ import play.Logger;
 import securesocial.core.java.SecureSocial;
 import securesocial.core.Identity;
 
+import scala.Some;
+
+import securesocial.core.providers.utils.GravatarHelper;
 import com.avaje.ebean.Expr;
 
 @Table(
-	    uniqueConstraints=
-	        @UniqueConstraint(columnNames={"username", "email"}))
+        uniqueConstraints=
+            @UniqueConstraint(columnNames={"email"}))
 @Entity
 public class User extends Model {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     @Id
+    public Long id;
+
     public String email;
 
     @OneToMany(cascade=CascadeType.ALL)
@@ -43,12 +48,46 @@ public class User extends Model {
 
     public String privilege = PrivilegeLevel.USER;
 
-	@MinLength(5)
-	@MaxLength(20)
-	public String username;
+    @MinLength(5)
+    @MaxLength(20)
+    public String username;
 
-	public static Finder<String, User> find = new Finder<String, User>(
-			String.class, User.class);
+    public static Finder<String, User> find = new Finder<String, User>(
+            String.class, User.class);
+
+    public User (String email, String firstName, String lastName){
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        save();
+    }
+
+    public User (String email, String firstName, String lastName, String username, String password){
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.password = password;
+        save();
+    }
+
+    public static User create(User user){
+        user.save();
+        return user;
+    }
+    
+    public void update(String firstName, String lastName, String username){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.password = password;
+        this.update();
+    }
+
+    public void setPassword(String password){
+        this.password = password;
+        update();
+    }
 
     public String displayName() {
         if(username != null) {
@@ -61,7 +100,7 @@ public class User extends Model {
             return "Unknown user";
         }
     }
-	
+    
     public void addProvider(Provider provider){
         providers.add(provider);
         this.save();
@@ -89,11 +128,11 @@ public class User extends Model {
      */
     public static User currentUser(){
         Identity identity = SecureSocial.currentUser();
-        User localUser = null;
+        User user = null;
         if (identity != null) {
-           localUser = User.find.byId(identity.identityId().userId());
+           user = User.findByEmail(identity.identityId().userId());
         }
-        return localUser;
+        return user;
     }
 
     public static boolean userSignedIn() {
@@ -134,7 +173,14 @@ public class User extends Model {
         return avatarUrl != null ? avatarUrl : "https://sigil.cupcake.io/" + displayName();
     }
 
-	@Override
+    public void updateAvatarUrl(){
+        if(avatarUrl == null && GravatarHelper.avatarFor(email) instanceof scala.Some){
+                avatarUrl = GravatarHelper.avatarFor(email).get();
+        }
+        update();
+    }
+
+    @Override
     public String toString() {
         return this.email + " - " + this.firstName;
     }
